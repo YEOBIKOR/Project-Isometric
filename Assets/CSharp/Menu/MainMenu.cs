@@ -36,7 +36,7 @@ namespace ISO.UI
 
             buttons = new GeneralButton[3];
             buttons[0] = new GeneralButton(this, "Start", OnGameStart);
-            buttons[1] = new GeneralButton(this, "Opritons", OpenOptions);
+            buttons[1] = new GeneralButton(this, "Options", OpenOptions);
             buttons[2] = new GeneralButton(this, "Quit", Application.Quit);
 
             buttons[0].position = new Vector2(0f, 88f - screenHeight * 0.5f);

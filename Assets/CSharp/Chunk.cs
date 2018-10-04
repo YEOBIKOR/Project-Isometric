@@ -59,8 +59,8 @@ public class Chunk
         {
             for (int j = 0; j < length; j++)
             {
-                //int y = Mathf.CeilToInt(Mathf.PerlinNoise((i + coordinate.x * length + 1024f) * 0.1f, (j + coordinate.y * length + 1024f) * 0.1f) * 4f) + 4;
-                int y = 1;
+                int y = Mathf.CeilToInt(Mathf.PerlinNoise((i + coordinate.x * length + 1024f) * 0.1f, (j + coordinate.y * length + 1024f) * 0.1f) * 4f) + 4;
+                //int y = 1;
                 //if ((i == 2 && j > 2 && j < 6) || (i > 0 && i < 4 && j == 3)) y = 3;//Hi
 
                 for (int k = 0; k < height; k++)
@@ -70,7 +70,7 @@ public class Chunk
                     if (k < y)
                     {
                         //float noise = Mathf.PerlinNoise((i + coordinate.x * length) * 0.1f, (j + coordinate.y * length) * 0.1f);
-                        tiles[i, k, j].SetBlock(new BlockSolid(1)); //new BlockSolid(k > 4 + RXRandom.Range(0, 5) ? 2 : 1));
+                        tiles[i, k, j].SetBlock(new BlockSolid(k > 4 + RXRandom.Range(0, 5) ? 2 : 1));
                     }
                     else
                         tiles[i, k, j].SetBlock(new BlockAir());
