@@ -43,7 +43,9 @@ public class WorldCamera
     private float shake;
     private float shakeTime;
 
-    private const int pixelsPerBlock = 24;
+    public const int PixelsPerTile = 24;
+    public const int PixelsPerHalfTile = PixelsPerTile / 2;
+    public const int PixelsPerQuaterTile = PixelsPerTile / 4;
 
     private WorldCameraUI worldCameraUI;
 
@@ -128,9 +130,9 @@ public class WorldCamera
     public RayTrace GetRayAtScreenPosition(Vector2 position)
     {
         Vector3 startRaytracePosition = CustomMath.HorizontalRotate(new Vector3(
-            (position.x + position.y * 2f) / 24f - Chunk.height,
+            (position.x + position.y * 2f) / PixelsPerTile - Chunk.height,
             Chunk.height,
-            (position.y * 2f - position.x) / 24f - Chunk.height), _viewAngle - 45f);
+            (position.y * 2f - position.x) / PixelsPerTile - Chunk.height), _viewAngle - 45f);
         return world.RayTraceTile(startRaytracePosition, CustomMath.HorizontalRotate(new Vector3(1f, -1f, 1f), _viewAngle - 45f), 0f);
     }
 
@@ -157,16 +159,16 @@ public class WorldCamera
             switch (_viewDirection)
             {
                 case CameraViewDirection.NE:
-                    return new Vector2(12f * (position.x - position.z), 6f * (position.x + position.z) + 12f * position.y);
+                    return new Vector2(PixelsPerHalfTile * (position.x - position.z), PixelsPerQuaterTile * (position.x + position.z) + PixelsPerHalfTile * position.y);
 
                 case CameraViewDirection.NW:
-                    return new Vector2(12f * (position.x + position.z), 6f * -(position.x - position.z) + 12f * position.y);
+                    return new Vector2(PixelsPerHalfTile * (position.x + position.z), PixelsPerQuaterTile * -(position.x - position.z) + PixelsPerHalfTile * position.y);
 
                 case CameraViewDirection.SW:
-                    return new Vector2(12f * -(position.x - position.z), 6f * -(position.x + position.z) + 12f * position.y);
+                    return new Vector2(PixelsPerHalfTile * -(position.x - position.z), PixelsPerQuaterTile * -(position.x + position.z) + PixelsPerHalfTile * position.y);
 
                 case CameraViewDirection.SE:
-                    return new Vector2(12f * -(position.x + position.z), 6f * (position.x - position.z) + 12f * position.y);
+                    return new Vector2(PixelsPerHalfTile * -(position.x + position.z), PixelsPerQuaterTile * (position.x - position.z) + PixelsPerHalfTile * position.y);
 
                 default:
                     return Vector2.zero;
@@ -174,8 +176,8 @@ public class WorldCamera
         }
         else
             return new Vector2(
-                12f * (cosViewAngle * -position.z + sinViewAngle * position.x),
-                6f * (sinViewAngle * position.z + cosViewAngle * position.x) + 12f * position.y);
+                PixelsPerHalfTile * (cosViewAngle * -position.z + sinViewAngle * position.x),
+                PixelsPerQuaterTile * (sinViewAngle * position.z + cosViewAngle * position.x) + PixelsPerHalfTile * position.y);
     }
 
     public float GetSortZ(Vector3 position)
