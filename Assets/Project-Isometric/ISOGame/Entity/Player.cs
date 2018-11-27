@@ -51,7 +51,7 @@ public class Player : EntityCreature
         inventory[1].SetItem(new ItemThrowableRock());
 
         for (int i = 0; i < 25; i++)
-            inventory[i + 2].SetItem(new ItemBlock(i, 1));
+            inventory[i + 2].SetItem(new ItemBlock(i, "stone", 1));
     }
 
     public override void OnSpawn(Chunk chunk, Vector3 position)

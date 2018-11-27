@@ -124,6 +124,12 @@ public class WorldCamera
             }
         }
 
+        Color skyColor = Color.Lerp(new Color(0.35f, 0.85f, 0.97f), Color.black, Mathf.Sin(Time.time * 0.1f) * 0.5f + 0.5f);
+
+        Shader.SetGlobalVector("_CameraPosition", targetPosition);
+        Shader.SetGlobalVector("_SkyColor", skyColor);
+        Futile.instance.camera.backgroundColor = skyColor;
+
         worldCameraUI.Update(deltaTime);
     }
 

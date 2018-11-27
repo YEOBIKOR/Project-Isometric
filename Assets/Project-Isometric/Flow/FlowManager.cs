@@ -19,8 +19,6 @@ public class FlowManager : LoopFlow
         fadeSprite.scaleX = Menu.screenWidth;
         fadeSprite.scaleY = Menu.screenHeight;
         fadeSprite.color = Color.black;
-        
-        SwitchLoopFlow(new IntroRoll());
     }
 
     public override void RawUpdate(float deltaTime)

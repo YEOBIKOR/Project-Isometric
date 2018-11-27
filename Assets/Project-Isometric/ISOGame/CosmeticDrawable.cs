@@ -97,7 +97,10 @@ public class CosmeticDrawable : IDrawable
 
     public virtual void OnInitializeSprite(SpriteLeaser spriteLeaser, WorldCamera camera)
     {
-        spriteLeaser.sprites.Add(new FSprite(element == null ? Futile.whiteElement : element));
+        FSprite sprite = new FSprite(element == null ? Futile.whiteElement : element);
+        sprite.shader = ISOMain.GetShader("WorldObject");
+
+        spriteLeaser.sprites.Add(sprite);
     }
 
     public virtual void GraphicUpdate(SpriteLeaser spriteLeaser, WorldCamera camera)
@@ -117,7 +120,7 @@ public class CosmeticDrawable : IDrawable
             sprite.scaleX = scale.x * (camera.GetFlipXByViewAngle(viewAngle) ? -1f : 1f);
             sprite.scaleY = scale.y;
             sprite.sortZ = camera.GetSortZ(worldPosition) + sortZOffset;
-            sprite.color = color * camera.GetTint(worldPosition);
+            sprite.color = new Color(worldPosition.x, worldPosition.y, worldPosition.z);
         }
         else
             spriteLeaser.Erase();

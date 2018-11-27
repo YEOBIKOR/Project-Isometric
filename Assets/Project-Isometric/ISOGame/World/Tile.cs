@@ -31,6 +31,7 @@ public class Tile
     public void SetBlock(Block block)
     {
         this.block = block;
+
         chunk.OnTileBlockSet(this);
     }
 

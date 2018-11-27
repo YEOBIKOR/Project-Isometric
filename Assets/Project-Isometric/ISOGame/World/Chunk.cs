@@ -59,7 +59,7 @@ public class Chunk
         {
             for (int j = 0; j < length; j++)
             {
-                int y = Mathf.CeilToInt(Mathf.PerlinNoise((i + coordinate.x * length + 1024f) * 0.1f, (j + coordinate.y * length + 1024f) * 0.1f) * 4f) + 4;
+                int y = Mathf.CeilToInt(Mathf.PerlinNoise((i + coordinate.x * length + 1024f) * 0.1f, (j + coordinate.y * length + 1024f) * 0.1f) * 8f) + 4;
                 //int y = 1;
                 //if ((i == 2 && j > 2 && j < 6) || (i > 0 && i < 4 && j == 3)) y = 3;//Hi
 
@@ -67,13 +67,15 @@ public class Chunk
                 {
                     tiles[i, k, j] = new Tile(this, (ushort)(i | (k << 4) | (j << 12)));
 
-                    if (k < y)
+                    if (k == 0)
+                        tiles[i, k, j].SetBlock(Block.GetBlockByKey("bedrock"));
+                    else if (k < y)
                     {
                         //float noise = Mathf.PerlinNoise((i + coordinate.x * length) * 0.1f, (j + coordinate.y * length) * 0.1f);
-                        tiles[i, k, j].SetBlock(new BlockSolid(k > 4 + RXRandom.Range(0, 5) ? 2 : 1));
+                        tiles[i, k, j].SetBlock(Block.GetBlockByKey(k > 4 + RXRandom.Range(0, 5) ? "stone" : "grass"));
                     }
                     else
-                        tiles[i, k, j].SetBlock(new BlockAir());
+                        tiles[i, k, j].SetBlock(Block.BlockAir);
                 }
 
                 //y = Mathf.CeilToInt(Mathf.PerlinNoise((i + coordinate.x * length + 1024f) * 0.2f, (j + coordinate.y * length + 1024f) * 0.2f) * 9f);
@@ -84,13 +86,14 @@ public class Chunk
 
         world.OnChunkGenerated(this);
 
-        worldCamera.AddDrawable(chunkGraphics);
         LoadChunk();
     }
 
     public void LoadChunk()
     {
         state = ChunkState.Loaded;
+
+        worldCamera.AddDrawable(chunkGraphics);
     }
 
     public void UnloadChunk()
@@ -127,25 +130,25 @@ public class Chunk
     {
         chunkGraphics.AddUpdateTile(tile);
 
-        //if (state == ChunkState.Loaded)
-        //{
-        //    int x = tile.worldPosition.x;
-        //    int y = tile.worldPosition.y;
-        //    int z = tile.worldPosition.z;
+        if (state == ChunkState.Loaded)
+        {
+            int x = tile.worldPosition.x;
+            int y = tile.worldPosition.y;
+            int z = tile.worldPosition.z;
 
-        //    Vector3Int[] positions = new Vector3Int[]
-        //    {
-        //        new Vector3Int(x + 1, y, z),
-        //        new Vector3Int(x - 1, y, z),
-        //        new Vector3Int(x, y + 1, z),
-        //        new Vector3Int(x, y - 1, z),
-        //        new Vector3Int(x, y, z + 1),
-        //        new Vector3Int(x, y, z - 1)
-        //    };
+            Vector3Int[] positions = new Vector3Int[]
+            {
+                new Vector3Int(x + 1, y, z),
+                new Vector3Int(x - 1, y, z),
+                // new Vector3Int(x, y + 1, z),
+                new Vector3Int(x, y - 1, z),
+                new Vector3Int(x, y, z + 1),
+                new Vector3Int(x, y, z - 1)
+            };
 
-        //    for (int index = 0; index < positions.Length; index++)
-        //        world.GetChunkGraphicsAtPosition(positions[index]).AddUpdateTile(GetTileAtWorldPosition(positions[index]));
-        //}
+            for (int index = 0; index < positions.Length; index++)
+                world.GetChunkGraphicsAtPosition(positions[index]).AddUpdateTile(GetTileAtWorldPosition(positions[index]));
+        }
     }
 
     public Tile GetTileAtWorldPosition(int x, int y, int z)
@@ -261,7 +264,7 @@ public class Chunk
                     Tile tile = drawTiles[index];
                     FSprite sprite = spriteLeaser.sprites[index];
 
-                    OptimizeSprite(sprite, tile, camera, true);
+                    SetSpriteByTile(sprite, tile, camera, true);
 
                     if (sprite.container != null && !spriteLeaser.InScreenRect(sprite))
                         sprite.RemoveFromContainer();
@@ -271,14 +274,14 @@ public class Chunk
             }
         }
 
-        public void OptimizeSprite(FSprite target, Tile tile, WorldCamera camera, bool optimizeColor = false)
+        public void SetSpriteByTile(FSprite target, Tile tile, WorldCamera camera, bool optimizeColor = false)
         {
             Vector3 spritePosition = tile.worldPosition + Vector3.one * 0.5f;
             target.SetPosition(camera.GetScreenPosition(spritePosition));
             target.sortZ = camera.GetSortZ(spritePosition);
-
+            
             if (optimizeColor)
-                target.color = camera.GetTint(tile.worldPosition + Vector3.up);
+                target.color = new Color(tile.worldPosition.x, tile.worldPosition.y, tile.worldPosition.z);
         }
 
         public bool GetShownByCamera(SpriteLeaser spriteLeaser, WorldCamera camera)
@@ -300,28 +303,29 @@ public class Chunk
                         if (GetTileShowing(tile))
                             showing = true;
 
-                    for (int index = 0; index < drawTiles.Count; index++)
-                    {
-                        if (drawTiles[index] == tile && !showing)
-                        {
-                            drawTiles.RemoveAt(index);
-
-                            spriteLeaser.sprites[index].RemoveFromContainer();
-                            spriteLeaser.sprites.RemoveAt(index);
-
-                            return;
-                        }
-                    }
-
                     if (showing)
                     {
                         drawTiles.Add(tile);
 
                         FSprite sprite = new FSprite(tile.block.sprite);
+                        sprite.shader = ISOMain.GetShader("WorldObject");
 
                         spriteLeaser.sprites.Add(sprite);
-                        OptimizeSprite(sprite, tile, camera);
+                        SetSpriteByTile(sprite, tile, camera);
                     }
+                    //else
+                    //{
+                    //    Debug.Log(tile.worldPosition);
+
+                    //    int index = drawTiles.IndexOf(tile);
+                    //    if (index < 0)
+                    //        return;
+
+                    //    drawTiles.RemoveAt(index);
+
+                    //    spriteLeaser.sprites[index].RemoveFromContainer();
+                    //    spriteLeaser.sprites.RemoveAt(index);
+                    //}
                 }
             }
         }

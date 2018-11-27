@@ -3,42 +3,48 @@ using UnityEngine;
 
 public abstract class Block
 {
-    public static Block[] _registry;
-    public static FAtlasElement[] blockSprites { get; private set; }
-
-    public Tile tile { get; private set; }
-    public bool installed { get { return tile != null; } }
+    private static Dictionary<string, Block> _registry;
+    private static Block _blockAir;
 
     public Block()
     {
-        if (blockSprites == null)
-            LoadBlockTexture();
+
     }
 
-    public virtual void OnInstalled(Tile tile)
+    public static void RegisterBlocks()
     {
-        this.tile = tile;
+        _registry = new Dictionary<string, Block>();
+
+        _blockAir = new BlockAir();
+        _registry.Add("air", _blockAir);
+        _registry.Add("dirt", new BlockSolid("b1"));
+        _registry.Add("grass", new BlockSolid("b2"));
+        _registry.Add("stone", new BlockSolid("b3"));
+        _registry.Add("mossy_stone", new BlockSolid("b4"));
+        _registry.Add("sand", new BlockSolid("b5"));
+        _registry.Add("sandstone", new BlockSolid("b6"));
+        _registry.Add("wood", new BlockSolid("b7"));
+        _registry.Add("bedrock", new BlockSolid("b26"));
     }
 
-    public static void LoadBlockTexture()
+    public static Block GetBlockByKey(string key)
     {
-        List<FAtlasElement> tileSpriteList = new List<FAtlasElement>();
-        int index = 0;
+        if (_registry == null)
+            RegisterBlocks();
 
-        while (true)
-        {
-            try
-            { tileSpriteList.Add(Futile.atlasManager.GetElementWithName(string.Concat("blocks/b", ++index))); }
-            catch
-            { break; }
-        }
+        return _registry[key];
+    }
 
-        blockSprites = tileSpriteList.ToArray();
+    public static Block BlockAir
+    {
+        get
+        { return _blockAir; }
     }
 
     public virtual bool fullBlock
     {
-        get { return false; }
+        get
+        { return false; }
     }
 
     public virtual FAtlasElement sprite
@@ -65,11 +71,11 @@ public class BlockAir : Block
 
 public class BlockSolid : Block
 {
-    private int id;
+    private FAtlasElement _sprite;
 
-    public BlockSolid(int id) : base()
+    public BlockSolid(string elementName) : base()
     {
-        this.id = id;
+        _sprite = Futile.atlasManager.GetElementWithName(string.Concat("blocks/", elementName));
     }
 
     public override bool fullBlock
@@ -81,6 +87,6 @@ public class BlockSolid : Block
     public override FAtlasElement sprite
     {
         get
-        { return blockSprites[id]; }
+        { return _sprite; }
     }
 }

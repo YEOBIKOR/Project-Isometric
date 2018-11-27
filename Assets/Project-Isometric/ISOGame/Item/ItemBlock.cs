@@ -7,16 +7,16 @@ namespace Isometric.Items
     {
         private Block block;
 
-        public ItemBlock(int itemID, int stackSize) : base(itemID, stackSize)
+        public ItemBlock(int itemID, string blockID, int stackSize) : base(itemID, stackSize)
         {
-            this.block = new BlockSolid(itemID);
+            this.block = Block.GetBlockByKey(blockID);
         }
 
         public override void OnUseItem(Player player, RayTrace rayTrace)
         {
             base.OnUseItem(player, rayTrace);
 
-            player.world.PlaceBlock(Vector3Int.FloorToInt(rayTrace.hitTilePosition + rayTrace.hitDirection), new BlockSolid(itemID));
+            player.world.PlaceBlock(Vector3Int.FloorToInt(rayTrace.hitTilePosition + rayTrace.hitDirection), block);
         }
 
         public override FAtlasElement element

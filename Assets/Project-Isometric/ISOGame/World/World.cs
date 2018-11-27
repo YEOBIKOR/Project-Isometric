@@ -53,14 +53,14 @@ public class World
         int yMin = Mathf.FloorToInt((playerCoordinate.y - loadChunkRange) / Chunk.length);
         int yMax = Mathf.FloorToInt((playerCoordinate.y + loadChunkRange) / Chunk.length);
 
-        for (int x = xMin; x <= xMax; x++)
-        {
-            for (int y = yMin; y <= yMax; y++)
-            {
-                if (((new Vector2(x + 0.5f, y + 0.5f) * Chunk.length) - playerCoordinate).sqrMagnitude < loadChunkRange * loadChunkRange)
-                    RequestLoadChunk(new Vector2Int(x, y));
-            }
-        }
+        //for (int x = xMin; x <= xMax; x++)
+        //{
+        //    for (int y = yMin; y <= yMax; y++)
+        //    {
+        //        if (((new Vector2(x + 0.5f, y + 0.5f) * Chunk.length) - playerCoordinate).sqrMagnitude < loadChunkRange * loadChunkRange)
+        //            RequestLoadChunk(new Vector2Int(x, y));
+        //    }
+        //}
 
         var chunks = chunkMap.Values;
 
@@ -292,7 +292,7 @@ public class World
         {
             Tile tile = GetTileAtPosition(tilePosition);
 
-            tile.SetBlock(new BlockAir());
+            tile.SetBlock(Block.GetBlockByKey("air"));
         }
     }
 }
