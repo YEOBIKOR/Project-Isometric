@@ -13,7 +13,7 @@ public class FlowManager : LoopFlow
     private bool transiting;
     private float transitFactor;
 
-    public FlowManager(ISOMain main) : base()
+    public FlowManager(IsometricMain main) : base()
     {
         fadeSprite = new FSprite("pixel");
         fadeSprite.scaleX = Menu.screenWidth;

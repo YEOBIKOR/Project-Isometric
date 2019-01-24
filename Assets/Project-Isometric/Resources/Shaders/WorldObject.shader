@@ -37,6 +37,7 @@
 				float4 color : COLOR;
 			};
 
+			uniform float _WorldTime;
 			uniform float3 _CameraPosition;
 			uniform float3 _SkyColor;
 
@@ -59,15 +60,15 @@
 			{
 				fixed4 col = tex2D(_MainTex, i.uv);
 				
-				float2 cloudPos = (i.scrPos - _Time.r) * 0.1;
-				cloudPos.y -= i.color.y * 0.01;
-				float cloudValue = floor(tex2D(_NoiseTex, cloudPos).r * 4.0) * 0.25;
+				float2 cloudPos = (i.scrPos - _WorldTime * 0.1) * 0.3;
+				cloudPos.y -= i.color.y * 0.012;
+				float cloudValue = floor(tex2D(_NoiseTex, cloudPos).r * 5.0) * 0.2;
 
 				col.rgb *= 1.0 - cloudValue * cloudValue;
 
 				float3 delta = i.color - _CameraPosition;
 				float distance = (delta.x * delta.x) + (delta.y * delta.y) + (delta.z * delta.z);
-				float factor = clamp(distance * 0.005, 0.0, 1.0);
+				float factor = saturate(distance * 0.001);
 
 				col.rgb = lerp(col.rgb, _SkyColor, factor);
 
