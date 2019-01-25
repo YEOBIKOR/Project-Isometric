@@ -156,17 +156,15 @@ public class Player : EntityCreature
                 itemUseCoolTime = pickItemStack.item.useCoolTime;
             }
         }
-
-        playerGraphics.useTime = 0f;
     }
 
     public class PlayerGraphics
     {
         private enum PartType
         {
+            Body,
             Head,
             Scarf,
-            Body,
             RLeg,
             LLeg,
             RFoot,
@@ -177,13 +175,6 @@ public class Player : EntityCreature
             Item,
         }
 
-        public enum MoveState
-        {
-            Idle,
-            Walk,
-            Run
-        }
-
         private Player player;
         private List<EntityPart> entityParts
         {
@@ -191,30 +182,9 @@ public class Player : EntityCreature
             { return player.entityParts; }
         }
 
-        public float useTime
-        {
-            get
-            { return _useTime; }
-            set
-            { _useTime = value; }
-        }
-
-        public MoveState moveState
-        {
-            get
-            { return _moveState; }
-            set
-            { _moveState = value; }
-        }
-
         private float runfactor;
-        private MoveState _moveState;
 
-        private float _useTime;
-
-        private PlayerArm rightArm, leftArm;
-        private PlayerLeg rightLeg, leftLeg;
-        private HoldItem holdItem;
+        private AnimationRigBipedal _rig;
 
         public PlayerGraphics(Player player)
         {
@@ -222,15 +192,26 @@ public class Player : EntityCreature
 
             runfactor = 0f;
 
-            entityParts.Add(new ZFlipEntityPart(player, "entityplayerhead", "entityplayerheadback"));
+            EntityPart body = new EntityPart(player, "entityplayerbody");
+            EntityPart head = new ZFlipEntityPart(player, "entityplayerhead", "entityplayerheadback");
+            EntityPart rArm = new EntityPart(player, "entityplayerarm");
+            EntityPart lArm = new EntityPart(player, "entityplayerarm");
+            EntityPart rLeg = new EntityPart(player, "entityplayerleg1");
+            EntityPart lLeg = new EntityPart(player, "entityplayerleg1");
+            EntityPart rFoot = new EntityPart(player, "entityplayerleg2");
+            EntityPart lFoot = new EntityPart(player, "entityplayerleg2");
+
+            _rig = new AnimationRigBipedal(body, head, rArm, lArm, rLeg, lLeg, rFoot, lFoot);
+
+            entityParts.Add(body);
+            entityParts.Add(head);
             entityParts.Add(new EntityPart(player, "entityplayerscarf"));
-            entityParts.Add(new EntityPart(player, "entityplayerbody"));
-            entityParts.Add(new EntityPart(player, "entityplayerleg1"));
-            entityParts.Add(new EntityPart(player, "entityplayerleg1"));
-            entityParts.Add(new EntityPart(player, "entityplayerleg2"));
-            entityParts.Add(new EntityPart(player, "entityplayerleg2"));
-            entityParts.Add(new EntityPart(player, "entityplayerarm"));
-            entityParts.Add(new EntityPart(player, "entityplayerarm"));
+            entityParts.Add(rLeg);
+            entityParts.Add(lLeg);
+            entityParts.Add(rFoot);
+            entityParts.Add(lFoot);
+            entityParts.Add(rArm);
+            entityParts.Add(lArm);
             entityParts.Add(new EntityPart(player, "entityplayertail"));
             entityParts.Add(new EntityPart(player, null as FAtlasElement));
 
@@ -242,190 +223,35 @@ public class Player : EntityCreature
             GetEntityPart(PartType.LFoot).sortZOffset = 0.5f;
             GetEntityPart(PartType.Item).sortZOffset = 0.5f;
             GetEntityPart(PartType.Item).scale = Vector2.one * 0.5f;
-
-            rightArm = new PlayerArm(this, GetEntityPart(PartType.RArm), true);
-            leftArm = new PlayerArm(this, GetEntityPart(PartType.LArm), false);
-            rightLeg = new PlayerLeg(this, GetEntityPart(PartType.RLeg), GetEntityPart(PartType.RFoot), true);
-            leftLeg = new PlayerLeg(this, GetEntityPart(PartType.LLeg), GetEntityPart(PartType.LFoot), false);
-            holdItem = new HoldItem(this, GetEntityPart(PartType.Item), GetEntityPart(PartType.RArm));
         }
 
         public void Update(float deltaTime)
         {
             Vector3 playerPosition = player.worldPosition;
 
-            runfactor += new Vector2(player.velocity.x, player.velocity.z).magnitude * deltaTime * 1.45f;
-            moveState = player.velocity.sqrMagnitude > 0.4f ? MoveState.Run : MoveState.Idle;
-            useTime += deltaTime;
+            _rig.worldPosition = playerPosition;
+            _rig.moveSpeed = new Vector2(player.velocity.x, player.velocity.z).magnitude * deltaTime * 1.45f;
+            _rig.viewAngle = player.viewAngle;
 
-            Vector3 headPosition = playerPosition + CustomMath.HorizontalRotate(new Vector3((Mathf.Cos(runfactor * 2f) + 0.5f) * 0.1f, 1.91f + (Mathf.Sin(runfactor * -2f) + 1f) * 0.05f, 0f), player.viewAngle);
-
-            GetEntityPart(PartType.Head).worldPosition = headPosition;
-            GetEntityPart(PartType.Scarf).worldPosition = playerPosition + new Vector3(0f, 1.41f + Mathf.Sin(runfactor * 2f) * -0.05f, 0f);
-            GetEntityPart(PartType.Body).worldPosition = playerPosition + CustomMath.HorizontalRotate(new Vector3(-0.1f, 1.08f + Mathf.Sin(runfactor * 2f) * -0.05f, 0f), player.viewAngle);
+            GetEntityPart(PartType.Scarf).worldPosition = Vector3.Lerp(GetEntityPart(PartType.Body).worldPosition, GetEntityPart(PartType.Head).worldPosition, 0.3f);
             GetEntityPart(PartType.Tail).worldPosition = playerPosition + CustomMath.HorizontalRotate(new Vector3(-0.3f, 0.75f + Mathf.Sin(runfactor * 2f) * -0.05f, Mathf.Sin(runfactor * 2f) * 0.05f), player.viewAngle);
 
             for (int index = 0; index < entityParts.Count; index++)
                 player.entityParts[index].viewAngle = player.viewAngle;
+            
+            _rig.Update(deltaTime);
 
-            rightArm.Update(deltaTime);
-            leftArm.Update(deltaTime);
-            rightLeg.Update(deltaTime);
-            leftLeg.Update(deltaTime);
-            holdItem.Update(deltaTime);
+            EntityPart item = GetEntityPart(PartType.Item);
+
+            item.element = null;
+            if (!player.pickedItemContainer.blank)
+                item.element = player.pickItemStack.item.element;
+            item.worldPosition = GetEntityPart(PartType.RArm).worldPosition;
         }
 
         private EntityPart GetEntityPart(PartType type)
         {
             return entityParts[(int)type];
-        }
-
-        public class AnimationPart
-        {
-            private PlayerGraphics _playerGraphics;
-            public PlayerGraphics playerGraphics
-            {
-                get
-                { return _playerGraphics; }
-            }
-
-            public Vector3 playerPosition
-            {
-                get
-                { return playerGraphics.player.worldPosition; }
-            }
-
-            public float runFactor
-            {
-                get
-                { return playerGraphics.runfactor; }
-            }
-
-            public float viewAngle
-            {
-                get
-                { return playerGraphics.player.viewAngle; }
-            }
-
-            public AnimationPart(PlayerGraphics playerGraphics)
-            {
-                _playerGraphics = playerGraphics;
-            }
-
-            public virtual void Update(float deltaTime)
-            {
-
-            }
-        }
-
-        public class PlayerArm : AnimationPart
-        {
-            private EntityPart arm;
-
-            private bool right;
-
-            public PlayerArm(PlayerGraphics playerGraphics, EntityPart arm, bool right) : base(playerGraphics)
-            {
-                this.arm = arm;
-
-                this.right = right;
-            }
-
-            public override void Update(float deltaTime)
-            {
-                switch (playerGraphics.moveState)
-                {
-                    case MoveState.Idle:
-                        arm.worldPosition = playerPosition + CustomMath.HorizontalRotate(
-                            new Vector3(0.1f, 0.8f, right ? -0.3f : 0.3f), viewAngle);
-
-                        break;
-                    case MoveState.Run:
-
-                        arm.worldPosition = playerPosition + CustomMath.HorizontalRotate(
-                            Vector3.Lerp(new Vector3(0.5f, 1.5f, right ? -0.2f : 0.2f), new Vector3(-0.3f, 0.7f, right ? -0.5f : 0.5f), (Mathf.Sin(runFactor + (right ? Mathf.PI : 0f)) + 1f) * 0.5f), viewAngle);
-                        break;
-                }
-                if (right)
-                    arm.worldPosition = arm.worldPosition + CustomMath.HorizontalRotate(Vector3.right * Mathf.Lerp(0.5f, 0f, CustomMath.Curve(playerGraphics.useTime * 3f, -2f)), viewAngle);
-
-                arm.viewAngle = viewAngle + (right ? 30f : -30f);
-
-                base.Update(deltaTime);
-            }
-        }
-
-        public class HoldItem : AnimationPart
-        {
-            private EntityPart item;
-            private EntityPart arm;
-
-            public HoldItem(PlayerGraphics playerGraphics, EntityPart item, EntityPart arm) : base(playerGraphics)
-            {
-                this.item = item;
-                this.arm = arm;
-            }
-
-            public override void Update(float deltaTime)
-            {
-                item.element = null;
-                if (!playerGraphics.player.pickedItemContainer.blank)
-                    item.element = playerGraphics.player.pickItemStack.item.element;
-                item.worldPosition = arm.worldPosition;
-
-                item.viewAngle = viewAngle;
-
-                base.Update(deltaTime);
-            }
-        }
-
-        public class PlayerLeg : AnimationPart
-        {
-            private EntityPart leg;
-            private EntityPart foot;
-            private bool right;
-
-            public PlayerLeg(PlayerGraphics playerGraphics, EntityPart leg, EntityPart foot, bool right) : base(playerGraphics)
-            {
-                this.leg = leg;
-                this.foot = foot;
-
-                this.right = right;
-            }
-
-            public override void Update(float deltaTime)
-            {
-                switch (playerGraphics.moveState)
-                {
-                    case MoveState.Idle:
-
-                        leg.worldPosition = playerPosition + CustomMath.HorizontalRotate(new Vector3(-0.05f, 0.58f, right ? -0.12f : 0.12f), viewAngle);
-                        foot.worldPosition = playerPosition + CustomMath.HorizontalRotate(new Vector3(0f, 0.18f, right ? -0.16f : 0.16f), viewAngle);
-                        break;
-
-                    case MoveState.Run:
-
-                        leg.worldPosition = playerPosition + CustomMath.HorizontalRotate(new Vector3(Mathf.Lerp(-0.1f, 0.125f, (Mathf.Sin(runFactor + (right ? Mathf.PI : 0f)) + 1f) * 0.5f), 0.58f, right ? -0.12f : 0.12f), viewAngle);
-
-                        float footFactor = right ? runFactor + Mathf.PI : runFactor;
-
-                        float footX = Mathf.Lerp(-0.4f, 0.5f, (Mathf.Sin(footFactor) + 1f) * 0.5f);
-                        float footY;
-
-                        if ((int)((footFactor + Mathf.PI / 2f) / Mathf.PI) % 2 > 0)
-                            footY = Mathf.Max(Mathf.Lerp(-0.5f, 0.6f, (Mathf.Sin(-footFactor) + 1f) * 0.5f), 0.18f);
-                        else
-                            footY = Mathf.Lerp(0.3f, 0.6f, (Mathf.Sin(-footFactor) + 1f) * 0.5f);
-
-                        foot.worldPosition = playerPosition + CustomMath.HorizontalRotate(new Vector3(footX, footY, right ? -0.16f : 0.16f), viewAngle);
-                        break;
-                }
-
-                leg.viewAngle = viewAngle + (right ? -30f : 30f);
-                foot.viewAngle = viewAngle + (right ? -30f : 30f);
-
-                base.Update(deltaTime);
-            }
         }
     }
 }

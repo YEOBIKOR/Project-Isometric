@@ -20,7 +20,7 @@ public class IsometricMain : MonoBehaviour
     private void Start()
     {
         Vector2 screenSize;
-        screenSize.y = 360f;
+        screenSize.y = 270f;
         screenSize.x = screenSize.y / Screen.height * Screen.width;
 
         FutileParams futileParams = new FutileParams(true, true, false, false);
@@ -34,7 +34,7 @@ public class IsometricMain : MonoBehaviour
         LoadTextures();
 
         _camera = Futile.instance.camera;
-        // InitializePixelPerfectCamera(_camera, screenSize);
+        InitializePixelPerfectCamera(_camera, screenSize);
 
         audioEngine = new AudioEngine(this);
         flowManager = new FlowManager(this);
@@ -66,7 +66,7 @@ public class IsometricMain : MonoBehaviour
 
     private void LoadTextures()
     {
-        Shader.SetGlobalTexture("_NoiseTex", Resources.Load<Texture>("Textures/noise"));
+        //Shader.SetGlobalTexture("_NoiseTex", Resources.Load<Texture>("Textures/noise"));
     }
 
     private void InitializePixelPerfectCamera(Camera camera, Vector2 screenSize)

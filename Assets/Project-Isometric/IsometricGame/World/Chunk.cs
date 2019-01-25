@@ -115,7 +115,7 @@ public class Chunk
             foreach (Tile tile in tiles)
             {
                 if (Tile.GetFullTile(tile))
-                chunkGraphics.AddUpdateTile(tile);
+                    chunkGraphics.AddUpdateTile(tile);
             }
 
             worldCamera.AddRenderer(chunkGraphics);
@@ -187,7 +187,7 @@ public class Chunk
         return Chunk.ToChunkCoordinate(position) == coordination;
     }
 
-    public void GetCollidedEntites(PhysicalEntity owner)
+    public void GetCollidedEntites(PhysicalEntity owner, Action<PhysicalEntity> callback)
     {
         LinkedListNode<Entity> node = entities.First;
         while (node != null)
@@ -196,7 +196,7 @@ public class Chunk
             if (entity != null)
             {
                 if (entity != owner && owner.GetCollisionWithOther(entity))
-                    owner.OnCollisionWithOther(entity);
+                    callback(entity);
             }
 
             node = node.Next;

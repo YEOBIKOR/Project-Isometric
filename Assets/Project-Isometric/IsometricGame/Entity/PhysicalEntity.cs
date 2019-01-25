@@ -46,7 +46,7 @@ public abstract class PhysicalEntity : Entity, ICollidable
         if (chunk == null)
             return;
 
-        chunk.GetCollidedEntites(this);
+        chunk.GetCollidedEntites(this, OnCollisionWithOther);
 
         if (!landed)
             velocity += Vector3.up * -50f * deltaTime;

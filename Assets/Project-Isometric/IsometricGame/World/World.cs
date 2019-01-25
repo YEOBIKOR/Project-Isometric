@@ -158,7 +158,9 @@ public class World
         if (chunk.coordination == new Vector2Int(0, 0))
         {
             SpawnEntity(player, new Vector3(1f, GetSurface(new Vector2(1f, 1f)), 1f));
+
             //SpawnEntity(new EntityBoss(), new Vector3(8f, 16f, 8f));
+
             //for (int i = 0; i < 300; i++)
             //{
             //    Vector2 position = Vector2.one * 10f;
