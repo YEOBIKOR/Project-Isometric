@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Isometric.UI
+namespace Isometric.Interface
 {
-	public class ButtonBase : UIObject
+	public class ButtonBase : InterfaceObject
 	{
         public bool hovering { get; private set; }
         public bool pressing { get; private set; }

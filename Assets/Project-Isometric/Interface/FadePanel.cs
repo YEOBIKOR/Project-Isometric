@@ -2,9 +2,9 @@
 using UnityEngine;
 using Custom;
 
-namespace Isometric.UI
+namespace Isometric.Interface
 {
-	public class FadePanel : UIObject
+	public class FadePanel : InterfaceObject
 	{
         private FSprite sprite;
 

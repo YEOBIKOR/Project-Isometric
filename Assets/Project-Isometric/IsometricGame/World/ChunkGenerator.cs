@@ -21,7 +21,7 @@ public class ChunkGenerator
         {
             for (int j = 0; j < Chunk.Length; j++)
             {
-                int y = Mathf.CeilToInt(Mathf.PerlinNoise((i + coordination.x * Chunk.Length + 1024f) * 0.1f, (j + coordination.y * Chunk.Length + 1024f) * 0.1f) * 12f) + 2;
+                int y = Mathf.CeilToInt(Mathf.PerlinNoise((i + coordination.x * Chunk.Length + 1024f) * 0.1f, (j + coordination.y * Chunk.Length + 1024f) * 0.1f) * 4f) + 2;
                 //int y = 1;
                 //if ((i == 2 && j > 2 && j < 6) || (i > 0 && i < 4 && j == 3)) y = 3;//Hi
 

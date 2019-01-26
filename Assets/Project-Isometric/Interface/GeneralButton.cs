@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Isometric.UI
+namespace Isometric.Interface
 {
     public class GeneralButton : ButtonBase
     {

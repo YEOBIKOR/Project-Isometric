@@ -40,7 +40,7 @@ public class World
 
         _worldCamera = new WorldCamera(this);
 
-        _worldTime = 0f;
+        _worldTime = System.DateTime.Now.Second;
 
         _chunkGenerator = new ChunkGenerator(this);
         _chunks = new LinkedList<Chunk>();
@@ -193,7 +193,7 @@ public class World
         { return null; }
     }
 
-    public Chunk.ChunkRenderer GetChunkGraphicsAtPosition(Vector3Int tilePosition)
+    public ChunkRenderer GetChunkGraphicsAtPosition(Vector3Int tilePosition)
     {
         Chunk chunk = GetChunkByCoordinate(Chunk.ToChunkCoordinate(tilePosition));
 

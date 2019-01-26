@@ -60,7 +60,7 @@
 			{
 				fixed4 col = tex2D(_MainTex, i.uv);
 				
-				float2 cloudPos = (i.scrPos - _WorldTime * 0.1) * 0.3;
+				float2 cloudPos = (i.scrPos - _WorldTime * 0.1) * 0.1;
 				cloudPos.y -= i.color.y * 0.012;
 				float cloudValue = floor(tex2D(_NoiseTex, cloudPos).r * 5.0) * 0.2;
 

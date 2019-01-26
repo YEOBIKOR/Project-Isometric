@@ -2,7 +2,7 @@
 using UnityEngine;
 using Custom;
 using Isometric.Items;
-using Isometric.UI;
+using Isometric.Interface;
 
 public class Player : EntityCreature
 {
@@ -230,8 +230,9 @@ public class Player : EntityCreature
             Vector3 playerPosition = player.worldPosition;
 
             _rig.worldPosition = playerPosition;
-            _rig.moveSpeed = new Vector2(player.velocity.x, player.velocity.z).magnitude * deltaTime * 1.45f;
             _rig.viewAngle = player.viewAngle;
+            _rig.moveSpeed = new Vector2(player.velocity.x, player.velocity.z).magnitude * deltaTime * 1.45f;
+            _rig.landed = player.landed;
 
             GetEntityPart(PartType.Scarf).worldPosition = Vector3.Lerp(GetEntityPart(PartType.Body).worldPosition, GetEntityPart(PartType.Head).worldPosition, 0.3f);
             GetEntityPart(PartType.Tail).worldPosition = playerPosition + CustomMath.HorizontalRotate(new Vector3(-0.3f, 0.75f + Mathf.Sin(runfactor * 2f) * -0.05f, Mathf.Sin(runfactor * 2f) * 0.05f), player.viewAngle);

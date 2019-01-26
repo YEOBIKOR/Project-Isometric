@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Custom;
-using Isometric.UI;
+using Isometric.Interface;
 
 public class FlowManager : LoopFlow
 {

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Isometric.UI
+namespace Isometric.Interface
 {
-    public class UIObject
+    public class InterfaceObject
     {
         private Menu _menu;
         public virtual Menu menu
@@ -12,7 +12,7 @@ namespace Isometric.UI
             { return _menu; }
         }
 
-        private List<UIObject> elements;
+        private List<InterfaceObject> elements;
 
         private Vector2 _position;
         public Vector2 position
@@ -38,9 +38,9 @@ namespace Isometric.UI
             { return _menu.container; }
         }
 
-        public UIObject(Menu menu)
+        public InterfaceObject(Menu menu)
         {
-            elements = new List<UIObject>();
+            elements = new List<InterfaceObject>();
 
             _menu = menu;
             _position = Vector2.zero;
@@ -59,7 +59,7 @@ namespace Isometric.UI
                 elements[index].Update(deltaTime);
         }
 
-        public UIObject AddElement(UIObject element)
+        public InterfaceObject AddElement(InterfaceObject element)
         {
             elements.Add(element);
             return element;

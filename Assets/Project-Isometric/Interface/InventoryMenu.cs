@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Isometric.Items;
 
-namespace Isometric.UI
+namespace Isometric.Interface
 {
     public class InventoryMenu : PopupMenu
     {
@@ -93,7 +93,7 @@ namespace Isometric.UI
         }
     }
 
-    public class InventoryCursor : UIObject
+    public class InventoryCursor : InterfaceObject
     {
         private ItemContainerVisualizer visualizer;
 

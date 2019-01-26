@@ -1,8 +1,8 @@
 ﻿using System;
 using UnityEngine;
-using Isometric.UI;
+using Isometric.Interface;
 
-namespace Isometric.UI
+namespace Isometric.Interface
 {
     public class PopupMenu : Menu
     {

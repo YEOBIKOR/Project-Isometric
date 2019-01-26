@@ -2,7 +2,7 @@
 using Isometric.Items;
 using Custom;
 
-namespace Isometric.UI
+namespace Isometric.Interface
 {
     public class PlayerInterface : Menu
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Isometric.UI
+namespace Isometric.Interface
 {
-	public class RoundedRect : UIObject
+	public class RoundedRect : InterfaceObject
 	{
         private FSprite[] sprites;
 

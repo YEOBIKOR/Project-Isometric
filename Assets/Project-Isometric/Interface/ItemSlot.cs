@@ -2,7 +2,7 @@
 using UnityEngine;
 using Isometric.Items;
 
-namespace Isometric.UI
+namespace Isometric.Interface
 {
     public class ItemSlot : GeneralButton
     {

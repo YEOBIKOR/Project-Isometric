@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Isometric.UI;
+using Isometric.Interface;
 
 public class IsometricGame : LoopFlow
 {

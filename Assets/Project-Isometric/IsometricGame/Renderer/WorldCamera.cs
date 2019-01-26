@@ -128,7 +128,6 @@ public class WorldCamera
 
         Shader.SetGlobalVector("_CameraPosition", _targetPosition);
         Shader.SetGlobalVector("_SkyColor", skyColor);
-        IsometricMain.camera.backgroundColor = skyColor;
 
         worldCameraUI.Update(deltaTime);
     }
@@ -295,7 +294,6 @@ public class WorldCamera
         _debugContainer.RemoveFromContainer();
 
         worldCameraUI.CleanUp();
-        IsometricMain.camera.backgroundColor = Color.black;
     }
 
     public bool turning

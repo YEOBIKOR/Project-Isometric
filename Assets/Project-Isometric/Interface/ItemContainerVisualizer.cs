@@ -2,9 +2,9 @@
 using UnityEngine;
 using Isometric.Items;
 
-namespace Isometric.UI
+namespace Isometric.Interface
 {
-    public class ItemContainerVisualizer : UIObject
+    public class ItemContainerVisualizer : InterfaceObject
     {
         private ItemContainer _itemContainer;
         public ItemContainer itemContainer

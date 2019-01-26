@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Isometric.UI
+namespace Isometric.Interface
 {
     public class Menu : LoopFlow
     {
@@ -12,12 +12,12 @@ namespace Isometric.UI
             { return _container; }
         }
 
-        private List<UIObject> _elements;
+        private List<InterfaceObject> _elements;
 
         public Menu() : base()
         {
             _container = new FContainer();
-            _elements = new List<UIObject>();
+            _elements = new List<InterfaceObject>();
         }
 
         public override void OnActivate()
@@ -45,7 +45,7 @@ namespace Isometric.UI
             base.Update(deltaTime);
         }
 
-        public UIObject AddElement(UIObject element)
+        public InterfaceObject AddElement(InterfaceObject element)
         {
             _elements.Add(element);
             return element;

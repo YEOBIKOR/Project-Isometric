@@ -16,6 +16,7 @@ public class AnimationRigBipedal : AnimationRig <AnimationRigBipedal>
     public Vector3 worldPosition { get; set; }
     public float viewAngle { get; set; }
     public float moveSpeed { get; set; }
+    public bool landed { get; set; }
 
     public AnimationRigBipedal(EntityPart body, EntityPart head, EntityPart rArm, EntityPart lArm, EntityPart rLeg, EntityPart lLeg, EntityPart rFoot, EntityPart lFoot) : base()
     {
@@ -63,7 +64,7 @@ public class AnimationRigBipedal : AnimationRig <AnimationRigBipedal>
             rig._rFoot.worldPosition = Vector3.Lerp(rig._rFoot.worldPosition, rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0f, 0.18f, -0.16f), rig.viewAngle), deltaTime * 5f);
             rig._lFoot.worldPosition = Vector3.Lerp(rig._lFoot.worldPosition, rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0f, 0.18f, 0.16f), rig.viewAngle), deltaTime * 5f);
 
-            if (rig.moveSpeed > 0.01f)
+            if (rig.moveSpeed > 0.01f || !rig.landed)
                 rig.ChangeState(new StateRun());
         }
     }
@@ -95,7 +96,7 @@ public class AnimationRigBipedal : AnimationRig <AnimationRigBipedal>
             rig._rFoot.worldPosition = rig.worldPosition + GetFootPosition(rig, true);
             rig._lFoot.worldPosition = rig.worldPosition + GetFootPosition(rig, false);
             
-            if (rig.moveSpeed < 0.01f)
+            if (rig.moveSpeed < 0.01f && rig.landed)
                 rig.ChangeState(new StateIdle());
         }
 

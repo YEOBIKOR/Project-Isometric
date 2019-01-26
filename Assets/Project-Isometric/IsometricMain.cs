@@ -66,7 +66,7 @@ public class IsometricMain : MonoBehaviour
 
     private void LoadTextures()
     {
-        //Shader.SetGlobalTexture("_NoiseTex", Resources.Load<Texture>("Textures/noise"));
+        Shader.SetGlobalTexture("_NoiseTex", Resources.Load<Texture>("Textures/noise"));
     }
 
     private void InitializePixelPerfectCamera(Camera camera, Vector2 screenSize)
