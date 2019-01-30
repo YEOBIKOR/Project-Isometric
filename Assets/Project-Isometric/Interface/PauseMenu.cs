@@ -25,7 +25,7 @@ namespace Isometric.Interface
             {
                 cinematicEdge[index] = new FSprite("pixel");
 
-                cinematicEdge[index].width = Futile.screen.width  * 2f;
+                cinematicEdge[index].width = Futile.screen.width;
                 cinematicEdge[index].color = Color.black;
                 cinematicEdge[index].y = Futile.screen.halfHeight * (index > 0 ? 1f : -1f);
             }

@@ -12,15 +12,14 @@ namespace Isometric.Interface
             { return _menu; }
         }
 
-        private List<InterfaceObject> elements;
-
-        private Vector2 _position;
+        private List<InterfaceObject> _elements;
+        
         public Vector2 position
         {
             get
-            { return _position; }
+            { return _container.GetPosition(); }
             set
-            { _position = value; }
+            { _container.SetPosition(value); }
         }
 
         private Vector2 _size;
@@ -32,36 +31,46 @@ namespace Isometric.Interface
             { _size = value; }
         }
 
+        public Vector2 scale
+        {
+            get
+            { return new Vector2(_container.scaleX, _container.scaleY); }
+            set
+            { _container.scaleX = value.x; _container.scaleY = value.y; }
+        }
+
+        private FContainer _container;
         public virtual FContainer container
         {
             get
-            { return _menu.container; }
+            { return _container; }
         }
 
         public InterfaceObject(Menu menu)
         {
-            elements = new List<InterfaceObject>();
-
             _menu = menu;
-            _position = Vector2.zero;
-            _size = Vector2.zero;
+            _elements = new List<InterfaceObject>();
+            _size = new Vector2(100f, 100f);
+            _container = new FContainer();
         }
 
         public virtual void OnActivate()
         {
-            for (int index = 0; index < elements.Count; index++)
-                elements[index].OnActivate();
+            for (int index = 0; index < _elements.Count; index++)
+                _elements[index].OnActivate();
         }
 
         public virtual void Update(float deltaTime)
         {
-            for (int index = 0; index < elements.Count; index++)
-                elements[index].Update(deltaTime);
+            for (int index = 0; index < _elements.Count; index++)
+                _elements[index].Update(deltaTime);
         }
 
         public InterfaceObject AddElement(InterfaceObject element)
         {
-            elements.Add(element);
+            _elements.Add(element);
+            _container.AddChild(element.container);
+
             return element;
         }
 

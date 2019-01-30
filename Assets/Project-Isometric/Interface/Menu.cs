@@ -11,7 +11,7 @@ namespace Isometric.Interface
             get
             { return _container; }
         }
-
+        
         private List<InterfaceObject> _elements;
 
         public Menu() : base()
@@ -48,6 +48,8 @@ namespace Isometric.Interface
         public InterfaceObject AddElement(InterfaceObject element)
         {
             _elements.Add(element);
+            _container.AddChild(element.container);
+
             return element;
         }
 

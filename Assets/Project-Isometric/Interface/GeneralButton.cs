@@ -39,13 +39,9 @@ namespace Isometric.Interface
         public override void Update(float deltaTime)
         {
             hoverfactor = Mathf.Lerp(hoverfactor, hovering && !pressing ? 1f : 0f, deltaTime * 16f);
-
-            rect1.position = position;
-            rect2.position = position;
+            
             rect1.size = size + Vector2.Lerp(Vector2.zero, Vector2.one * 6f, hoverfactor);
             rect2.size = size + Vector2.Lerp(Vector2.zero, Vector2.one * 2f, hoverfactor);
-
-            label.SetPosition(position);
 
             base.Update(deltaTime);
         }
