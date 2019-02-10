@@ -35,7 +35,7 @@ public class Player : EntityCreature
     {
         airControl = true;
 
-        _inventory = new ItemContainer[32];
+        _inventory = new ItemContainer[36];
 
         for (int index = 0; index < _inventory.Length; index++)
             _inventory[index] = new ItemContainer();
@@ -53,7 +53,7 @@ public class Player : EntityCreature
             if (index >= items.Length)
                 break;
 
-            inventory[index].SetItem(new ItemStack(items[index], 1));
+            inventory[index].SetItem(new ItemStack(items[index], 30));
         }
     }
 

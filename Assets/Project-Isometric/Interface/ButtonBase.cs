@@ -35,6 +35,7 @@ namespace Isometric.Interface
 
                 if (!mouseOn)
                 {
+                    OnMouseLeave();
                     hovering = false;
                     pressing = false;
                 }
@@ -49,6 +50,11 @@ namespace Isometric.Interface
         }
 
         public virtual void OnMouseHover()
+        {
+
+        }
+
+        public virtual void OnMouseLeave()
         {
 
         }

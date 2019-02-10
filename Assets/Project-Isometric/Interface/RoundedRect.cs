@@ -11,18 +11,21 @@ namespace Isometric.Interface
 		{
             sprites = new FSprite[8];
 
-            sprites[0] = new FSprite("roundedrectcorner", true);
-            sprites[1] = new FSprite("roundedrectcorner", true);
+            FAtlasElement cornerElement = Futile.atlasManager.GetElementWithName("roundedrectcorner");
+            FAtlasElement pixelElement = Futile.atlasManager.GetElementWithName("uipixel");
+
+            sprites[0] = new FSprite(cornerElement, true);
+            sprites[1] = new FSprite(cornerElement, true);
             sprites[1].scaleX = -1f;
-            sprites[2] = new FSprite("roundedrectcorner", true);
+            sprites[2] = new FSprite(cornerElement, true);
             sprites[2].scaleY = -1f;
-            sprites[3] = new FSprite("roundedrectcorner", true);
+            sprites[3] = new FSprite(cornerElement, true);
             sprites[3].scaleX = -1f;
             sprites[3].scaleY = -1f;
-            sprites[4] = new FSprite("uipixel", true);
-            sprites[5] = new FSprite("uipixel", true);
-            sprites[6] = new FSprite("uipixel", true);
-            sprites[7] = new FSprite("uipixel", true);
+            sprites[4] = new FSprite(pixelElement, true);
+            sprites[5] = new FSprite(pixelElement, true);
+            sprites[6] = new FSprite(pixelElement, true);
+            sprites[7] = new FSprite(pixelElement, true);
 
             for (int i = 0; i < this.sprites.Length; i++)
                 container.AddChild(sprites[i]);

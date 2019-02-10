@@ -14,6 +14,14 @@ namespace Isometric.Interface
 
         private List<InterfaceObject> _elements;
         
+        public bool activated
+        {
+            get
+            { return container.isVisible; }
+            set
+            { container.isVisible = value; }
+        }
+
         public Vector2 position
         {
             get

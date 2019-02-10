@@ -358,7 +358,7 @@ public class WorldCamera
             tutorialLabel.alignment = FLabelAlignment.Left;
             tutorialLabel.SetPosition(-Futile.screen.halfWidth + 4f, -Futile.screen.halfHeight + 32f);
             tutorialLabel.scale = 1f;
-            Futile.stage.AddChild(tutorialLabel);
+            // Futile.stage.AddChild(tutorialLabel);
         }
 
         public void Update(float deltaTime)

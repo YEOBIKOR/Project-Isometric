@@ -1,6 +1,6 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public enum ChunkState
 {
@@ -44,11 +44,11 @@ public class Chunk
 
     public Tile this[int x, int y, int z]
     {
-        get { return tiles[x, y, z]; }
+        get { return _tiles[x, y, z]; }
     }
 
-    private Tile[,,] tiles;
-    private LinkedList<Entity> entities;
+    private Tile[,,] _tiles;
+    private LinkedList<Entity> _entities;
     
     public Vector2Int coordination { get; private set; }
     public ChunkRenderer chunkGraphics { get; private set; }
@@ -62,8 +62,8 @@ public class Chunk
 
         _state = ChunkState.Unloaded;
 
-        tiles = new Tile[Length, Height, Length];
-        entities = new LinkedList<Entity>();
+        _tiles = new Tile[Length, Height, Length];
+        _entities = new LinkedList<Entity>();
 
         chunkGraphics = new ChunkRenderer(this);
 
@@ -73,7 +73,7 @@ public class Chunk
             {
                 for (int k = 0; k < Length; k++)
                 {
-                    tiles[i, j, k] = new Tile(this, (ushort)(i | (j << 4) | (k << 12)));
+                    _tiles[i, j, k] = new Tile(this, (ushort)(i | (j << 4) | (k << 12)));
                 }
             }
         }
@@ -82,8 +82,6 @@ public class Chunk
     public void LoadChunk()
     {
         _state = ChunkState.Loaded;
-
-        //worldCamera.AddRenderer(chunkGraphics);
     }
 
     public void UnloadChunk()
@@ -93,7 +91,7 @@ public class Chunk
 
     public void Update(float deltaTime)
     {
-        LinkedListNode<Entity> node = entities.First;
+        LinkedListNode<Entity> node = _entities.First;
         while (node != null)
         {
             Entity entity = node.Value;
@@ -105,14 +103,14 @@ public class Chunk
 
             LinkedListNode<Entity> nextNode = node.Next;
             if (entity.chunk != this)
-                entities.Remove(node);
+                _entities.Remove(node);
 
             node = nextNode;
         }
 
         if (state == ChunkState.Loaded && !chunkGraphics.initialized)
         {
-            foreach (Tile tile in tiles)
+            foreach (Tile tile in _tiles)
             {
                 if (Tile.GetFullTile(tile))
                     chunkGraphics.AddUpdateTile(tile);
@@ -124,7 +122,7 @@ public class Chunk
 
     public void AddEntity(Entity entity)
     {
-        entities.AddLast(entity);
+        _entities.AddLast(entity);
     }
 
     public void OnTileBlockSet(Tile tile)
@@ -152,6 +150,11 @@ public class Chunk
         }
     }
 
+    public void SetNearbyChunk(int index, Chunk chunk)
+    {
+        _nearbyChunks[index] = chunk;
+    }
+
     public Tile GetTileAtWorldPosition(int x, int y, int z)
     {
         return GetTileAtWorldPosition(new Vector3Int(x, y, z));
@@ -168,7 +171,23 @@ public class Chunk
                 position.y,
                 position.z & 0x0F)];
         else
+        {
+            for (int index = 0; index < _nearbyChunks.Length; index++)
+            {
+                if (_nearbyChunks[index] != null)
+                {
+                    if (_nearbyChunks[index].GetPositionInChunk(position))
+                    {
+                        return _nearbyChunks[index][new Vector3Int(
+                            position.x & 0x0F,
+                            position.y,
+                            position.z & 0x0F)];
+                    }
+                }
+            }
+
             return world.GetTileAtPosition(position);
+        }
     }
 
     public float GetSurface(Vector2 position)
@@ -189,7 +208,7 @@ public class Chunk
 
     public void GetCollidedEntites(PhysicalEntity owner, Action<PhysicalEntity> callback)
     {
-        LinkedListNode<Entity> node = entities.First;
+        LinkedListNode<Entity> node = _entities.First;
         while (node != null)
         {
             PhysicalEntity entity = node.Value as PhysicalEntity;
@@ -219,4 +238,16 @@ public class Chunk
     {
         return new Vector2Int(worldPosition.x >> 4, worldPosition.z >> 4);
     }
+}
+
+public enum NearbyChunkDirection
+{
+    N,
+    NE,
+    E,
+    SE,
+    S,
+    SW,
+    W,
+    NW
 }

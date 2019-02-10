@@ -5,7 +5,7 @@ namespace Isometric.Items
 {
     public class ItemCoin : Item
     {
-        public ItemCoin() : base()
+        public ItemCoin(string name) : base(name)
         {
 
         }

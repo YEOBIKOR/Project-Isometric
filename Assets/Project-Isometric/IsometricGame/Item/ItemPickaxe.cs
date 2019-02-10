@@ -4,7 +4,7 @@ namespace Isometric.Items
 {
     public class ItemPickaxe : ItemTool
     {
-        public ItemPickaxe() : base()
+        public ItemPickaxe(string name) : base(name)
         {
 
         }

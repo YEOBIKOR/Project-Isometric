@@ -21,6 +21,7 @@ namespace Isometric.Interface
             this._itemContainer = itemContainer;
 
             itemAmount = new FLabel("font", string.Empty);
+            itemAmount.SetPosition(new Vector2(8f, -8f));
             itemAmount.scale = 0.5f;
             container.AddChild(itemAmount);
 
@@ -62,15 +63,6 @@ namespace Isometric.Interface
 
                 itemAmount.isVisible = visible && itemContainer.itemStack.stackSize > 1;
             }
-        }
-
-        public override void Update(float deltaTime)
-        {
-            if (itemSprite != null)
-                itemSprite.SetPosition(position);
-            itemAmount.SetPosition(position + new Vector2(8f, -8f));
-
-            base.Update(deltaTime);
         }
     }
 }

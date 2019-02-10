@@ -28,7 +28,7 @@ namespace Isometric.Interface
 
         private GeneralButton exitButton;
 
-        public InventoryMenu(PlayerInterface playerInterface) : base(null, true, 0.5f, 0.5f)
+        public InventoryMenu(PlayerInterface playerInterface) : base(null, true, 0.2f, 0.2f)
         {
             this.playerInterface = playerInterface;
 
@@ -87,27 +87,42 @@ namespace Isometric.Interface
 
         public override void Update(float deltaTime)
         {
-            playerInterface.player.game.timeScale = Mathf.Lerp(1f, 0.1f, factor);
+            playerInterface.player.game.timeScale = Mathf.Lerp(1f, 0.02f, factor);
 
             base.Update(deltaTime);
+        }
+
+        public void InspectItem(ItemContainer itemContainer)
+        {
+            inventoryCursor.InspectItem(itemContainer);
         }
     }
 
     public class InventoryCursor : InterfaceObject
     {
         private ItemContainerVisualizer visualizer;
+        private ItemInspector inspector;
 
         public InventoryCursor(InventoryMenu menu) : base(menu)
         {
             visualizer = new ItemContainerVisualizer(menu, menu.cursorItemContainer);
+            inspector = new ItemInspector(menu);
+
             AddElement(visualizer);
+            AddElement(inspector);
         }
 
         public override void Update(float deltaTime)
         {
             visualizer.position = Menu.mousePosition;
+            inspector.position = Menu.mousePosition;
 
             base.Update(deltaTime);
+        }
+
+        public void InspectItem(ItemContainer itemContainer)
+        {
+            inspector.InspectItem(itemContainer);
         }
     }
 }

@@ -26,11 +26,18 @@ namespace Isometric.Interface
             AddElement(visualizer);
         }
 
-        public override void Update(float deltaTime)
+        public override void OnMouseHover()
         {
-            visualizer.position = position;
+            base.OnMouseHover();
 
-            base.Update(deltaTime);
+            inventoryMenu.InspectItem(itemContainer);
+        }
+
+        public override void OnMouseLeave()
+        {
+            base.OnMouseLeave();
+
+            inventoryMenu.InspectItem(null);
         }
 
         public override void OnPressUp()

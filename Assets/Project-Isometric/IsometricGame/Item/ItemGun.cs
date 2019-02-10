@@ -5,7 +5,7 @@ namespace Isometric.Items
 {
     public class ItemGun : ItemTool
     {
-        public ItemGun() : base()
+        public ItemGun(string name) : base(name)
         {
 
         }

@@ -7,7 +7,7 @@ namespace Isometric.Items
     {
         private Block block;
 
-        public ItemBlock(string blockKey) : base()
+        public ItemBlock(string name, string blockKey) : base(name)
         {
             this.block = Block.GetBlockByKey(blockKey);
         }

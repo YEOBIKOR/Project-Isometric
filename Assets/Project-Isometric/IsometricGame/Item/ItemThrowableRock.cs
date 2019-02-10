@@ -6,7 +6,7 @@ namespace Isometric.Items
 {
     public class ItemThrowableRock : ItemTool
     {
-        public ItemThrowableRock() : base()
+        public ItemThrowableRock(string name) : base(name)
         {
 
         }

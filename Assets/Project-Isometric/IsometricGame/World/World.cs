@@ -175,13 +175,36 @@ public class World
             Vector2 position = (chunk.coordination * Chunk.Length) + new Vector2(RXRandom.Range(0f, 16f), RXRandom.Range(0f, 16f));
             SpawnEntity(new EntityPpyongppyong(), new Vector3(position.x, GetSurface(new Vector3(position.x, 0f, position.y)), position.y));
         }
-        
+
         spawnCount = (int)RXRandom.Range(0f, 1.05f);
 
         for (int i = 0; i < spawnCount; i++)
         {
             Vector2 position = (chunk.coordination * Chunk.Length) + new Vector2(RXRandom.Range(0f, 16f), RXRandom.Range(0f, 16f));
             SpawnEntity(new EntityDipper(), new Vector3(position.x, GetSurface(new Vector3(position.x, 0f, position.y)), position.y));
+        }
+
+        Vector2Int[] nearbyCoordinations = new Vector2Int[]
+        {
+            new Vector2Int(0, -1),
+            new Vector2Int(-1, -1),
+            new Vector2Int(-1, 0),
+            new Vector2Int(-1, 1),
+            new Vector2Int(0, 1),
+            new Vector2Int(1, 1),
+            new Vector2Int(1, 1),
+            new Vector2Int(1, 0)
+        };
+
+        for (int index = 0; index < nearbyCoordinations.Length; index++)
+        {
+            Chunk nearbyChunk = GetChunkByCoordinate(chunk.coordination + nearbyCoordinations[index]);
+
+            if (nearbyChunk != null)
+            {
+                chunk.SetNearbyChunk((index + 4) % 8, nearbyChunk);
+                nearbyChunk.SetNearbyChunk(index, chunk);
+            }
         }
     }
 
