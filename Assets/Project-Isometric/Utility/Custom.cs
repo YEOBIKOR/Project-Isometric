@@ -19,13 +19,20 @@ namespace Custom
             return f - Mathf.Floor((f + 180f) / 360f) * 360f;
         }
 
-        public static Vector3 HorizontalRotate(Vector3 v, float angle)
+        public static Vector2 Rotate(Vector2 v, float angle)
         {
             float radian = angle * Mathf.Deg2Rad;
             float sin = Mathf.Sin(radian);
             float cos = Mathf.Cos(radian);
 
-            return new Vector3(v.x * cos - v.z * sin, v.y, v.x * sin + v.z * cos);
+            return new Vector2(v.x * cos - v.y * sin, v.x * sin + v.y * cos);
+        }
+
+        public static Vector3 HorizontalRotate(Vector3 v, float angle)
+        {
+            Vector2 r = Rotate(new Vector2(v.x, v.z), angle);
+
+            return new Vector3(r.x, v.y, r.y);
         }
 
         public static float Factor(float time, float startTime, float duration)

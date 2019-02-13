@@ -16,6 +16,11 @@ public class WorldCamera
     private World _world;
 
     private WorldMicrophone _worldMicrophone;
+    public WorldMicrophone worldMicroPhone
+    {
+        get
+        { return _worldMicrophone; }
+    }
 
     private Queue<IRenderer> _renderersQueue;
     private List<SpriteLeaser> _spriteLeasers;
@@ -128,6 +133,11 @@ public class WorldCamera
 
         Shader.SetGlobalVector("_CameraPosition", _targetPosition);
         Shader.SetGlobalVector("_SkyColor", skyColor);
+
+        _worldMicrophone.worldPosition = _targetPosition;
+        _worldMicrophone.viewAngle = _viewAngle;
+
+        _worldMicrophone.Update(deltaTime);
 
         worldCameraUI.Update(deltaTime);
     }

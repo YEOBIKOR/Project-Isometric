@@ -61,6 +61,8 @@ public class World
         _cameraHUD.Speech(player, "W A S D : Move the character\nSpace : Jump the character\nQ, E : Move the camera\nEsc : Exit the game");
 
         worldProfiler = new WorldProfiler(this);
+
+        _worldCamera.worldMicroPhone.PlaySound(Resources.Load<AudioClip>("SoundEffects/EAS"), new FixedPosition(new Vector3(0f, 6f, 0f)));
     }
 
     public void Update(float deltaTime)
