@@ -3,7 +3,7 @@ using System.Collections;
 using Custom;
 using Isometric.Items;
 
-public abstract class EntityCreature : PhysicalEntity
+public abstract class EntityCreature : PhysicalEntity, ITarget
 {
     private float _viewAngle;
     public float viewAngle
@@ -41,6 +41,12 @@ public abstract class EntityCreature : PhysicalEntity
         get { return _maxHealth; }
     }
 
+    public virtual Rect boundRect
+    {
+        get
+        { return new Rect(0f, 12f, 24f, 36f); }
+    }
+
     public EntityCreature(float radius, float height, float maxHealth) : base(radius, height)
     {
         _viewAngle = 0f;
@@ -69,6 +75,11 @@ public abstract class EntityCreature : PhysicalEntity
         //    world.SpawnEntity(new DroppedItem(new ItemCoin()), worldPosition + new Vector3(Random.Range(-0.5f, 0.5f), 0f, Random.Range(-0.5f, 0.5f)));
 
         DespawnEntity();
+    }
+
+    public virtual void Trigger()
+    {
+
     }
 
     public virtual EntityPart[][] decomposeCreatureParts

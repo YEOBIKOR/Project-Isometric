@@ -4,6 +4,12 @@ using Custom;
 
 public class EntityDipper : EntityCreature
 {
+    public override Rect boundRect
+    {
+        get
+        { return new Rect(0f, 24f, 36f, 48f); }
+    }
+
     public EntityDipper() : base(0.8f, 3.0f, 35f)
     {
         entityParts.Add(new EntityPart(this, "dipperbody"));

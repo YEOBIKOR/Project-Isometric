@@ -92,7 +92,7 @@ namespace Isometric.Interface
         public static Vector2 mousePosition
         {
             get
-            { return ( Input.mousePosition - new Vector3(Screen.width, Screen.height) * 0.5f) / Futile.displayScale; }
+            { return (Input.mousePosition - new Vector3(Screen.width, Screen.height) * 0.5f) * Futile.displayScaleInverse; }
         }
     }
 }

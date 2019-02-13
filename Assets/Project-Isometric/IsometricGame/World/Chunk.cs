@@ -170,24 +170,22 @@ public class Chunk
                 position.x & 0x0F,
                 position.y,
                 position.z & 0x0F)];
-        else
+
+        for (int index = 0; index < _nearbyChunks.Length; index++)
         {
-            for (int index = 0; index < _nearbyChunks.Length; index++)
+            if (_nearbyChunks[index] != null)
             {
-                if (_nearbyChunks[index] != null)
+                if (_nearbyChunks[index].GetPositionInChunk(position))
                 {
-                    if (_nearbyChunks[index].GetPositionInChunk(position))
-                    {
-                        return _nearbyChunks[index][new Vector3Int(
-                            position.x & 0x0F,
-                            position.y,
-                            position.z & 0x0F)];
-                    }
+                    return _nearbyChunks[index][new Vector3Int(
+                        position.x & 0x0F,
+                        position.y,
+                        position.z & 0x0F)];
                 }
             }
-
-            return world.GetTileAtPosition(position);
         }
+
+        return world.GetTileAtPosition(position);
     }
 
     public float GetSurface(Vector2 position)

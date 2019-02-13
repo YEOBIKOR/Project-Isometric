@@ -38,7 +38,7 @@ public class ChunkGenerator
                         if (biome > 0)
                             block = Block.GetBlockByKey("sand");
                         else
-                            block = Block.GetBlockByKey(k > 4 + RXRandom.Range(0, 5) ? "stone" : "grass");
+                            block = Block.GetBlockByKey(k > 4 + RXRandom.Range(0, 5) ? "stone" : (k + 1 == y) ? "grass" : "dirt");
                     }
 
                     chunk[i, k, j].SetBlock(block);

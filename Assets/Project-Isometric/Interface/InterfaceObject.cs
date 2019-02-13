@@ -82,6 +82,13 @@ namespace Isometric.Interface
             return element;
         }
 
+        public FNode AddElement(FNode element)
+        {
+            _container.AddChild(element);
+
+            return element;
+        }
+
         public bool mouseOn
         {
             get

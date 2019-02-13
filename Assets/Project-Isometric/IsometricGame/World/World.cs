@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using Isometric.Interface;
 
 public class World
 {
@@ -29,6 +30,8 @@ public class World
 
     public Player player { get; private set; }
 
+    private CameraHUDMenu _cameraHUD;
+
     private const float loadChunkRange = 30f;
     private const float unloadChunkRange = 50f;
 
@@ -51,6 +54,11 @@ public class World
         
         player = new Player();
         RequestLoadChunk(new Vector2Int(0, 0));
+
+        _cameraHUD = new CameraHUDMenu(_worldCamera);
+        game.AddSubLoopFlow(_cameraHUD);
+
+        _cameraHUD.Speech(player, "W A S D : Move the character\nSpace : Jump the character\nQ, E : Move the camera\nEsc : Exit the game");
 
         worldProfiler = new WorldProfiler(this);
     }
@@ -313,6 +321,9 @@ public class World
             {
                 chunk.AddEntity(entity);
                 entity.OnSpawn(chunk, position);
+
+                if (entity is ITarget)
+                    _cameraHUD.AddTarget(entity as ITarget);
             }
         }
         else
