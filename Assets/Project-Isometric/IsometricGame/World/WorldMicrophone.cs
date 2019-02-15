@@ -43,7 +43,7 @@ public class WorldMicrophone
 
             if (!audioSource.isPlaying)
             {
-                _playingAudios.RemoveAt(index);
+                _playingAudios.RemoveAt(index--);
                 break;
             }
 
@@ -62,7 +62,7 @@ public class WorldMicrophone
 
     public float GetVolume(IPositionable owner)
     {
-        return 1f / ((owner.worldPosition - _worldPosition).magnitude + 1f);
+        return Mathf.Pow(1.5f, -(owner.worldPosition - _worldPosition).magnitude);
     }
 
     public void PlaySound(AudioClip clip, IPositionable owner)

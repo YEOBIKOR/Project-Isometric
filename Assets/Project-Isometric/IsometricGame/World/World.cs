@@ -31,6 +31,11 @@ public class World
     public Player player { get; private set; }
 
     private CameraHUDMenu _cameraHUD;
+    public CameraHUDMenu cameraHUD
+    {
+        get
+        { return _cameraHUD; }
+    }
 
     private const float loadChunkRange = 30f;
     private const float unloadChunkRange = 50f;
@@ -61,8 +66,7 @@ public class World
         _cameraHUD.Speech(player, "W A S D : Move the character\nSpace : Jump the character\nQ, E : Move the camera\nEsc : Exit the game");
 
         worldProfiler = new WorldProfiler(this);
-
-        _worldCamera.worldMicroPhone.PlaySound(Resources.Load<AudioClip>("SoundEffects/EAS"), new FixedPosition(new Vector3(0f, 6f, 0f)));
+        worldCamera.worldMicroPhone.PlaySound(Resources.Load<AudioClip>("SoundEffects/EAS"), new FixedPosition(new Vector3(0f, 6f, 0f)));
     }
 
     public void Update(float deltaTime)
@@ -163,11 +167,17 @@ public class World
         } while (_loadingChunks.Count > 0);
     }
 
+    AudioClip clip;
+
     public void OnChunkGenerated(Chunk chunk)
     {
         if (chunk.coordination == new Vector2Int(0, 0))
         {
             SpawnEntity(player, new Vector3(1f, GetSurface(new Vector2(1f, 1f)), 1f));
+
+            Entity ppyongppyong = new EntityPpyongppyong();
+
+            SpawnEntity(ppyongppyong, new Vector3(1f, GetSurface(new Vector2(1f, 1f)), 1f));
 
             //SpawnEntity(new EntityBoss(), new Vector3(8f, 16f, 8f));
 

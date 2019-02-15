@@ -72,5 +72,13 @@ namespace Isometric.Interface
         {
             _targets.Add(target);
         }
+
+        public void IndicateDamage(Damage damage, Vector3 position)
+        {
+            DamageIndicator indicator = new DamageIndicator(this, damage);
+            indicator.position = _camera.GetScreenPosition(position) + _camera.worldContainer.GetPosition();
+
+            AddElement(indicator);
+        }
     }
 }
