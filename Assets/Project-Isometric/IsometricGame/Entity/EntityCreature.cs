@@ -71,8 +71,8 @@ public abstract class EntityCreature : PhysicalEntity, ITarget
         for (int index = 0; index < entityParts.Count; index++)
             world.SpawnEntity(new DecomposeCreaturePart(this, entityParts[index]), entityParts[index].worldPosition);
         
-        //for (int i = 0; i < 10; i++)
-        //    world.SpawnEntity(new DroppedItem(new ItemCoin()), worldPosition + new Vector3(Random.Range(-0.5f, 0.5f), 0f, Random.Range(-0.5f, 0.5f)));
+        for (int i = 0; i < 10; i++)
+            world.SpawnEntity(new DroppedItem(new ItemStack(Item.GetItemByKey("pickaxe"), 1)), worldPosition + new Vector3(Random.Range(-0.5f, 0.5f), 0f, Random.Range(-0.5f, 0.5f)));
 
         DespawnEntity();
     }

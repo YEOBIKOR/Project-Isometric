@@ -66,7 +66,7 @@ public class World
         _cameraHUD.Speech(player, "W A S D : Move the character\nSpace : Jump the character\nQ, E : Move the camera\nEsc : Exit the game");
 
         worldProfiler = new WorldProfiler(this);
-        worldCamera.worldMicroPhone.PlaySound(Resources.Load<AudioClip>("SoundEffects/EAS"), new FixedPosition(new Vector3(0f, 6f, 0f)));
+        worldCamera.worldMicroPhone.PlaySound(Resources.Load<AudioClip>("SoundEffects/radar"), new FixedPosition(new Vector3(0f, 6f, 0f)));
     }
 
     public void Update(float deltaTime)
@@ -174,10 +174,6 @@ public class World
         if (chunk.coordination == new Vector2Int(0, 0))
         {
             SpawnEntity(player, new Vector3(1f, GetSurface(new Vector2(1f, 1f)), 1f));
-
-            Entity ppyongppyong = new EntityPpyongppyong();
-
-            SpawnEntity(ppyongppyong, new Vector3(1f, GetSurface(new Vector2(1f, 1f)), 1f));
 
             //SpawnEntity(new EntityBoss(), new Vector3(8f, 16f, 8f));
 

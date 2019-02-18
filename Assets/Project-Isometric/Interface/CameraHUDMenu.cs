@@ -19,7 +19,7 @@ namespace Isometric.Interface
             _targets = new List<ITarget>();
 
             _rect = new GeneralButton(this, string.Empty, null);
-            AddElement(_rect);
+            // AddElement(_rect);
         }
 
         private ITarget _currentTarget;

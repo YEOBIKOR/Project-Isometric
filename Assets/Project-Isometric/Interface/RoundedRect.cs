@@ -34,7 +34,7 @@ namespace Isometric.Interface
         public override void Update(float deltaTime)
         {
             Vector2 cornerSize = new Vector2(sprites[0].width, sprites[0].height);
-            Vector2 cornerPosition = (size * 0.5f) - (cornerSize * 0.5f);
+            Vector2 cornerPosition = (size * 0.5f) + (cornerSize * 0.5f);
 
             sprites[0].SetPosition(-cornerPosition.x, cornerPosition.y);
             sprites[1].SetPosition(cornerPosition.x, cornerPosition.y);
@@ -42,20 +42,67 @@ namespace Isometric.Interface
             sprites[3].SetPosition(cornerPosition.x, -cornerPosition.y);
 
             float edgeThickness = 1f;
-            Vector2 edgeLength = size - cornerSize * 2f;
+            Vector2 edgeLength = size;
             
-            sprites[4].y = size.y * 0.5f - 0.5f;
+            sprites[4].y = size.y * 0.5f + cornerSize.y - 0.5f;
             sprites[4].scaleX = edgeLength.x;
             sprites[4].scaleY = edgeThickness;
-            sprites[5].y = size.y * -0.5f + 0.5f;
+            sprites[5].y = size.y * -0.5f - cornerSize.y + 0.5f;
             sprites[5].scaleX = edgeLength.x;
             sprites[5].scaleY = edgeThickness;
-            sprites[6].x = size.x * 0.5f - 0.5f;
+            sprites[6].x = size.x * 0.5f + cornerSize.x - 0.5f;
             sprites[6].scaleX = edgeThickness;
             sprites[6].scaleY = edgeLength.y;
-            sprites[7].x = size.x * -0.5f + 0.5f;
+            sprites[7].x = size.x * -0.5f - cornerSize.x + 0.5f;
             sprites[7].scaleX = edgeThickness;
             sprites[7].scaleY = edgeLength.y;
+
+            base.Update(deltaTime);
+        }
+    }
+
+    public class SolidRoundedRect : RoundedRect
+    {
+        private FSprite[] sprites;
+
+        public SolidRoundedRect(Menu menu) : base(menu)
+        {
+            sprites = new FSprite[5];
+
+            FAtlasElement cornerElement = Futile.atlasManager.GetElementWithName("roundedrectcorner");
+            FAtlasElement pixelElement = Futile.atlasManager.GetElementWithName("uipixel");
+
+            sprites[0] = new FSprite(pixelElement);
+            sprites[1] = new FSprite(pixelElement);
+            sprites[2] = new FSprite(pixelElement);
+            sprites[3] = new FSprite(pixelElement);
+            sprites[4] = new FSprite(pixelElement);
+
+            for (int i = 0; i < this.sprites.Length; i++)
+            {
+                sprites[i].color = Color.black;
+                container.AddChild(sprites[i]);
+            }
+        }
+
+        public override void Update(float deltaTime)
+        {
+            sprites[0].scaleX = size.x;
+            sprites[0].scaleY = size.y;
+
+            sprites[1].SetPosition(0f, size.y * 0.5f + 2f);
+            sprites[2].SetPosition(0f, -(size.y * 0.5f + 2f));
+            sprites[3].SetPosition(-(size.x * 0.5f + 2f), 0f);
+            sprites[4].SetPosition(size.x * 0.5f + 2f, 0f);
+
+            sprites[1].scaleX = size.x;
+            sprites[1].scaleY = 4f;
+            sprites[2].scaleX = size.x;
+            sprites[2].scaleY = 4f;
+            sprites[3].scaleX = 4f;
+            sprites[3].scaleY = size.y;
+            sprites[4].scaleX = 4f;
+            sprites[4].scaleY = size.y;
 
             base.Update(deltaTime);
         }

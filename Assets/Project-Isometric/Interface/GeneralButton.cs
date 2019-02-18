@@ -14,6 +14,9 @@ namespace Isometric.Interface
 
         private float hoverfactor;
 
+        private static AudioClip _onHoverAudio;
+        private static AudioClip _onPressAudio;
+
         public GeneralButton(Menu menu, string name, Action clickCallback) : base(menu)
         {
             rect1 = new RoundedRect(menu);
@@ -27,6 +30,12 @@ namespace Isometric.Interface
             container.AddChild(label);
 
             this.clickCallback = clickCallback;
+
+            if (_onHoverAudio == null)
+            {
+                _onHoverAudio = Resources.Load<AudioClip>("SoundEffects/UIMetal3");
+                _onPressAudio = Resources.Load<AudioClip>("SoundEffects/UIArp");
+            }
         }
 
         public override void OnActivate()
@@ -39,11 +48,20 @@ namespace Isometric.Interface
         public override void Update(float deltaTime)
         {
             hoverfactor = Mathf.Lerp(hoverfactor, hovering && !pressing ? 1f : 0f, deltaTime * 16f);
-            
-            rect1.size = size + Vector2.Lerp(Vector2.zero, Vector2.one * 6f, hoverfactor);
-            rect2.size = size + Vector2.Lerp(Vector2.zero, Vector2.one * 2f, hoverfactor);
+
+            Vector2 rectSize = size - Vector2.one * 12f;
+
+            rect1.size = rectSize + Vector2.Lerp(Vector2.zero, Vector2.one * 6f, hoverfactor);
+            rect2.size = rectSize + Vector2.Lerp(Vector2.zero, Vector2.one * 2f, hoverfactor);
 
             base.Update(deltaTime);
+        }
+
+        public override void OnMouseHover()
+        {
+            base.OnMouseHover();
+
+            AudioEngine.PlaySound(_onHoverAudio);
         }
 
         public override void OnPressUp()
@@ -52,6 +70,8 @@ namespace Isometric.Interface
 
             if (clickCallback != null)
                 clickCallback();
+
+            AudioEngine.PlaySound(_onPressAudio);
         }
     }
 }

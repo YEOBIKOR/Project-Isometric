@@ -11,7 +11,11 @@ public class DroppedItem : PhysicalEntity
         { return _itemStack; }
     }
 
-    private bool acquirable;
+    private bool _acquirable;
+    private bool _acquired;
+
+    private float _acquiretime;
+    private Vector3 _acquirePosition;
 
     public DroppedItem(ItemStack itemStack) : base(0.25f, 0.5f)
     {
@@ -21,36 +25,48 @@ public class DroppedItem : PhysicalEntity
         entityParts[0].sortZOffset = 1f;
         entityParts[0].scale = Vector2.one * 0.5f;
 
-        acquirable = false;
+        _acquirable = false;
+        _acquired = false;
     }
 
     public override void Update(float deltaTime)
     {
-        if (time > 60f)
-            DespawnEntity();
-
-        acquirable = time > 2f;
-
-        if (acquirable)
+        if (_acquired)
+            AcquireUpdate(time - _acquiretime);
+        else
         {
-            Vector3 deltaVec = world.player.worldPosition - worldPosition;
-            if (deltaVec.sqrMagnitude < 4f)
-                AddForce(deltaVec.normalized * 100f / deltaVec.sqrMagnitude * deltaTime);
+            if (time > 60f)
+                DespawnEntity();
+
+            _acquirable = time > 2f;
+
+            if (_acquirable)
+            {
+                Vector3 deltaVec = world.player.worldPosition - worldPosition;
+                if (deltaVec.sqrMagnitude < 4f)
+                {
+                    _acquired = true;
+                    _acquiretime = time;
+                    _acquirePosition = worldPosition;
+                }
+            }
         }
 
         entityParts[0].worldPosition = worldPosition + Vector3.up * (Mathf.Sin(time * Mathf.PI) + 2f) * 0.3f;
 
         base.Update(deltaTime);
     }
-
-    public override void OnCollisionWithOther(PhysicalEntity other)
+    
+    public void AcquireUpdate(float time)
     {
-        if (other == world.player && acquirable)
+        float factor = time * 2f;
+
+        worldPosition = Vector3.Lerp(_acquirePosition, world.player.worldPosition, factor) + Vector3.up * Mathf.Sin(factor * Mathf.PI) * 2f;
+
+        if (factor > 1f)
         {
             world.player.AcquireItem(itemStack);
             DespawnEntity();
         }
-        else
-            base.OnCollisionWithOther(other);
     }
 }

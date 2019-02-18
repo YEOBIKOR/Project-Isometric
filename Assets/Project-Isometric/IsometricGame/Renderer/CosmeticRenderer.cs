@@ -98,7 +98,7 @@ public class CosmeticRenderer : IRenderer
     public virtual void OnInitializeSprite(SpriteLeaser spriteLeaser, WorldCamera camera)
     {
         FSprite sprite = new FSprite(element == null ? Futile.whiteElement : element);
-        sprite.shader = IsometricMain.GetShader("WorldObject");
+        // sprite.shader = IsometricMain.GetShader("WorldObject");
 
         spriteLeaser.sprites.Add(sprite);
     }
@@ -120,7 +120,7 @@ public class CosmeticRenderer : IRenderer
             sprite.scaleX = scale.x * (camera.GetFlipXByViewAngle(viewAngle) ? -1f : 1f);
             sprite.scaleY = scale.y;
             sprite.sortZ = camera.GetSortZ(worldPosition) + sortZOffset;
-            sprite.color = new Color(worldPosition.x, worldPosition.y, worldPosition.z);
+            sprite.color = color; // new Color(worldPosition.x, worldPosition.y, worldPosition.z);
         }
         else
             spriteLeaser.Erase();

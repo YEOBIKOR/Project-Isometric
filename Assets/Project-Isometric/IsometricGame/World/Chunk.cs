@@ -96,8 +96,8 @@ public class Chunk
         {
             Entity entity = node.Value;
 
-            entity.Update(deltaTime);
-
+            if (entity.spawned)
+                entity.Update(deltaTime);
             if (!entity.spawned)
                 entity.OnDespawn();
 

@@ -12,7 +12,7 @@ namespace Isometric.Interface
         private float _time;
 
         private FLabel _label;
-        private RoundedRect _rect;
+        private SolidRoundedRect _rect;
 
         const float SpeechSpeed = 24f;
 
@@ -23,13 +23,13 @@ namespace Isometric.Interface
             _behaviour = behaviour;
             _text = text;
 
+            _rect = new SolidRoundedRect(menu);
             _label = new FLabel("font", string.Empty);
-            _rect = new RoundedRect(menu);
 
             _label.scale = 0.5f;
 
-            AddElement(_label);
             AddElement(_rect);
+            AddElement(_label);
         }
 
         public override void Update(float deltaTime)
@@ -41,7 +41,7 @@ namespace Isometric.Interface
             if (_time * SpeechSpeed < _text.Length + 1)
                 _label.text = _text.Substring(0, (int)(_time * SpeechSpeed));
 
-            _rect.size = _label.textRect.size * 0.5f + new Vector2(10f, 10f);
+            _rect.size = _label.textRect.size * 0.5f;
 
             base.Update(deltaTime);
         }

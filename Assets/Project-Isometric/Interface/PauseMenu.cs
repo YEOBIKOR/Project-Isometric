@@ -12,6 +12,8 @@ namespace Isometric.Interface
 
         private GeneralButton[] buttons;
 
+        private static AudioClip _onPauseAudio;
+
         public PauseMenu(LoopFlow pauseTarget) : base(null, true, 0.5f, 0.5f)
         {
             this.pauseTarget = pauseTarget;
@@ -47,6 +49,11 @@ namespace Isometric.Interface
             buttons[0].position = Menu.rightDown + Vector2.right * -30f;
             buttons[1].position = Menu.leftDown + Vector2.right * 30f;
             buttons[2].position = Menu.leftDown + Vector2.right * 90f;
+
+            if (_onPauseAudio == null)
+            {
+                _onPauseAudio = Resources.Load<AudioClip>("SoundEffects/UIMetalHit");
+            }
         }
 
         public override void Update(float deltaTime)
@@ -61,6 +68,13 @@ namespace Isometric.Interface
                 buttons[index].position = new Vector2(buttons[index].position.x,Menu.screenHeight * -0.5f + Mathf.Lerp(-16f, 16f, CustomMath.Curve(factor * 4f - (index + 1), -1f)));
 
             base.Update(deltaTime);
+        }
+
+        public override void OnActivate()
+        {
+            base.OnActivate();
+
+            AudioEngine.PlaySound(_onPauseAudio);
         }
 
         public override void OnTerminate()
