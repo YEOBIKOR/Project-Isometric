@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Isometric.Interface
 {
-    public class InterfaceObject
+    public abstract class InterfaceObject
     {
         private Menu _menu;
         public virtual Menu menu

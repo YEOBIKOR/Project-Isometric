@@ -66,7 +66,6 @@ public class World
         _cameraHUD.Speech(player, "W A S D : Move the character\nSpace : Jump the character\nQ, E : Move the camera\nEsc : Exit the game");
 
         worldProfiler = new WorldProfiler(this);
-        worldCamera.worldMicroPhone.PlaySound(Resources.Load<AudioClip>("SoundEffects/radar"), new FixedPosition(new Vector3(0f, 6f, 0f)));
     }
 
     public void Update(float deltaTime)
@@ -330,7 +329,7 @@ public class World
                 chunk.AddEntity(entity);
                 entity.OnSpawn(chunk, position);
 
-                if (entity is ITarget)
+                if (entity is ITarget && entity != player)
                     _cameraHUD.AddTarget(entity as ITarget);
             }
         }

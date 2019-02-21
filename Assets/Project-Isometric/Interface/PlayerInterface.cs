@@ -124,8 +124,7 @@ namespace Isometric.Interface
                 get
                 { return playerInterface.player; }
             }
-
-            private FSprite selectSprite;
+            
             private ItemContainerVisualizer[] visualizer;
             private int selectedIndex;
 
@@ -138,9 +137,6 @@ namespace Isometric.Interface
             public ItemSelect(PlayerInterface playerInterface) : base()
             {
                 this.playerInterface = playerInterface;
-
-                selectSprite = new FSprite("itemselect");
-                container.AddChild(selectSprite);
 
                 visualizer = new ItemContainerVisualizer[length];
                 for (int index = 0; index < length; index++)
@@ -175,14 +171,14 @@ namespace Isometric.Interface
                     player.PickItem(player.inventory[selectedIndex]);
 
                 selectSpriteAngle = Mathf.LerpAngle(selectSpriteAngle, (float)selectedIndex / length * 360f, deltaTime * 10f);
-                selectSprite.SetPosition(anchorPosition + new Vector2(Mathf.Cos(selectSpriteAngle * Mathf.Deg2Rad), Mathf.Sin(selectSpriteAngle * Mathf.Deg2Rad)) * 40f);
 
                 for (int index = 0; index < length; index++)
                 {
                     bool selected = index == selectedIndex;
-                    float radian = (float)index / length * Mathf.PI * 2f;
+                    float radian = (index + 1f - factor) / length * Mathf.PI * 2f;
 
                     visualizer[index].position = Vector2.Lerp(visualizer[index].position, anchorPosition + (new Vector2(Mathf.Cos(radian), Mathf.Sin(radian)) * factor * (selected ? 40f : 32f)), deltaTime * 10f);
+                    visualizer[index].container.alpha = factor;
                 }
 
                 base.Update(deltaTime);

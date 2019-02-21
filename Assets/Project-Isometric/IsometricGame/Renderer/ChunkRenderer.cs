@@ -56,7 +56,8 @@ public class ChunkRenderer : IRenderer
                 Tile tile = drawTiles[index];
                 FSprite sprite = spriteLeaser.sprites[index];
 
-                SetSpriteByTile(sprite, tile, camera, true);
+                if (camera.turning)
+                    SetSpriteByTile(sprite, tile, camera, true);
 
                 if (sprite.container != null && !spriteLeaser.InScreenRect(sprite))
                     sprite.RemoveFromContainer();
@@ -115,7 +116,7 @@ public class ChunkRenderer : IRenderer
                         sprite.element = tile.block.sprite;
                     }
 
-                    SetSpriteByTile(sprite, tile, camera);
+                    SetSpriteByTile(sprite, tile, camera, true);
                 }
                 else
                 {

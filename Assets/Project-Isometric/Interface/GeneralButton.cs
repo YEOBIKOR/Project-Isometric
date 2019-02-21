@@ -57,21 +57,32 @@ namespace Isometric.Interface
             base.Update(deltaTime);
         }
 
-        public override void OnMouseHover()
+        public override void OnHoverIn()
         {
-            base.OnMouseHover();
-
             AudioEngine.PlaySound(_onHoverAudio);
+        }
+
+        public override void OnHover()
+        {
+
+        }
+
+        public override void OnHoverOut()
+        {
+
         }
 
         public override void OnPressUp()
         {
-            base.OnPressUp();
-
             if (clickCallback != null)
                 clickCallback();
 
             AudioEngine.PlaySound(_onPressAudio);
+        }
+
+        public override void OnPressDown()
+        {
+
         }
     }
 }

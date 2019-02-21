@@ -8,6 +8,7 @@ namespace Isometric.Interface
 
         private IPositionable _behaviour;
         private string _text;
+        private float _duration;
 
         private float _time;
 
@@ -22,6 +23,7 @@ namespace Isometric.Interface
 
             _behaviour = behaviour;
             _text = text;
+            _duration = 10f;
 
             _rect = new SolidRoundedRect(menu);
             _label = new FLabel("font", string.Empty);
@@ -42,6 +44,16 @@ namespace Isometric.Interface
                 _label.text = _text.Substring(0, (int)(_time * SpeechSpeed));
 
             _rect.size = _label.textRect.size * 0.5f;
+
+            if (_time > _duration)
+            {
+                float factor = Mathf.Clamp01(_time - _duration);
+
+                if (factor < 1f)
+                    container.alpha = Mathf.Clamp01(1f - factor);
+                else
+                    ;
+            }
 
             base.Update(deltaTime);
         }

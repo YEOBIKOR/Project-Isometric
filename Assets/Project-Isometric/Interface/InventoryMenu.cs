@@ -89,6 +89,8 @@ namespace Isometric.Interface
         {
             playerInterface.player.game.timeScale = Mathf.Lerp(1f, 0.02f, factor);
 
+            InspectItem(null);
+
             base.Update(deltaTime);
         }
 

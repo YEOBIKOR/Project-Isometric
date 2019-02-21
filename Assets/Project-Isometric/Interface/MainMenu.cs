@@ -7,7 +7,7 @@ namespace Isometric.Interface
     {
         private OptionsMenu optionsMenu;
 
-        private FSprite backGround;
+        private FSprite background;
         private FSprite[] titleSprites;
         private GeneralButton[] buttons;
         private GeneralButton visitDevLog;
@@ -16,9 +16,9 @@ namespace Isometric.Interface
         {
             optionsMenu = new OptionsMenu(this);
 
-            backGround = new FSprite("mainbackground");
-            backGround.scale = 1.2f * screenHeight / 270f;
-            container.AddChild(backGround);
+            background = new FSprite("mainbackground");
+            background.scale = 1.2f * screenHeight / 270f;
+            container.AddChild(background);
 
             titleSprites = new FSprite[3];
             titleSprites[0] = new FSprite("titlei");
@@ -57,10 +57,12 @@ namespace Isometric.Interface
 
         public override void Update(float deltaTime)
         {
-            backGround.SetPosition(-mousePosition * 0.03f +
-                new Vector2(Mathf.PerlinNoise(time, 0f) - 0.5f, Mathf.PerlinNoise(0f, time) - 0.5f) * 5f);
+            Vector2 backgroundTargetPosition = -mousePosition * 0.03f +
+                new Vector2(Mathf.PerlinNoise(time, 0f) - 0.5f, Mathf.PerlinNoise(0f, time) - 0.5f) * 5f;
 
-            backGround.alpha = Mathf.Lerp(0f, 0.5f, (time - 1f) * 0.5f);
+            background.SetPosition(Vector2.Lerp(background.GetPosition(), backgroundTargetPosition, deltaTime * 3f));
+
+            background.alpha = Mathf.Lerp(0f, 0.5f, (time - 1f) * 0.5f);
             for (int i = 0; i < titleSprites.Length; i++)
                 titleSprites[i].y = Mathf.Lerp(-screenHeight, screenHeight * 0.5f - 60f, CustomMath.Curve(time - (i * 0.2f), -3f)) + Mathf.Sin(time * 3f - i) * 4f;
             for (int i = 0; i < buttons.Length; i++)

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Isometric.Interface
 {
-    public class Menu : LoopFlow
+    public abstract class Menu : LoopFlow
     {
         private FContainer _container;
         public FContainer container

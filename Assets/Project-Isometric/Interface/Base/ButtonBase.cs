@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Isometric.Interface
 {
-	public class ButtonBase : InterfaceObject
+	public abstract class ButtonBase : InterfaceObject
 	{
         public bool hovering { get; private set; }
         public bool pressing { get; private set; }
@@ -35,38 +35,32 @@ namespace Isometric.Interface
 
                 if (!mouseOn)
                 {
-                    OnMouseLeave();
+                    OnHoverOut();
                     hovering = false;
                     pressing = false;
+                }
+                else
+                {
+                    OnHover();
                 }
             }
             else if (!hovering && mouseOn)
             {
-                OnMouseHover();
+                OnHoverIn();
                 hovering = true;
             }
 
             base.Update(deltaTime);
         }
 
-        public virtual void OnMouseHover()
-        {
+        public abstract void OnHoverIn();
 
-        }
+        public abstract void OnHover();
 
-        public virtual void OnMouseLeave()
-        {
+        public abstract void OnHoverOut();
 
-        }
+        public abstract void OnPressDown();
 
-        public virtual void OnPressDown()
-        {
-
-        }
-
-        public virtual void OnPressUp()
-        {
-
-        }
+        public abstract void OnPressUp();
     }
 }
