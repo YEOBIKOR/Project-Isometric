@@ -22,7 +22,6 @@ public class World
     private ChunkGenerator _chunkGenerator;
     private LinkedList<Chunk> _chunks;
     private Dictionary<int, Chunk> _chunkMap;
-    private Queue<Vector2Int> _loadingChunks;
 
     private LinkedList<CosmeticRenderer> _cosmeticDrawables;
 
@@ -53,7 +52,6 @@ public class World
         _chunkGenerator = new ChunkGenerator(this);
         _chunks = new LinkedList<Chunk>();
         _chunkMap = new Dictionary<int, Chunk>(256);
-        _loadingChunks = new Queue<Vector2Int>();
 
         _cosmeticDrawables = new LinkedList<CosmeticRenderer>();
         
@@ -107,6 +105,26 @@ public class World
             }
         }
 
+        Queue<Chunk> loadedChunkQueue = _chunkGenerator.GetLoadedChunkQueue();
+
+        while (loadedChunkQueue.Count > 0)
+        {
+            Chunk loadedChunk = loadedChunkQueue.Dequeue();
+
+            OnChunkGenerated(loadedChunk);
+        }
+
+        DrawablesUpdate(deltaTime);
+
+        worldProfiler.updateProfiler.MeasureTime(UpdateProfilerType.ChunkUpdate);
+
+        Shader.SetGlobalFloat("_WorldTime", _worldTime);
+        worldCamera.GraphicUpdate(deltaTime);
+        worldProfiler.updateProfiler.MeasureTime(UpdateProfilerType.RenderUpdate);
+    }
+
+    private void DrawablesUpdate(float deltaTime)
+    {
         for (var iterator = _cosmeticDrawables.First; iterator != null; iterator = iterator.Next)
         {
             CosmeticRenderer cosmeticDrawable = iterator.Value;
@@ -116,12 +134,6 @@ public class World
             else
                 _cosmeticDrawables.Remove(iterator);
         }
-
-        worldProfiler.updateProfiler.MeasureTime(UpdateProfilerType.ChunkUpdate);
-
-        Shader.SetGlobalFloat("_WorldTime", _worldTime);
-        worldCamera.GraphicUpdate(deltaTime);
-        worldProfiler.updateProfiler.MeasureTime(UpdateProfilerType.RenderUpdate);
     }
 
     public void OnTerminate()
@@ -130,6 +142,7 @@ public class World
         worldProfiler.updateProfiler.CleanUp();
     }
 
+
     public void RequestLoadChunk(Vector2Int coordination)
     {
         Chunk chunk;
@@ -137,36 +150,16 @@ public class World
 
         if (chunk == null)
         {
-            _loadingChunks.Enqueue(coordination);
-            
-            if (_loadingChunks.Count < 2)
-            {
-                Thread loadThread = new Thread(LoadChunk);
-                loadThread.Priority = System.Threading.ThreadPriority.Lowest;
+            chunk = new Chunk(this, coordination);
 
-                loadThread.Start();
-            }
+            _chunks.AddLast(chunk);
+            _chunkMap.Add((coordination.x << 16) + coordination.y, chunk);
+            _chunkGenerator.RequestGenerateChunk(chunk);
         }
 
         else if (chunk.state == ChunkState.Unloaded)
             chunk.LoadChunk();
     }
-
-    public void LoadChunk()
-    {
-        do
-        {
-            Vector2Int coordination = _loadingChunks.Peek();
-            Chunk newChunk = _chunkGenerator.GenerateChunk(coordination);
-            _chunks.AddLast(newChunk);
-            _chunkMap.Add((coordination.x << 16) + coordination.y, newChunk);
-            OnChunkGenerated(newChunk);
-
-            _loadingChunks.Dequeue();
-        } while (_loadingChunks.Count > 0);
-    }
-
-    AudioClip clip;
 
     public void OnChunkGenerated(Chunk chunk)
     {

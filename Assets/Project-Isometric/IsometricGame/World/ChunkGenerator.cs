@@ -1,20 +1,48 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class ChunkGenerator
 {
     private World _world;
 
+    private Queue<Chunk> _inChunkQueue;
+    private Queue<Chunk> _outChunkQueue;
+
     public ChunkGenerator(World world)
     {
         _world = world;
+
+        _inChunkQueue = new Queue<Chunk>();
+        _outChunkQueue = new Queue<Chunk>();
     }
 
-    public Chunk GenerateChunk(Vector2Int coordination)
+    public void RequestGenerateChunk(Chunk chunk)
     {
-        Chunk chunk = new Chunk(_world, coordination);
+        _inChunkQueue.Enqueue(chunk);
 
+        if (_inChunkQueue.Count < 2)
+        {
+            Thread loadThread = new Thread(GenerateChunks);
+            loadThread.Start();
+        }
+    }
+
+    private void GenerateChunks()
+    {
+        do
+        {
+            Chunk chunk = _inChunkQueue.Peek();
+            GenerateChunk(chunk);
+            _inChunkQueue.Dequeue();
+            _outChunkQueue.Enqueue(chunk);
+        } while (_inChunkQueue.Count > 0);
+    }
+
+    public void GenerateChunk(Chunk chunk)
+    {
+        Vector2Int coordination = chunk.coordination;
         chunk.state = ChunkState.Loading;
         
         for (int i = 0; i < Chunk.Length; i++)
@@ -47,7 +75,13 @@ public class ChunkGenerator
         }
 
         chunk.state = ChunkState.Loaded;
+    }
 
-        return chunk;
+    public Queue<Chunk> GetLoadedChunkQueue()
+    {
+        lock (_outChunkQueue)
+        {
+            return _outChunkQueue;
+        }
     }
 }

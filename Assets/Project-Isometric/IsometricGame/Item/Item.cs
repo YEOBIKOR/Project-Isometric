@@ -20,6 +20,7 @@ namespace Isometric.Items
             registry.Add("block_sand", new ItemBlock("Sand Block", "sand"));
             registry.Add("block_sandstone", new ItemBlock("Sandstone Block", "sandstone"));
             registry.Add("block_wood", new ItemBlock("Wood Block", "wood"));
+            registry.Add("gunak47", new ItemGun("AK47"));
         }
 
         public static Item GetItemByID(int id)

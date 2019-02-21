@@ -222,7 +222,7 @@ public class Player : EntityCreature
             GetEntityPart(PartType.RFoot).sortZOffset = 0.5f;
             GetEntityPart(PartType.LFoot).sortZOffset = 0.5f;
             GetEntityPart(PartType.Item).sortZOffset = 0.5f;
-            GetEntityPart(PartType.Item).scale = Vector2.one * 0.5f;
+            GetEntityPart(PartType.Item).scale = new Vector2(-1f, 1f);
         }
 
         public void Update(float deltaTime)
