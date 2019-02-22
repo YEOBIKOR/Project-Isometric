@@ -64,7 +64,7 @@
 				cloudPos.y -= i.color.y * 0.012;
 				float cloudValue = floor(tex2D(_NoiseTex, cloudPos).r * 5.0) * 0.2;
 
-				col.rgb *= 1.0 - cloudValue * cloudValue;
+				// col.rgb *= 1.0 - cloudValue * cloudValue;
 
 				float3 delta = i.color - _CameraPosition;
 				float distance = (delta.x * delta.x) + (delta.y * delta.y) + (delta.z * delta.z);

@@ -4,15 +4,9 @@ namespace Isometric.Items
 {
     public class ItemBat : ItemTool
     {
-        public ItemBat(string name) : base(name)
+        public ItemBat(string name, string textureName) : base(name, textureName)
         {
 
-        }
-
-        public override FAtlasElement element
-        {
-            get
-            { return Futile.atlasManager.GetElementWithName("items/itemaluminumbat"); }
         }
     }
 }

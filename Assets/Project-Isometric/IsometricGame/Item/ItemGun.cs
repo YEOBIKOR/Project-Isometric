@@ -5,7 +5,7 @@ namespace Isometric.Items
 {
     public class ItemGun : ItemTool
     {
-        public ItemGun(string name) : base(name)
+        public ItemGun(string name, string textureName) : base(name, textureName)
         {
 
         }
@@ -15,12 +15,6 @@ namespace Isometric.Items
             base.OnUseItem(player, rayTrace);
 
             player.world.SpawnEntity(new EntityBoss(), rayTrace.hitPosition + Vector3.up * 50f);
-        }
-
-        public override FAtlasElement element
-        {
-            get
-            { return Futile.atlasManager.GetElementWithName("items/gunak47"); }
         }
     }
 }

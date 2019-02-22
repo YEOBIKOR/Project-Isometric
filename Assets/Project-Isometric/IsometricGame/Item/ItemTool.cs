@@ -4,7 +4,7 @@ namespace Isometric.Items
 {
     public class ItemTool : Item
     {
-        public ItemTool(string name) : base(name)
+        public ItemTool(string name, string textureName) : base(name, textureName)
         {
 
         }

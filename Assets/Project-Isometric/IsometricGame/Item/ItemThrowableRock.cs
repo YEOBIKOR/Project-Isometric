@@ -6,7 +6,7 @@ namespace Isometric.Items
 {
     public class ItemThrowableRock : ItemTool
     {
-        public ItemThrowableRock(string name) : base(name)
+        public ItemThrowableRock(string name, string textureName) : base(name, textureName)
         {
 
         }
@@ -22,12 +22,6 @@ namespace Isometric.Items
 
             rock.velocity = player.velocity + shotDirection * 30f;
             player.world.SpawnEntity(rock, playerShotPosition);
-        }
-
-        public override FAtlasElement element
-        {
-            get
-            { return Futile.atlasManager.GetElementWithName("entities/throwablerock"); }
         }
 
         public override float useCoolTime

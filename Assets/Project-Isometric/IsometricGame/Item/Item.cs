@@ -11,8 +11,8 @@ namespace Isometric.Items
         {
             registry = new Registry<Item>();
 
-            registry.Add("pickaxe", new ItemPickaxe("Pickaxe"));
-            registry.Add("throwable_rock", new ItemThrowableRock("Rock"));
+            registry.Add("pickaxe", new ItemPickaxe("Pickaxe", "pickaxe"));
+            registry.Add("throwable_rock", new ItemThrowableRock("Rock", "throwablerock"));
             registry.Add("block_dirt", new ItemBlock("Dirt Block", "dirt"));
             registry.Add("block_grass", new ItemBlock("Grass Block", "grass"));
             registry.Add("block_stone", new ItemBlock("Stone Block", "stone"));
@@ -20,7 +20,11 @@ namespace Isometric.Items
             registry.Add("block_sand", new ItemBlock("Sand Block", "sand"));
             registry.Add("block_sandstone", new ItemBlock("Sandstone Block", "sandstone"));
             registry.Add("block_wood", new ItemBlock("Wood Block", "wood"));
-            registry.Add("gunak47", new ItemGun("AK47"));
+            registry.Add("gunak47", new ItemGun("AK47", "gunak47"));
+            registry.Add("guncannon", new ItemGun("Cannon", "guncannon"));
+            registry.Add("gungranade", new ItemGun("Granade Launcher", "gungranade"));
+            registry.Add("gunpistol", new ItemGun("Pistol", "gunpistol"));
+            registry.Add("gunshot", new ItemGun("Shotgun", "gunshot"));
         }
 
         public static Item GetItemByID(int id)
@@ -54,6 +58,19 @@ namespace Isometric.Items
             { return _name; }
         }
 
+        private FAtlasElement _texture;
+
+
+        public Item(string name, string textureName) : this(name, Futile.atlasManager.GetElementWithName(string.Concat("items/", textureName)))
+        {
+
+        }
+
+        public Item(string name, FAtlasElement texture) : this(name)
+        {
+            _texture = texture;
+        }
+
         public Item(string name)
         {
             _name = name;
@@ -73,7 +90,7 @@ namespace Isometric.Items
         public virtual FAtlasElement element
         {
             get
-            { return null; }
+            { return _texture; }
         }
 
         public virtual float useCoolTime

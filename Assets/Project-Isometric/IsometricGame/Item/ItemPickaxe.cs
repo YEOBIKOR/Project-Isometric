@@ -4,7 +4,7 @@ namespace Isometric.Items
 {
     public class ItemPickaxe : ItemTool
     {
-        public ItemPickaxe(string name) : base(name)
+        public ItemPickaxe(string name, string textureName) : base(name, textureName)
         {
 
         }
@@ -14,12 +14,6 @@ namespace Isometric.Items
             base.OnUseItem(player, rayTrace);
 
             player.world.DestroyBlock(rayTrace.hitTilePosition);
-        }
-
-        public override FAtlasElement element
-        {
-            get
-            { return Futile.atlasManager.GetElementWithName("items/pickaxe"); }
         }
     }
 }
