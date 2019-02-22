@@ -53,19 +53,29 @@ public class AnimationRigBipedal : AnimationRig <AnimationRigBipedal>
             
         }
 
+        public override void Start(AnimationRigBipedal rig)
+        {
+
+        }
+
         public override void Update(AnimationRigBipedal rig, float deltaTime)
         {
-            rig._head.worldPosition = Vector3.Lerp(rig._head.worldPosition, rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0f, 1.91f, 0f), rig.viewAngle), deltaTime * 5f);
-            rig._body.worldPosition = Vector3.Lerp(rig._body.worldPosition, rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(-0.1f, 1.08f, 0f), rig.viewAngle), deltaTime * 5f);
-            rig._rArm.worldPosition = Vector3.Lerp(rig._rArm.worldPosition, rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0.1f, 0.8f, -0.3f), rig.viewAngle), deltaTime * 5f);
-            rig._lArm.worldPosition = Vector3.Lerp(rig._lArm.worldPosition, rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0.1f, 0.8f, 0.3f), rig.viewAngle), deltaTime * 5f);
-            rig._rLeg.worldPosition = Vector3.Lerp(rig._rLeg.worldPosition, rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(-0.05f, 0.58f, -0.12f), rig.viewAngle), deltaTime * 5f);
-            rig._lLeg.worldPosition = Vector3.Lerp(rig._lLeg.worldPosition, rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(-0.05f, 0.58f, 0.12f), rig.viewAngle), deltaTime * 5f);
-            rig._rFoot.worldPosition = Vector3.Lerp(rig._rFoot.worldPosition, rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0f, 0.18f, -0.16f), rig.viewAngle), deltaTime * 5f);
-            rig._lFoot.worldPosition = Vector3.Lerp(rig._lFoot.worldPosition, rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0f, 0.18f, 0.16f), rig.viewAngle), deltaTime * 5f);
+            rig._head.worldPosition = rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0f, 1.91f, 0f), rig.viewAngle);
+            rig._body.worldPosition = rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(-0.1f, 1.08f, 0f), rig.viewAngle);
+            rig._rArm.worldPosition = rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0.1f, 0.8f, -0.3f), rig.viewAngle);
+            rig._lArm.worldPosition = rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0.1f, 0.8f, 0.3f), rig.viewAngle);
+            rig._rLeg.worldPosition = rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(-0.05f, 0.58f, -0.12f), rig.viewAngle);
+            rig._lLeg.worldPosition = rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(-0.05f, 0.58f, 0.12f), rig.viewAngle);
+            rig._rFoot.worldPosition = rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0f, 0.18f, -0.16f), rig.viewAngle);
+            rig._lFoot.worldPosition = rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0f, 0.18f, 0.16f), rig.viewAngle);
 
             if (rig.moveSpeed > 0.01f)
                 rig.ChangeState(new StateRun());
+        }
+
+        public override void End(AnimationRigBipedal rig)
+        {
+
         }
     }
 
@@ -76,6 +86,11 @@ public class AnimationRigBipedal : AnimationRig <AnimationRigBipedal>
         public StateRun()
         {
             _runFactor = 0f;
+        }
+
+        public override void Start(AnimationRigBipedal rig)
+        {
+
         }
 
         public override void Update(AnimationRigBipedal rig, float deltaTime)
@@ -98,6 +113,11 @@ public class AnimationRigBipedal : AnimationRig <AnimationRigBipedal>
             
             if (rig.moveSpeed < 0.01f)
                 rig.ChangeState(new StateIdle());
+        }
+
+        public override void End(AnimationRigBipedal rig)
+        {
+
         }
 
         private Vector3 GetFootPosition(AnimationRigBipedal rig, bool right)

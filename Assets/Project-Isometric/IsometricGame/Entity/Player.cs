@@ -184,7 +184,8 @@ public class Player : EntityCreature
 
         private float runfactor;
 
-        private AnimationRigBipedal _rig;
+        private AnimationRigBipedal _bodyRig;
+        private AnimationRigHandle _handleRig;
 
         public PlayerGraphics(Player player)
         {
@@ -200,8 +201,10 @@ public class Player : EntityCreature
             EntityPart lLeg = new EntityPart(player, "entityplayerleg1");
             EntityPart rFoot = new EntityPart(player, "entityplayerleg2");
             EntityPart lFoot = new EntityPart(player, "entityplayerleg2");
+            EntityPart item = new EntityPart(player, null as FAtlasElement);
 
-            _rig = new AnimationRigBipedal(body, head, rArm, lArm, rLeg, lLeg, rFoot, lFoot);
+            _bodyRig = new AnimationRigBipedal(body, head, rArm, lArm, rLeg, lLeg, rFoot, lFoot);
+            _handleRig = new AnimationRigHandle(rArm, lArm, item);
 
             entityParts.Add(body);
             entityParts.Add(head);
@@ -213,7 +216,7 @@ public class Player : EntityCreature
             entityParts.Add(rArm);
             entityParts.Add(lArm);
             entityParts.Add(new EntityPart(player, "entityplayertail"));
-            entityParts.Add(new EntityPart(player, null as FAtlasElement));
+            entityParts.Add(item);
 
             GetEntityPart(PartType.Scarf).sortZOffset = 0.6f;
             GetEntityPart(PartType.Body).sortZOffset = -0.5f;
@@ -228,25 +231,37 @@ public class Player : EntityCreature
         {
             Vector3 playerPosition = player.worldPosition;
 
-            _rig.worldPosition = playerPosition;
-            _rig.viewAngle = player.viewAngle;
-            _rig.moveSpeed = new Vector2(player.velocity.x, player.velocity.z).magnitude * deltaTime * 1.45f;
-            _rig.landed = player.landed;
+            _bodyRig.worldPosition = playerPosition;
+            _bodyRig.viewAngle = player.viewAngle;
+            _bodyRig.moveSpeed = new Vector2(player.velocity.x, player.velocity.z).magnitude * deltaTime * 1.45f;
+            _bodyRig.landed = player.landed;
+
+            _handleRig.worldPosition = playerPosition;
+            _handleRig.viewAngle = player.viewAngle;
 
             GetEntityPart(PartType.Scarf).worldPosition = Vector3.Lerp(GetEntityPart(PartType.Body).worldPosition, GetEntityPart(PartType.Head).worldPosition, 0.3f);
             GetEntityPart(PartType.Tail).worldPosition = playerPosition + CustomMath.HorizontalRotate(new Vector3(-0.3f, 0.75f + Mathf.Sin(runfactor * 2f) * -0.05f, Mathf.Sin(runfactor * 2f) * 0.05f), player.viewAngle);
 
             for (int index = 0; index < entityParts.Count; index++)
                 player.entityParts[index].viewAngle = player.viewAngle;
-            
-            _rig.Update(deltaTime);
+
+            HoldType holdType = HoldType.None;
 
             EntityPart item = GetEntityPart(PartType.Item);
-
             item.element = null;
+
             if (!player.pickedItemContainer.blank)
-                item.element = player.pickItemStack.item.element;
-            item.worldPosition = GetEntityPart(PartType.RArm).worldPosition;
+            {
+                Item pickingItem = player.pickItemStack.item;
+
+                item.element = pickingItem.element;
+                holdType = pickingItem.holdType;
+            }
+
+            _handleRig.ChangeHoldState(holdType);
+
+            _bodyRig.Update(deltaTime);
+            _handleRig.Update(deltaTime);
         }
 
         private EntityPart GetEntityPart(PartType type)

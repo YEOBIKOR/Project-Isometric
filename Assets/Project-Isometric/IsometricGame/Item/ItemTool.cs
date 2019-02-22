@@ -14,5 +14,11 @@ namespace Isometric.Items
             get
             { return 1; }
         }
+
+        public override HoldType holdType
+        {
+            get
+            { return HoldType.TwoHands; }
+        }
     }
 }

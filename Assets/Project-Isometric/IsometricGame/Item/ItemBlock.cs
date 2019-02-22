@@ -24,5 +24,11 @@ namespace Isometric.Items
             get
             { return block.sprite; }
         }
+
+        public override HoldType holdType
+        {
+            get
+            { return HoldType.Block; }
+        }
     }
 }

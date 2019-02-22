@@ -1,8 +1,8 @@
 ﻿using System;
 
-public class AnimationRig <T> where T : AnimationRig <T>
+public class AnimationRig <Rig> where Rig : AnimationRig <Rig>
 {
-    private AnimationState<T> _currentState;
+    private AnimationState<Rig> _currentState;
 
     public AnimationRig()
     {
@@ -12,36 +12,28 @@ public class AnimationRig <T> where T : AnimationRig <T>
     public virtual void Update(float deltaTime)
     {
         if (_currentState != null)
-            _currentState.Update(this as T, deltaTime);
+            _currentState.Update(this as Rig, deltaTime);
     }
 
-    protected void ChangeState(AnimationState<T> newState)
+    protected void ChangeState(AnimationState<Rig> newState)
     {
         if (_currentState == newState)
             return;
 
         if (_currentState != null)
-            _currentState.End(this as T);
+            _currentState.End(this as Rig);
         _currentState = newState;
 
-        _currentState.Start(this as T);
+        if (_currentState != null)
+            _currentState.Start(this as Rig);
     }
 }
 
-public class AnimationState <T> where T : AnimationRig <T>
+public abstract class AnimationState <T> where T : AnimationRig <T>
 {
-    public virtual void Start(T rig)
-    {
+    public abstract void Start(T rig);
 
-    }
+    public abstract void Update(T rig, float deltaTime);
 
-    public virtual void Update(T rig, float deltaTime)
-    {
-
-    }
-
-    public virtual void End(T rig)
-    {
-
-    }
+    public abstract void End(T rig);
 }

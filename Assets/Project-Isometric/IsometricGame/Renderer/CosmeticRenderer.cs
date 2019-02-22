@@ -31,11 +31,25 @@ public class CosmeticRenderer : IRenderer
         set { _positionOffset = value; }
     }
 
+    private float _rotation;
+    public float rotation
+    {
+        get { return _rotation; }
+        set { _rotation = value; }
+    }
+
     private Vector2 _scale;
     public Vector2 scale
     {
         get { return _scale; }
         set { _scale = value; }
+    }
+
+    private bool _doesFlip;
+    public bool doesFlip
+    {
+        get { return _doesFlip; }
+        set { _doesFlip = value; }
     }
 
     private float _viewAngle;
@@ -73,6 +87,8 @@ public class CosmeticRenderer : IRenderer
         this._element = element;
         this._worldPosition = Vector3.zero;
         this._positionOffset = Vector2.zero;
+        this._rotation = 0f;
+        this._doesFlip = true;
         this._viewAngle = 0f;
         this._sortZOffset = 0f;
         this._color = Color.white;
@@ -117,8 +133,11 @@ public class CosmeticRenderer : IRenderer
             else
                 sprite.isVisible = false;
             sprite.SetPosition(camera.GetScreenPosition(worldPosition) + _positionOffset);
-            sprite.scaleX = scale.x * (camera.GetFlipXByViewAngle(viewAngle) ? -1f : 1f);
+            sprite.rotation = _rotation;
+            sprite.scaleX = scale.x;
             sprite.scaleY = scale.y;
+            if (doesFlip)
+                sprite.scaleX *= (camera.GetFlipXByViewAngle(viewAngle) ? -1f : 1f);
             sprite.sortZ = camera.GetSortZ(worldPosition) + sortZOffset;
             sprite.color = color; // new Color(worldPosition.x, worldPosition.y, worldPosition.z);
         }

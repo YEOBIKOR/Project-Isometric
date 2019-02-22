@@ -104,5 +104,11 @@ namespace Isometric.Items
             get
             { return false; }
         }
+
+        public virtual HoldType holdType
+        {
+            get
+            { return HoldType.None; }
+        }
     }
 }
