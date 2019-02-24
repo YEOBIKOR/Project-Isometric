@@ -18,6 +18,7 @@ public class AnimationRigHandle : AnimationRig <AnimationRigHandle>
 
     public Vector3 worldPosition { get; set; }
     public float viewAngle { get; set; }
+    public float cameraViewAngle { get; set; }
 
     private AnimationState<AnimationRigHandle>[] _states;
 
@@ -53,7 +54,7 @@ public class AnimationRigHandle : AnimationRig <AnimationRigHandle>
             rig._rArm.worldPosition = rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0.5f, 1.2f, -0.2f), rig.viewAngle);
             rig._lArm.worldPosition = rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0.3f, 1.2f, 0.2f), rig.viewAngle);
             rig._item.worldPosition = rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0.7f, 1.3f, 0f), rig.viewAngle);
-            rig._item.rotation = 135f - rig.viewAngle;
+            rig._item.rotation = 90f - rig.viewAngle + rig.cameraViewAngle;
         }
 
         public override void End(AnimationRigHandle rig)
@@ -74,7 +75,7 @@ public class AnimationRigHandle : AnimationRig <AnimationRigHandle>
             rig._rArm.worldPosition = rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0.5f, 1.0f, -0.2f), rig.viewAngle);
             rig._lArm.worldPosition = rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0.3f, 1.0f, 0.2f), rig.viewAngle);
             rig._item.worldPosition = rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0.7f, 1.3f, 0f), rig.viewAngle);
-            rig._item.rotation = 135f - rig.viewAngle;
+            rig._item.rotation = 90f - rig.viewAngle + rig.cameraViewAngle;
         }
 
         public override void End(AnimationRigHandle rig)

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 using Isometric.Interface;
 
@@ -109,9 +108,11 @@ public class World
 
         while (loadedChunkQueue.Count > 0)
         {
-            Chunk loadedChunk = loadedChunkQueue.Dequeue();
-
-            OnChunkGenerated(loadedChunk);
+            lock (loadedChunkQueue)
+            {
+                Chunk loadedChunk = loadedChunkQueue.Dequeue();
+                OnChunkGenerated(loadedChunk);
+            }
         }
 
         DrawablesUpdate(deltaTime);

@@ -32,6 +32,9 @@ namespace Isometric.Interface
 
         public override void OnTerminate()
         {
+            for (int index = 0; index < _elements.Count; index++)
+                _elements[index].OnDeactivate();
+
             _container.RemoveFromContainer();
 
             base.OnTerminate();
@@ -45,12 +48,27 @@ namespace Isometric.Interface
             base.Update(deltaTime);
         }
 
-        public InterfaceObject AddElement(InterfaceObject element)
+        public void AddElement(InterfaceObject element)
         {
             _elements.Add(element);
             _container.AddChild(element.container);
 
-            return element;
+            if (activated)
+                element.OnActivate();
+        }
+
+        public void RemoveElement(InterfaceObject element)
+        {
+            int index = _elements.IndexOf(element);
+
+            if (index < 0)
+                return;
+
+            if (activated)
+                element.OnDeactivate();
+
+            _elements.RemoveAt(index);
+            _container.RemoveChild(element.container);
         }
 
         public static float screenWidth

@@ -153,6 +153,11 @@ public class Player : EntityCreature
             if (!(itemUseCoolTime > 0f) && (pickItemStack.item.repeatableUse || clicked))
             {
                 pickItemStack.OnUseItem(this, rayTrace);
+
+                Vector3 shootPosition = worldPosition + CustomMath.HorizontalRotate(new Vector3(0.7f, 1f, 0f), viewAngle);
+
+                world.SpawnEntity(new Bullet(new Damage(this), (rayTrace.hitPosition - shootPosition).normalized * 25f), shootPosition);
+
                 itemUseCoolTime = pickItemStack.item.useCoolTime;
             }
         }
@@ -238,6 +243,7 @@ public class Player : EntityCreature
 
             _handleRig.worldPosition = playerPosition;
             _handleRig.viewAngle = player.viewAngle;
+            _handleRig.cameraViewAngle = player.worldCamera.viewAngle;
 
             GetEntityPart(PartType.Scarf).worldPosition = Vector3.Lerp(GetEntityPart(PartType.Body).worldPosition, GetEntityPart(PartType.Head).worldPosition, 0.3f);
             GetEntityPart(PartType.Tail).worldPosition = playerPosition + CustomMath.HorizontalRotate(new Vector3(-0.3f, 0.75f + Mathf.Sin(runfactor * 2f) * -0.05f, Mathf.Sin(runfactor * 2f) * 0.05f), player.viewAngle);

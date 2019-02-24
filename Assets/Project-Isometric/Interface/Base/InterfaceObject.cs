@@ -12,6 +12,8 @@ namespace Isometric.Interface
             { return _menu; }
         }
 
+        private InterfaceObject _parent;
+
         private List<InterfaceObject> _elements;
         
         public bool activated
@@ -68,18 +70,27 @@ namespace Isometric.Interface
                 _elements[index].OnActivate();
         }
 
+        public virtual void OnDeactivate()
+        {
+            for (int index = 0; index < _elements.Count; index++)
+                _elements[index].OnDeactivate();
+        }
+
         public virtual void Update(float deltaTime)
         {
             for (int index = 0; index < _elements.Count; index++)
                 _elements[index].Update(deltaTime);
         }
 
-        public InterfaceObject AddElement(InterfaceObject element)
+        public void AddElement(InterfaceObject element)
         {
+            if (activated)
+                element.OnActivate();
+
+            element._parent = this;
+
             _elements.Add(element);
             _container.AddChild(element.container);
-
-            return element;
         }
 
         public FNode AddElement(FNode element)
@@ -87,6 +98,34 @@ namespace Isometric.Interface
             _container.AddChild(element);
 
             return element;
+        }
+
+        public void RemoveElement(InterfaceObject element)
+        {
+            int index = _elements.IndexOf(element);
+
+            if (index < 0)
+                return;
+
+            if (activated)
+                element.OnDeactivate();
+
+            element._parent = null;
+
+            _elements.RemoveAt(index);
+            _container.RemoveChild(element.container);
+        }
+
+        public void RemoveSelf()
+        {
+            if (activated)
+            {
+                if (_parent == null)
+                    _menu.RemoveElement(this);
+                else
+                    _parent.RemoveElement(this);
+            }
+
         }
 
         public bool mouseOn

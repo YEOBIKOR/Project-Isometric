@@ -20,7 +20,10 @@ public class ChunkGenerator
 
     public void RequestGenerateChunk(Chunk chunk)
     {
-        _inChunkQueue.Enqueue(chunk);
+        lock (_inChunkQueue)
+        {
+            _inChunkQueue.Enqueue(chunk);
+        }
 
         if (_inChunkQueue.Count < 2)
         {
@@ -35,8 +38,17 @@ public class ChunkGenerator
         {
             Chunk chunk = _inChunkQueue.Peek();
             GenerateChunk(chunk);
-            _inChunkQueue.Dequeue();
-            _outChunkQueue.Enqueue(chunk);
+
+            lock (_inChunkQueue)
+            {
+                _inChunkQueue.Dequeue();
+            }
+
+            lock (_outChunkQueue)
+            {
+                _outChunkQueue.Enqueue(chunk);
+            }
+
         } while (_inChunkQueue.Count > 0);
     }
 
@@ -79,9 +91,6 @@ public class ChunkGenerator
 
     public Queue<Chunk> GetLoadedChunkQueue()
     {
-        lock (_outChunkQueue)
-        {
-            return _outChunkQueue;
-        }
+        return _outChunkQueue;
     }
 }

@@ -56,7 +56,7 @@ public class ChunkRenderer : IRenderer
                 Tile tile = drawTiles[index];
                 FSprite sprite = spriteLeaser.sprites[index];
 
-                if (camera.turning)
+                // if (camera.turning)
                     SetSpriteByTile(sprite, tile, camera, true);
 
                 if (sprite.container != null && !spriteLeaser.InScreenRect(sprite))

@@ -14,7 +14,7 @@ namespace Isometric.Items
         {
             base.OnUseItem(player, rayTrace);
 
-            player.world.SpawnEntity(new EntityBoss(), rayTrace.hitPosition + Vector3.up * 50f);
+            // player.world.SpawnEntity(new EntityBoss(), rayTrace.hitPosition + Vector3.up * 50f);
         }
     }
 }

@@ -66,7 +66,7 @@ namespace Isometric.Interface
                             available = player.pickItemStack.item is ItemBlock || player.pickItemStack.item is ItemPickaxe;
                         bool inRange = (rayTrace.hitPosition - player.worldPosition).sqrMagnitude < 25f;
 
-                        if (Input.GetKey(KeyCode.Mouse0) && available && inRange)
+                        if (Input.GetKey(KeyCode.Mouse0) && (inRange || !available))
                             player.UseItem(rayTrace, Input.GetKeyDown(KeyCode.Mouse0));
 
                         SetConstructionGuide(rayTrace.hitTilePosition + Vector3.one * 0.5f, rayTrace.hitDirection, inRange);

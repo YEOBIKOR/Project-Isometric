@@ -52,7 +52,7 @@ namespace Isometric.Interface
                 if (factor < 1f)
                     container.alpha = Mathf.Clamp01(1f - factor);
                 else
-                    ;
+                    RemoveSelf();
             }
 
             base.Update(deltaTime);
