@@ -106,6 +106,16 @@ public class Player : EntityCreature
 
         itemUseCoolTime = Mathf.Max(itemUseCoolTime - deltaTime, 0f);
 
+        CursorType type = CursorType.None;
+
+        if (!pickedItemContainer.blank)
+        {
+            Item pickingItem = pickItemStack.item;
+            type = pickingItem.cursorType;
+        }
+
+        playerInterface.SetCursor(type);
+
         base.Update(deltaTime);
 
         playerGraphics.Update(deltaTime);
@@ -152,7 +162,7 @@ public class Player : EntityCreature
         {
             if (!(itemUseCoolTime > 0f) && (pickItemStack.item.repeatableUse || clicked))
             {
-                pickItemStack.OnUseItem(this, rayTrace);
+                pickItemStack.OnUseItem(world, this, rayTrace);
 
                 Vector3 shootPosition = worldPosition + CustomMath.HorizontalRotate(new Vector3(0.7f, 1f, 0f), viewAngle);
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using UnityEngine;
+using Isometric.Interface;
 
 namespace Isometric.Items
 {
@@ -9,11 +10,17 @@ namespace Isometric.Items
 
         }
 
-        public override void OnUseItem(Player player, RayTrace rayTrace)
+        public override void OnUseItem(World world, Player player, RayTrace rayTrace)
         {
-            base.OnUseItem(player, rayTrace);
+            base.OnUseItem(world, player, rayTrace);
 
-            player.world.DestroyBlock(rayTrace.hitTilePosition);
+            world.DestroyBlock(Vector3Int.FloorToInt(rayTrace.hitTilePosition));
+        }
+
+        public override CursorType cursorType
+        {
+            get
+            { return CursorType.Construct; }
         }
     }
 }

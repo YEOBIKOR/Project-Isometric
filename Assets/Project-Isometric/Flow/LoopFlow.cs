@@ -46,14 +46,14 @@ public class LoopFlow
         get { return _time; }
     }
 
-    private LinkedList<LoopFlow> subLoopFlows;
+    private List<LoopFlow> subLoopFlows;
 
     public LoopFlow()
     {
         _timeScale = 1f;
         _paused = false;
 
-        subLoopFlows = new LinkedList<LoopFlow>();
+        subLoopFlows = new List<LoopFlow>();
     }
 
     public virtual void RawUpdate(float deltaTime)
@@ -67,8 +67,8 @@ public class LoopFlow
         if (!paused)
             Update(deltaTime * timeScale);
 
-        for (var subLoopFlow = subLoopFlows.First; subLoopFlow != null; subLoopFlow = subLoopFlow.Next)
-            subLoopFlow.Value.RawUpdate(deltaTime);
+        for (int index = 0; index < subLoopFlows.Count; index++)
+            subLoopFlows[index].RawUpdate(deltaTime);
     }
 
     public virtual void Update(float deltaTime)
@@ -98,7 +98,7 @@ public class LoopFlow
         if (loopFlow.activated)
             loopFlow.Terminate();
 
-        subLoopFlows.AddLast(loopFlow);
+        subLoopFlows.Add(loopFlow);
 
         loopFlow._owner = this;
         loopFlow.OnActivate();

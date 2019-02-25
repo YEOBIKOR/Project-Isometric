@@ -1,4 +1,5 @@
 ﻿using System;
+using Isometric.Interface;
 using UnityEngine;
 
 namespace Isometric.Items
@@ -12,11 +13,11 @@ namespace Isometric.Items
             this.block = Block.GetBlockByKey(blockKey);
         }
 
-        public override void OnUseItem(Player player, RayTrace rayTrace)
+        public override void OnUseItem(World world, Player player, RayTrace rayTrace)
         {
-            base.OnUseItem(player, rayTrace);
+            base.OnUseItem(world, player, rayTrace);
 
-            player.world.PlaceBlock(Vector3Int.FloorToInt(rayTrace.hitTilePosition + rayTrace.hitDirection), block);
+            world.PlaceBlock(Vector3Int.FloorToInt(rayTrace.hitTilePosition + rayTrace.hitDirection), block);
         }
 
         public override FAtlasElement element
@@ -29,6 +30,12 @@ namespace Isometric.Items
         {
             get
             { return HoldType.Block; }
+        }
+
+        public override CursorType cursorType
+        {
+            get
+            { return CursorType.Construct; }
         }
     }
 }

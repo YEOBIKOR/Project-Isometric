@@ -4,6 +4,13 @@ using Custom;
 
 namespace Isometric.Interface
 {
+    public enum CursorType
+    {
+        None,
+        Construct,
+        Target
+    }
+
     public class PlayerInterface : Menu
     {
         private Player _player;
@@ -19,8 +26,8 @@ namespace Isometric.Interface
         private ItemSelect itemSelect;
         private InventoryMenu inventoryMenu;
 
-        private FSprite cursorSprite;
-        private FAtlasElement[] guideSprites;
+        private WorldCursor[] _cursors;
+        private WorldCursor _currentCursor;
 
         public PlayerInterface(Player player) : base()
         {
@@ -28,20 +35,42 @@ namespace Isometric.Interface
 
             itemSelect = new ItemSelect(this);
             inventoryMenu = new InventoryMenu(this);
-
-            guideSprites = new FAtlasElement[3];
-            guideSprites[0] = Futile.atlasManager.GetElementWithName("constructguidex");
-            guideSprites[1] = Futile.atlasManager.GetElementWithName("constructguidey");
-            guideSprites[2] = Futile.atlasManager.GetElementWithName("constructguidez");
-
-            cursorSprite = new FSprite(guideSprites[0]);
         }
 
         public override void OnActivate()
         {
             base.OnActivate();
 
-            worldCamera.worldContainer.AddChild(cursorSprite);
+            _cursors = new WorldCursor[]
+            {
+                null,
+                new ConstructCursor(this, worldCamera),
+                new TargetCursor(this)
+            };
+
+            SetCursor(CursorType.None);
+        }
+
+        public void SetCursor(CursorType cursorType)
+        {
+            WorldCursor newCursor = _cursors[(int)cursorType];
+
+            if (_currentCursor == newCursor)
+                return;
+
+            if (_currentCursor != null)
+                _currentCursor.RemoveSelf();
+
+            _currentCursor = newCursor;
+
+            if (_currentCursor != null)
+                AddElement(_currentCursor);
+        }
+
+        public override void RawUpdate(float deltaTime)
+        {
+            if (!player.game.paused)
+                base.RawUpdate(deltaTime);
         }
 
         public override void Update(float deltaTime)
@@ -52,65 +81,12 @@ namespace Isometric.Interface
                     AddSubLoopFlow(itemSelect);
                 if (Input.GetKey(KeyCode.I))
                     AddSubLoopFlow(inventoryMenu);
-
-                cursorSprite.isVisible = false;
-
-                if (!worldCamera.turning)
-                {
-                    RayTrace rayTrace = worldCamera.GetRayAtScreenPosition(Menu.mousePosition - worldCamera.worldContainer.GetPosition());
-
-                    if (rayTrace.hit)
-                    {
-                        bool available = false;
-                        if (player.pickItemStack != null)
-                            available = player.pickItemStack.item is ItemBlock || player.pickItemStack.item is ItemPickaxe;
-                        bool inRange = (rayTrace.hitPosition - player.worldPosition).sqrMagnitude < 25f;
-
-                        if (Input.GetKey(KeyCode.Mouse0) && (inRange || !available))
-                            player.UseItem(rayTrace, Input.GetKeyDown(KeyCode.Mouse0));
-
-                        SetConstructionGuide(rayTrace.hitTilePosition + Vector3.one * 0.5f, rayTrace.hitDirection, inRange);
-                        cursorSprite.isVisible = true;
-                    }
-                }
             }
 
+            if (_currentCursor != null)
+                _currentCursor.CursorUpdate(player.world, player, mousePosition);
+
             base.Update(deltaTime);
-        }
-
-        public void SetConstructionGuide(Vector3 worldPosition, Vector3 hitDirection, bool inRange)
-        {
-            cursorSprite.SetPosition(worldCamera.GetScreenPosition(worldPosition + hitDirection));
-            cursorSprite.sortZ = worldCamera.GetSortZ(worldPosition) + 0.1f;
-
-            cursorSprite.color = inRange ? Color.cyan : Color.red;
-            cursorSprite.alpha = Mathf.Sin(time * Mathf.PI) * 0.25f + 0.5f;
-
-            cursorSprite.element = player.pickItemStack.item.element;
-
-            //if (hitDirection == Vector3.up)
-            //    cursorSprite.element = guideSprites[1];
-            //else
-            //{
-            //    switch (worldCamera.viewDirection)
-            //    {
-            //        case CameraViewDirection.NE:
-            //            cursorSprite.element = guideSprites[hitDirection == Vector3.left ? 0 : 2];
-            //            break;
-
-            //        case CameraViewDirection.NW:
-            //            cursorSprite.element = guideSprites[hitDirection == Vector3.back ? 0 : 2];
-            //            break;
-
-            //        case CameraViewDirection.SE:
-            //            cursorSprite.element = guideSprites[hitDirection == Vector3.forward ? 0 : 2];
-            //            break;
-
-            //        case CameraViewDirection.SW:
-            //            cursorSprite.element = guideSprites[hitDirection == Vector3.right ? 0 : 2];
-            //            break;
-            //    }
-            //}
         }
 
         public class ItemSelect : Menu

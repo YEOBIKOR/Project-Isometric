@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace Isometric.Items
 {
@@ -24,9 +25,9 @@ namespace Isometric.Items
             _stackSize = stackSize;
         }
 
-        public void OnUseItem(Player player, RayTrace rayTrace)
+        public void OnUseItem(World world, Player player, RayTrace rayTrace)
         {
-            _item.OnUseItem(player, rayTrace);
+            _item.OnUseItem(world, player, rayTrace);
         }
 
         public int StackUp(int amount)

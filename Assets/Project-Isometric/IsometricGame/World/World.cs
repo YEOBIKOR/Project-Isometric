@@ -57,7 +57,7 @@ public class World
         player = new Player();
         RequestLoadChunk(new Vector2Int(0, 0));
 
-        _cameraHUD = new CameraHUDMenu(_worldCamera);
+        _cameraHUD = new CameraHUDMenu(_game, _worldCamera);
         game.AddSubLoopFlow(_cameraHUD);
 
         _cameraHUD.Speech(player, "W A S D : Move the character\nSpace : Jump the character\nQ, E : Move the camera\nEsc : Exit the game");
@@ -323,8 +323,8 @@ public class World
                 chunk.AddEntity(entity);
                 entity.OnSpawn(chunk, position);
 
-                if (entity is ITarget && entity != player)
-                    _cameraHUD.AddTarget(entity as ITarget);
+                //if (entity is ITarget && entity != player)
+                //    _cameraHUD.AddTarget(entity as ITarget);
             }
         }
         else

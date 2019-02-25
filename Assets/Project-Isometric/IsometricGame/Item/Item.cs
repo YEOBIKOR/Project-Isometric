@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using UnityEngine;
+using Isometric.Interface;
 
 namespace Isometric.Items
 {
@@ -76,7 +76,12 @@ namespace Isometric.Items
             _name = name;
         }
 
-        public virtual void OnUseItem(Player player, RayTrace rayTrace)
+        public virtual void OnUseItem(World world, Player player, RayTrace rayTrace)
+        {
+
+        }
+
+        public virtual void OnUseItem(World world, Player player, Vector3 targetPosition)
         {
 
         }
@@ -109,6 +114,12 @@ namespace Isometric.Items
         {
             get
             { return HoldType.None; }
+        }
+
+        public virtual CursorType cursorType
+        {
+            get
+            { return CursorType.None; }
         }
     }
 }

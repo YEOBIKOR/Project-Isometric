@@ -11,9 +11,9 @@ namespace Isometric.Items
 
         }
 
-        public override void OnUseItem(Player player, RayTrace rayTrace)
+        public override void OnUseItem(World world, Player player, RayTrace rayTrace)
         {
-            base.OnUseItem(player, rayTrace);
+            base.OnUseItem(world, player, rayTrace);
 
             ThrowableRock rock = new ThrowableRock(player);
 
@@ -21,7 +21,7 @@ namespace Isometric.Items
             Vector3 shotDirection = (rayTrace.hitPosition + Vector3.up - playerShotPosition).normalized;
 
             rock.velocity = player.velocity + shotDirection * 30f;
-            player.world.SpawnEntity(rock, playerShotPosition);
+            world.SpawnEntity(rock, playerShotPosition);
         }
 
         public override float useCoolTime
