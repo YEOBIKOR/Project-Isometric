@@ -22,19 +22,19 @@ public class Damage
     {
         if (target.damagedCooldown < 0f)
         {
-            if (target is PhysicalEntity)
-            {
-                PhysicalEntity physicalEntity = target as PhysicalEntity;
+            //if (target is PhysicalEntity)
+            //{
+            //    PhysicalEntity physicalEntity = target as PhysicalEntity;
 
-                Vector2 pushVelocity = new Vector3(
-                    target.worldPosition.x - _behaviour.worldPosition.x,
-                    target.worldPosition.z - _behaviour.worldPosition.z).normalized;
+            //    Vector2 pushVelocity = new Vector3(
+            //        target.worldPosition.x - _behaviour.worldPosition.x,
+            //        target.worldPosition.z - _behaviour.worldPosition.z).normalized;
 
-                physicalEntity.AddForce(new Vector3(pushVelocity.x * 5f, 8f, pushVelocity.y * 5f));
+            //    physicalEntity.AddForce(new Vector3(pushVelocity.x * 5f, 8f, pushVelocity.y * 5f));
+            //}
 
-                if (target is EntityCreature)
-                    (target as EntityCreature).Damage(_amount);
-            }
+            if (target is EntityCreature)
+                (target as EntityCreature).Damage(_amount);
 
             target.damagedCooldown = 0.3f;
             _behaviour.worldCamera.ShakeCamera(2f);

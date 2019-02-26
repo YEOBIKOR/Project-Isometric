@@ -24,7 +24,7 @@ public class EntityPpyongppyong : EntityCreature
     {
         base.Update(deltaTime);
 
-        if (landed)
+        if (_physics.landed)
         {
             Vector3 deltaV = world.player.worldPosition - worldPosition;
 
@@ -33,12 +33,12 @@ public class EntityPpyongppyong : EntityCreature
                 velocity = velocity * 0.5f;
 
                 Vector3 deltaVNormalized = deltaV.normalized;
-                AddForce(new Vector3(deltaVNormalized.x, Random.Range(13f, 15f), deltaVNormalized.z));
+                _physics.AddForce(new Vector3(deltaVNormalized.x, Random.Range(13f, 15f), deltaVNormalized.z), ref _velocity);
             }
 
             else if (!(jumpTime > 0f))
             {
-                AddForce(new Vector3(Random.Range(-1f, 1f), Random.Range(13f, 15f), Random.Range(-1f, 1f)));
+                _physics.AddForce(new Vector3(Random.Range(-1f, 1f), Random.Range(13f, 15f), Random.Range(-1f, 1f)), ref _velocity);
                 jumpTime = Random.Range(0.5f, 3.0f);
             }
         }
@@ -46,7 +46,7 @@ public class EntityPpyongppyong : EntityCreature
         if (velocity.x != 0f && velocity.z != 0f)
             viewAngle = Mathf.LerpAngle(viewAngle, Mathf.Atan2(velocity.z, velocity.x) * Mathf.Rad2Deg, deltaTime * 10f);
 
-        if (landed)
+        if (_physics.landed)
             jumpTime -= deltaTime;
 
         entityParts[0].worldPosition = worldPosition + new Vector3(0f, 1.6f, 0f);
@@ -62,11 +62,11 @@ public class EntityPpyongppyong : EntityCreature
         entityParts[4].viewAngle = viewAngle + 30f;
     }
 
-    public override void OnCollisionWithOther(PhysicalEntity other)
-    {
-        base.OnCollisionWithOther(other);
+    //public override void OnCollisionWithOther(PhysicalEntity other)
+    //{
+    //    base.OnCollisionWithOther(other);
 
-        if (other == world.player)
-            other.ApplyDamage(new Damage(this));
-    }
+    //    if (other == world.player)
+    //        other.ApplyDamage(new Damage(this));
+    //}
 }

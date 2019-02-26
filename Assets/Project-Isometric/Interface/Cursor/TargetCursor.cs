@@ -6,8 +6,6 @@ namespace Isometric.Interface
 {
     public class TargetCursor : WorldCursor
     {
-        private List<ITarget> _targets;
-
         private FSprite[] _sprites;
         
         private ITarget _currentTarget;
@@ -19,8 +17,6 @@ namespace Isometric.Interface
 
         public TargetCursor(PlayerInterface menu) : base(menu)
         {
-            _targets = new List<ITarget>();
-
             _sprites = new FSprite[5];
             _sprites[0] = new FSprite("targetcenter");
 
@@ -40,31 +36,27 @@ namespace Isometric.Interface
             }
         }
 
-        public void AddTarget(ITarget target)
-        {
-            _targets.Add(target);
-        }
-
         public override void CursorUpdate(World world, Player player, Vector2 cursorPosition)
         {
             WorldCamera camera = world.worldCamera;
+            List<ITarget> targets = world.targets;
 
-            if (_targets.Count > 0)
+            if (targets.Count > 0)
             {
                 Vector2 screenPositionA, screenPositionB, mousePosition;
-                ITarget nearestTarget = _targets[0];
+                ITarget nearestTarget = targets[0];
 
                 screenPositionA = camera.GetScreenPosition(nearestTarget.worldPosition) + camera.worldContainer.GetPosition();
 
-                for (int index = 1; index < _targets.Count; index++)
+                for (int index = 1; index < targets.Count; index++)
                 {
-                    screenPositionB = camera.GetScreenPosition(_targets[index].worldPosition) + camera.worldContainer.GetPosition();
+                    screenPositionB = camera.GetScreenPosition(targets[index].worldPosition) + camera.worldContainer.GetPosition();
 
                     mousePosition = Menu.mousePosition;
 
                     if ((screenPositionA - mousePosition).sqrMagnitude > (screenPositionB - mousePosition).sqrMagnitude)
                     {
-                        nearestTarget = _targets[index];
+                        nearestTarget = targets[index];
                         screenPositionA = screenPositionB;
                     }
                 }
@@ -76,6 +68,12 @@ namespace Isometric.Interface
                     _lastScreenPosition = position;
                     _currentTarget = nearestTarget;
                     _lastTime = menu.time;
+                }
+
+                if (Input.GetKey(KeyCode.Mouse0) && _currentTarget != null)
+                {
+                    RayTrace rayTrace = new RayTrace(_currentTarget.worldPosition, Vector3.zero, Vector3Int.zero);
+                    player.UseItem(rayTrace, Input.GetKeyDown(KeyCode.Mouse0));
                 }
             }
         }

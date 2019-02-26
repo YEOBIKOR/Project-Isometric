@@ -24,6 +24,13 @@ public class World
 
     private LinkedList<CosmeticRenderer> _cosmeticDrawables;
 
+    private List<ITarget> _targets;
+    public List<ITarget> targets
+    {
+        get
+        { return _targets; }
+    }
+
     private int _seed;
 
     public Player player { get; private set; }
@@ -53,7 +60,9 @@ public class World
         _chunkMap = new Dictionary<int, Chunk>(256);
 
         _cosmeticDrawables = new LinkedList<CosmeticRenderer>();
-        
+
+        _targets = new List<ITarget>();
+
         player = new Player();
         RequestLoadChunk(new Vector2Int(0, 0));
 
@@ -323,8 +332,8 @@ public class World
                 chunk.AddEntity(entity);
                 entity.OnSpawn(chunk, position);
 
-                //if (entity is ITarget && entity != player)
-                //    _cameraHUD.AddTarget(entity as ITarget);
+                if (entity is ITarget && entity != player)
+                    _targets.Add(entity as ITarget);
             }
         }
         else

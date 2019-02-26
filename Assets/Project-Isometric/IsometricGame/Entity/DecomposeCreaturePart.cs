@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using Custom;
 
-class DecomposeCreaturePart : PhysicalEntity
+class DecomposeCreaturePart : Entity
 {
     private float viewAngle;
     private float decayTime;
 
-    public DecomposeCreaturePart(EntityCreature creature, EntityPart part) : base(0.25f, 0.5f)
+    public DecomposeCreaturePart(EntityCreature creature, EntityPart part) : base(0.5f)
     {
         velocity = CustomMath.HorizontalRotate(creature.velocity, Random.Range(-30f, 30f));
 
@@ -15,6 +15,8 @@ class DecomposeCreaturePart : PhysicalEntity
 
         viewAngle = part.viewAngle;
         decayTime = Random.Range(5f, 10f);
+
+        _physics = new EntityPhysics(0.25f, 0.5f);
     }
 
     public override void Update(float deltaTime)

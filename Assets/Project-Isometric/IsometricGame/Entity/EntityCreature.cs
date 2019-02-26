@@ -3,7 +3,7 @@ using System.Collections;
 using Custom;
 using Isometric.Items;
 
-public abstract class EntityCreature : PhysicalEntity, ITarget
+public abstract class EntityCreature : Entity, ITarget
 {
     private float _viewAngle;
     public float viewAngle
@@ -47,18 +47,20 @@ public abstract class EntityCreature : PhysicalEntity, ITarget
         { return new Rect(0f, 12f, 24f, 36f); }
     }
 
-    public EntityCreature(float radius, float height, float maxHealth) : base(radius, height)
+    public EntityCreature(float radius, float height, float maxHealth) : base(radius * 2f)
     {
         _viewAngle = 0f;
         _moveSpeed = 3f;
         _health = maxHealth;
         _maxHealth = maxHealth;
+
+        _physics = new EntityPhysics(radius, height);
     }
 
     public void MoveTo(Vector2 direction, float force)
     {
         if (new Vector2(velocity.x, velocity.z).sqrMagnitude < moveSpeed * moveSpeed)
-            AddForce(new Vector3(direction.x, 0f, direction.y).normalized * force);
+            _physics.AddForce(new Vector3(direction.x, 0f, direction.y).normalized * force, ref _velocity);
     }
 
     public void Damage(float value)

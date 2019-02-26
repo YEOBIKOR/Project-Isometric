@@ -204,21 +204,21 @@ public class Chunk
         return Chunk.ToChunkCoordinate(position) == coordination;
     }
 
-    public void GetCollidedEntites(PhysicalEntity owner, Action<PhysicalEntity> callback)
-    {
-        LinkedListNode<Entity> node = _entities.First;
-        while (node != null)
-        {
-            PhysicalEntity entity = node.Value as PhysicalEntity;
-            if (entity != null)
-            {
-                if (entity != owner && owner.GetCollisionWithOther(entity))
-                    callback(entity);
-            }
+    //public void GetCollidedEntites(PhysicalEntity owner, Action<PhysicalEntity> callback)
+    //{
+    //    LinkedListNode<Entity> node = _entities.First;
+    //    while (node != null)
+    //    {
+    //        PhysicalEntity entity = node.Value as PhysicalEntity;
+    //        if (entity != null)
+    //        {
+    //            if (entity != owner && owner.GetCollisionWithOther(entity))
+    //                callback(entity);
+    //        }
 
-            node = node.Next;
-        }
-    }
+    //        node = node.Next;
+    //    }
+    //}
 
     public static bool IsEmptyTile(Tile tile)
     {

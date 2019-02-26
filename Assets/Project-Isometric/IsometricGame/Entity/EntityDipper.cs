@@ -46,11 +46,11 @@ public class EntityDipper : EntityCreature
         base.Update(deltaTime);
     }
 
-    public override void OnCollisionWithOther(PhysicalEntity other)
-    {
-        base.OnCollisionWithOther(other);
+    //public override void OnCollisionWithOther(PhysicalEntity other)
+    //{
+    //    base.OnCollisionWithOther(other);
 
-        if (other == world.player)
-            other.ApplyDamage(new Damage(this));
-    }
+    //    if (other == world.player)
+    //        other.ApplyDamage(new Damage(this));
+    //}
 }

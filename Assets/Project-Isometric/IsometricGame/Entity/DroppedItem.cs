@@ -2,7 +2,7 @@
 using UnityEngine;
 using Isometric.Items;
 
-public class DroppedItem : PhysicalEntity
+public class DroppedItem : Entity
 {
     private ItemStack _itemStack;
     public ItemStack itemStack
@@ -17,7 +17,7 @@ public class DroppedItem : PhysicalEntity
     private float _acquiretime;
     private Vector3 _acquirePosition;
 
-    public DroppedItem(ItemStack itemStack) : base(0.25f, 0.5f)
+    public DroppedItem(ItemStack itemStack) : base(0.5f)
     {
         _itemStack = itemStack;
 
@@ -27,6 +27,8 @@ public class DroppedItem : PhysicalEntity
 
         _acquirable = false;
         _acquired = false;
+
+        _physics = new EntityPhysics(0.25f, 0.5f);
     }
 
     public override void Update(float deltaTime)

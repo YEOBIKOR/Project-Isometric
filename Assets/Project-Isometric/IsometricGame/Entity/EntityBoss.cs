@@ -179,7 +179,7 @@ public class EntityBoss : EntityCreature
             entityParts[0].worldPosition = worldPosition + Vector3.up * 1.2f;
             entityParts[1].worldPosition = worldPosition + Vector3.up * 1.2f;
 
-            bool faint = state == RuneState.Drop && landed;
+            bool faint = state == RuneState.Drop && _physics.landed;
             if (!faint)
                 entityParts[1].positionOffset = UnityEngine.Random.insideUnitCircle * 1.2f;
             entityParts[1].color = Color.Lerp(entityParts[1].color, faint ? Color.clear :

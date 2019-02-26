@@ -33,7 +33,7 @@ public class Player : EntityCreature
     
     public Player() : base(0.3f, 2.0f, 100f)
     {
-        airControl = true;
+        _physics.airControl = true;
 
         _inventory = new ItemContainer[36];
 
@@ -76,8 +76,8 @@ public class Player : EntityCreature
     {
         moveSpeed = Input.GetKey(KeyCode.LeftShift) ? 8f : 4f;
 
-        if (Input.GetKey(KeyCode.Space) && landed)
-            AddForce(new Vector3(0f, 12f, 0f));
+        if (Input.GetKey(KeyCode.Space) && _physics.landed)
+            _physics.AddForce(new Vector3(0f, 12f, 0f), ref _velocity);
 
         if (Input.GetKey(KeyCode.Return))
             KillCreature();
@@ -164,10 +164,6 @@ public class Player : EntityCreature
             {
                 pickItemStack.OnUseItem(world, this, rayTrace);
 
-                Vector3 shootPosition = worldPosition + CustomMath.HorizontalRotate(new Vector3(0.7f, 1f, 0f), viewAngle);
-
-                world.SpawnEntity(new Bullet(new Damage(this), (rayTrace.hitPosition - shootPosition).normalized * 25f), shootPosition);
-
                 itemUseCoolTime = pickItemStack.item.useCoolTime;
             }
         }
@@ -249,7 +245,7 @@ public class Player : EntityCreature
             _bodyRig.worldPosition = playerPosition;
             _bodyRig.viewAngle = player.viewAngle;
             _bodyRig.moveSpeed = new Vector2(player.velocity.x, player.velocity.z).magnitude * deltaTime * 1.45f;
-            _bodyRig.landed = player.landed;
+            _bodyRig.landed = player._physics.landed;
 
             _handleRig.worldPosition = playerPosition;
             _handleRig.viewAngle = player.viewAngle;

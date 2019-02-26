@@ -1,25 +1,27 @@
 ﻿using System;
 using UnityEngine;
 
-public class ThrowableRock : PhysicalEntity
+public class ThrowableRock : Entity
 {
     private EntityCreature behaviour;
     private Damage rockDamage;
 
     private float decayTime = 5f;
 
-    public ThrowableRock(EntityCreature behaviour) : base(0.2f, 0.4f)
+    public ThrowableRock(EntityCreature behaviour) : base(0.4f)
     {
         this.behaviour = behaviour;
 
         entityParts.Add(new EntityPart(this, "throwablerock"));
 
         rockDamage = new Damage(this);
+
+        _physics = new EntityPhysics(0.2f, 0.4f);
     }
 
     public override void Update(float deltaTime)
     {
-        if (landed)
+        if (_physics.landed)
             decayTime -= deltaTime;
         if (decayTime < 0f)
             DespawnEntity();
@@ -29,14 +31,14 @@ public class ThrowableRock : PhysicalEntity
         base.Update(deltaTime);
     }
 
-    public override void OnCollisionWithOther(PhysicalEntity other)
-    {
-        base.OnCollisionWithOther(other);
+    //public override void OnCollisionWithOther(PhysicalEntity other)
+    //{
+    //    base.OnCollisionWithOther(other);
 
-        if (other != behaviour && !landed && other is EntityCreature)
-        {
-            other.ApplyDamage(rockDamage);
-            velocity = new Vector3(-velocity.x, velocity.y, -velocity.z) * 0.5f;
-        }
-    }
+    //    if (other != behaviour && !landed && other is EntityCreature)
+    //    {
+    //        other.ApplyDamage(rockDamage);
+    //        velocity = new Vector3(-velocity.x, velocity.y, -velocity.z) * 0.5f;
+    //    }
+    //}
 }

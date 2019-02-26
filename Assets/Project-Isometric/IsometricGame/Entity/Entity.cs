@@ -47,7 +47,7 @@ public abstract class Entity : IPositionable
         { return worldCamera.GetScreenPosition(_worldPosition) + worldCamera.worldContainer.GetPosition(); }
     }
 
-    private Vector3 _velocity;
+    protected Vector3 _velocity;
     public Vector3 velocity
     {
         get
@@ -78,6 +78,8 @@ public abstract class Entity : IPositionable
         get
         { return _time; }
     }
+
+    protected EntityPhysics _physics;
 
     private Shadow shadow;
     protected List<EntityPart> entityParts;
@@ -145,6 +147,11 @@ public abstract class Entity : IPositionable
     {
         _time = _time + deltaTime;
         _damagedCooldown = _damagedCooldown - deltaTime;
+
+        _worldPosition = _worldPosition + _velocity * deltaTime;
+
+        if (_physics != null)
+            _physics.ApplyPhysics(chunk, deltaTime, ref _worldPosition, ref _velocity);
 
         if (IsometricMain.doesDebugging)
         {
