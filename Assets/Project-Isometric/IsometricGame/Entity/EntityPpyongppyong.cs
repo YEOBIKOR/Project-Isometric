@@ -33,12 +33,12 @@ public class EntityPpyongppyong : EntityCreature
                 velocity = velocity * 0.5f;
 
                 Vector3 deltaVNormalized = deltaV.normalized;
-                _physics.AddForce(new Vector3(deltaVNormalized.x, Random.Range(13f, 15f), deltaVNormalized.z), ref _velocity);
+                _physics.AddForce(new Vector3(deltaVNormalized.x, Random.Range(13f, 15f), deltaVNormalized.z));
             }
 
             else if (!(jumpTime > 0f))
             {
-                _physics.AddForce(new Vector3(Random.Range(-1f, 1f), Random.Range(13f, 15f), Random.Range(-1f, 1f)), ref _velocity);
+                _physics.AddForce(new Vector3(Random.Range(-1f, 1f), Random.Range(13f, 15f), Random.Range(-1f, 1f)));
                 jumpTime = Random.Range(0.5f, 3.0f);
             }
         }

@@ -40,20 +40,19 @@ public abstract class Entity : IPositionable
         get
         { return Vector3Int.FloorToInt(_worldPosition); }
     }
+    
+    public Vector3 velocity
+    {
+        get
+        { return _physics.velocity; }
+        set
+        { _physics.velocity = value; }
+    }
 
     public Vector2 screenPosition
     {
         get
         { return worldCamera.GetScreenPosition(_worldPosition) + worldCamera.worldContainer.GetPosition(); }
-    }
-
-    protected Vector3 _velocity;
-    public Vector3 velocity
-    {
-        get
-        { return _velocity; }
-        set
-        { _velocity = value; }
     }
 
     private bool _spawned;
@@ -91,7 +90,6 @@ public abstract class Entity : IPositionable
         _chunk = null;
 
         _worldPosition = Vector3.zero;
-        _velocity = Vector3.zero;
 
         _spawned = false;
         _damagedCooldown = 0f;
@@ -148,10 +146,8 @@ public abstract class Entity : IPositionable
         _time = _time + deltaTime;
         _damagedCooldown = _damagedCooldown - deltaTime;
 
-        _worldPosition = _worldPosition + _velocity * deltaTime;
-
         if (_physics != null)
-            _physics.ApplyPhysics(chunk, deltaTime, ref _worldPosition, ref _velocity);
+            _physics.ApplyPhysics(chunk, deltaTime, ref _worldPosition);
 
         if (IsometricMain.doesDebugging)
         {
@@ -203,8 +199,7 @@ public abstract class Entity : IPositionable
             return string.Concat(
                 "chunk : ", chunk.coordination, "\n",
                 "position : ", worldPosition, "\n",
-                "tilePosition : ", tilePosition, "\n",
-                "velocity : ", velocity, "\n"
+                "tilePosition : ", tilePosition, "\n"
                 );
         }
     }

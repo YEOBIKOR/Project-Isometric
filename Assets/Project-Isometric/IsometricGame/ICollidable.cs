@@ -1,4 +1,5 @@
 ﻿public interface ICollidable
 {
-    bool GetCollision(ICollidable other);
+    float width { get; }
+    float height { get; }
 }

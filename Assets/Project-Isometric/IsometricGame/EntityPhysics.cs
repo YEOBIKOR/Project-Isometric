@@ -1,10 +1,30 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
-public class EntityPhysics
+public class EntityPhysics : ICollidable
 {
     private float _width;
+    public float width
+    {
+        get
+        { return _width; }
+    }
     private float _height;
+    public float height
+    {
+        get
+        { return _height; }
+    }
+
+    private Vector3 _velocity;
+    public Vector3 velocity
+    {
+        get
+        { return _velocity; }
+        set
+        { _velocity = value; }
+    }
 
     private bool _landed;
     public bool landed
@@ -22,31 +42,44 @@ public class EntityPhysics
         { _airControl = value; }
     }
 
+    private Action _onTileCallback;
+
+    public EntityPhysics(float width, float height, Action onTileCallback) : this(width, height)
+    {
+        _onTileCallback = onTileCallback;
+    }
+
     public EntityPhysics(float width, float height)
     {
         _width = width;
         _height = height;
+
+        _velocity = Vector3.zero;
+        _landed = false;
+        _airControl = false;
     }
 
-    public void ApplyPhysics(Chunk chunk, float deltaTime, ref Vector3 position, ref Vector3 velocity)
+    public void ApplyPhysics(Chunk chunk, float deltaTime, ref Vector3 position)
     {
+        position = position + _velocity * deltaTime;
+
         if (!_landed)
-            velocity += Vector3.up * -50f * deltaTime;
+            _velocity += Vector3.up * -50f * deltaTime;
 
         if (_airControl || _landed)
         {
-            Vector3 frictionForce = new Vector3(-velocity.x, 0f, -velocity.z).normalized * 30f;
-            Vector3 appliedVelocity = velocity + (frictionForce * deltaTime);
+            Vector3 frictionForce = new Vector3(-_velocity.x, 0f, -_velocity.z).normalized * 30f;
+            Vector3 appliedVelocity = _velocity + (frictionForce * deltaTime);
 
             if (new Vector2(appliedVelocity.x, appliedVelocity.z).magnitude < 10f * deltaTime)
                 appliedVelocity = new Vector3(0f, appliedVelocity.y, 0f);
 
-            velocity = appliedVelocity;
+            _velocity = appliedVelocity;
         }
 
         Vector3 appliedPosition = position;
         Vector3 finalPosition = appliedPosition;
-        Vector3 finalVelocity = velocity;
+        Vector3 finalVelocity = _velocity;
 
         int x = Mathf.FloorToInt(appliedPosition.x);
         int xMin = Mathf.FloorToInt(appliedPosition.x - _width);
@@ -59,9 +92,11 @@ public class EntityPhysics
 
         _landed = false;
 
+        bool collided = false;
+
         if (appliedPosition.y + _height >= 0f && appliedPosition.y <= Chunk.Height)
         {
-            if (velocity.y < 0f)
+            if (_velocity.y < 0f)
             {
                 if (!Tile.GetCrossable(chunk.GetTileAtWorldPosition(x, yMin, z)))
                 {
@@ -69,14 +104,18 @@ public class EntityPhysics
                     finalVelocity.y = 0f;
 
                     _landed = true;
+
+                    collided = true;
                 }
             }
-            else if (velocity.y > 0f)
+            else if (_velocity.y > 0f)
             {
                 if (!Tile.GetCrossable(chunk.GetTileAtWorldPosition(x, yMax, z)))
                 {
                     finalPosition.y = yMax - _height;
                     finalVelocity.y = 0f;
+
+                    collided = true;
                 }
             }
 
@@ -85,22 +124,26 @@ public class EntityPhysics
 
             for (int y = yMin; y <= yMax; y++)
             {
-                if (velocity.x < 0f)
+                if (_velocity.x < 0f)
                 {
                     if (!Tile.GetCrossable(chunk.GetTileAtWorldPosition(xMin, y, z)))
                     {
                         finalPosition.x = xMin + 1 + _width;
                         finalVelocity.x = 0f;
 
+                        collided = true;
+
                         break;
                     }
                 }
-                else if (velocity.x > 0f)
+                else if (_velocity.x > 0f)
                 {
                     if (!Tile.GetCrossable(chunk.GetTileAtWorldPosition(xMax, y, z)))
                     {
                         finalPosition.x = xMax - _width;
                         finalVelocity.x = 0f;
+
+                        collided = true;
 
                         break;
                     }
@@ -111,22 +154,26 @@ public class EntityPhysics
 
             for (int y = yMin; y <= yMax; y++)
             {
-                if (velocity.z < 0f)
+                if (_velocity.z < 0f)
                 {
                     if (!Tile.GetCrossable(chunk.GetTileAtWorldPosition(x, y, zMin)))
                     {
                         finalPosition.z = zMin + 1 + _width;
                         finalVelocity.z = 0f;
 
+                        collided = true;
+
                         break;
                     }
                 }
-                else if (velocity.z > 0f)
+                else if (_velocity.z > 0f)
                 {
                     if (!Tile.GetCrossable(chunk.GetTileAtWorldPosition(x, y, zMax)))
                     {
                         finalPosition.z = zMax - _width;
                         finalVelocity.z = 0f;
+
+                        collided = true;
 
                         break;
                     }
@@ -135,17 +182,20 @@ public class EntityPhysics
         }
 
         position = finalPosition;
-        velocity = finalVelocity;
+        _velocity = finalVelocity;
+
+        if (collided && _onTileCallback != null)
+            _onTileCallback();
     }
 
-    public void AddForce(Vector3 force, ref Vector3 velocity)
+    public void AddForce(Vector3 force)
     {
         if (_landed)
         {
             _landed = false;
-            velocity += Vector3.up * -velocity.y;
+            _velocity += Vector3.up * -_velocity.y;
         }
 
-        velocity += force;
+        _velocity += force;
     }
 }

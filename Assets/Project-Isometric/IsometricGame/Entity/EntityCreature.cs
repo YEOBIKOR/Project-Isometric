@@ -60,7 +60,7 @@ public abstract class EntityCreature : Entity, ITarget
     public void MoveTo(Vector2 direction, float force)
     {
         if (new Vector2(velocity.x, velocity.z).sqrMagnitude < moveSpeed * moveSpeed)
-            _physics.AddForce(new Vector3(direction.x, 0f, direction.y).normalized * force, ref _velocity);
+            _physics.AddForce(new Vector3(direction.x, 0f, direction.y).normalized * force);
     }
 
     public void Damage(float value)

@@ -77,7 +77,7 @@ public class Player : EntityCreature
         moveSpeed = Input.GetKey(KeyCode.LeftShift) ? 8f : 4f;
 
         if (Input.GetKey(KeyCode.Space) && _physics.landed)
-            _physics.AddForce(new Vector3(0f, 12f, 0f), ref _velocity);
+            _physics.AddForce(new Vector3(0f, 12f, 0f));
 
         if (Input.GetKey(KeyCode.Return))
             KillCreature();
