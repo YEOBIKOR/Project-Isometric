@@ -1,20 +1,20 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections;
 
-public class EntityPhysics : ICollidable
+public class EntityPhysics
 {
-    private float _width;
-    public float width
+    private Entity _owner;
+    public Entity  owner
     {
         get
-        { return _width; }
+        { return _owner; }
     }
-    private float _height;
-    public float height
+
+    private EntityAABBCollider _collider;
+    public EntityAABBCollider collider
     {
         get
-        { return _height; }
+        { return _collider; }
     }
 
     private Vector3 _velocity;
@@ -44,15 +44,10 @@ public class EntityPhysics : ICollidable
 
     private Action _onTileCallback;
 
-    public EntityPhysics(float width, float height, Action onTileCallback) : this(width, height)
+    public EntityPhysics(EntityAABBCollider collider, Action onTileCallback = null)
     {
+        _collider = collider;
         _onTileCallback = onTileCallback;
-    }
-
-    public EntityPhysics(float width, float height)
-    {
-        _width = width;
-        _height = height;
 
         _velocity = Vector3.zero;
         _landed = false;
@@ -61,6 +56,9 @@ public class EntityPhysics : ICollidable
 
     public void ApplyPhysics(Chunk chunk, float deltaTime, ref Vector3 position)
     {
+        float width = _collider.width;
+        float height = _collider.height;
+
         position = position + _velocity * deltaTime;
 
         if (!_landed)
@@ -82,19 +80,19 @@ public class EntityPhysics : ICollidable
         Vector3 finalVelocity = _velocity;
 
         int x = Mathf.FloorToInt(appliedPosition.x);
-        int xMin = Mathf.FloorToInt(appliedPosition.x - _width);
-        int xMax = Mathf.FloorToInt(appliedPosition.x + _width);
+        int xMin = Mathf.FloorToInt(appliedPosition.x - width);
+        int xMax = Mathf.FloorToInt(appliedPosition.x + width);
         int yMin = Mathf.FloorToInt(appliedPosition.y);
-        int yMax = Mathf.FloorToInt(appliedPosition.y + _height);
+        int yMax = Mathf.FloorToInt(appliedPosition.y + height);
         int z = Mathf.FloorToInt(appliedPosition.z);
-        int zMin = Mathf.FloorToInt(appliedPosition.z - _width);
-        int zMax = Mathf.FloorToInt(appliedPosition.z + _width);
+        int zMin = Mathf.FloorToInt(appliedPosition.z - width);
+        int zMax = Mathf.FloorToInt(appliedPosition.z + width);
 
         _landed = false;
 
         bool collided = false;
 
-        if (appliedPosition.y + _height >= 0f && appliedPosition.y <= Chunk.Height)
+        if (appliedPosition.y + height >= 0f && appliedPosition.y <= Chunk.Height)
         {
             if (_velocity.y < 0f)
             {
@@ -112,7 +110,7 @@ public class EntityPhysics : ICollidable
             {
                 if (!Tile.GetCrossable(chunk.GetTileAtWorldPosition(x, yMax, z)))
                 {
-                    finalPosition.y = yMax - _height;
+                    finalPosition.y = yMax - height;
                     finalVelocity.y = 0f;
 
                     collided = true;
@@ -120,7 +118,7 @@ public class EntityPhysics : ICollidable
             }
 
             yMin = Mathf.FloorToInt(finalPosition.y);
-            yMax = Mathf.FloorToInt(finalPosition.y + _height) - 1;
+            yMax = Mathf.FloorToInt(finalPosition.y + height) - 1;
 
             for (int y = yMin; y <= yMax; y++)
             {
@@ -128,7 +126,7 @@ public class EntityPhysics : ICollidable
                 {
                     if (!Tile.GetCrossable(chunk.GetTileAtWorldPosition(xMin, y, z)))
                     {
-                        finalPosition.x = xMin + 1 + _width;
+                        finalPosition.x = xMin + 1 + width;
                         finalVelocity.x = 0f;
 
                         collided = true;
@@ -140,7 +138,7 @@ public class EntityPhysics : ICollidable
                 {
                     if (!Tile.GetCrossable(chunk.GetTileAtWorldPosition(xMax, y, z)))
                     {
-                        finalPosition.x = xMax - _width;
+                        finalPosition.x = xMax - width;
                         finalVelocity.x = 0f;
 
                         collided = true;
@@ -158,7 +156,7 @@ public class EntityPhysics : ICollidable
                 {
                     if (!Tile.GetCrossable(chunk.GetTileAtWorldPosition(x, y, zMin)))
                     {
-                        finalPosition.z = zMin + 1 + _width;
+                        finalPosition.z = zMin + 1 + width;
                         finalVelocity.z = 0f;
 
                         collided = true;
@@ -170,7 +168,7 @@ public class EntityPhysics : ICollidable
                 {
                     if (!Tile.GetCrossable(chunk.GetTileAtWorldPosition(x, y, zMax)))
                     {
-                        finalPosition.z = zMax - _width;
+                        finalPosition.z = zMax - width;
                         finalVelocity.z = 0f;
 
                         collided = true;

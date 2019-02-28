@@ -54,7 +54,7 @@ public abstract class EntityCreature : Entity, ITarget
         _health = maxHealth;
         _maxHealth = maxHealth;
 
-        _physics = new EntityPhysics(radius, height);
+        AttachPhysics(radius, height);
     }
 
     public void MoveTo(Vector2 direction, float force)

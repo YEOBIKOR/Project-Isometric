@@ -24,15 +24,10 @@ public abstract class Entity : IPositionable
     private Vector3 _worldPosition;
     public Vector3 worldPosition
     {
-        get { return _worldPosition; }
-
+        get
+        { return _worldPosition; }
         set
-        {
-            _worldPosition = value;
-            
-            if (!chunk.GetPositionInChunk(value))
-                MoveToOtherChunk();
-        }
+        { _worldPosition = value; }
     }
 
     public Vector3Int tilePosition
@@ -78,7 +73,19 @@ public abstract class Entity : IPositionable
         { return _time; }
     }
 
+    protected EntityAABBCollider _collider;
+    public EntityAABBCollider collider
+    {
+        get
+        { return _collider; }
+    }
+
     protected EntityPhysics _physics;
+    public EntityPhysics physics
+    {
+        get
+        { return _physics; }
+    }
 
     private Shadow shadow;
     protected List<EntityPart> entityParts;
@@ -171,15 +178,23 @@ public abstract class Entity : IPositionable
             OnOtherChunk(newChunk);
         }
         else
-        {
             DespawnEntity();
-        }
     }
 
     public void ApplyDamage(Damage damage)
     {
         if (damagedCooldown < 0f)
             damage.OnApplyDamage(this);
+    }
+
+    public void AttachCollider(EntityAABBCollider collider)
+    {
+        _collider = collider;
+    }
+
+    public void AttachPhysics(float width, float height)
+    {
+        _physics = new EntityPhysics(new EntityAABBCollider(width, height));
     }
 
     public Tile GetTileAtWorldPosition(Vector3Int position)

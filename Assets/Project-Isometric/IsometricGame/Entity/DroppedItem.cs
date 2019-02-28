@@ -28,7 +28,7 @@ public class DroppedItem : Entity
         _acquirable = false;
         _acquired = false;
 
-        _physics = new EntityPhysics(0.25f, 0.5f);
+        AttachPhysics(0.25f, 0.5f);
     }
 
     public override void Update(float deltaTime)

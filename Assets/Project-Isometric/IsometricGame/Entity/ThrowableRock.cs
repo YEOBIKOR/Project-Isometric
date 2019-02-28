@@ -16,7 +16,7 @@ public class ThrowableRock : Entity
 
         rockDamage = new Damage(this);
 
-        _physics = new EntityPhysics(0.2f, 0.4f);
+        AttachPhysics(0.2f, 0.4f);
     }
 
     public override void Update(float deltaTime)

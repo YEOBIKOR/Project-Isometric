@@ -25,6 +25,20 @@ public class Chunk
         get { return _world.game; }
     }
 
+    private Vector2Int _coordination;
+    public Vector2Int coordination
+    {
+        get
+        { return _coordination; }
+    }
+
+    private ChunkRenderer _chunkRenderer;
+    public ChunkRenderer chunkRenderer
+    {
+        get
+        { return _chunkRenderer; }
+    }
+
     private Chunk[] _nearbyChunks;
 
     private ChunkState _state;
@@ -49,23 +63,22 @@ public class Chunk
 
     private Tile[,,] _tiles;
     private LinkedList<Entity> _entities;
-    
-    public Vector2Int coordination { get; private set; }
-    public ChunkRenderer chunkGraphics { get; private set; }
+    private LinkedList<ICollidable<Entity>> _collidables;
 
     public Chunk(World world, Vector2Int coordination)
     {
         _world = world;
-        this.coordination = coordination;
+        _coordination = coordination;
 
         _nearbyChunks = new Chunk[8];
 
+        _chunkRenderer = new ChunkRenderer(this);
+
         _state = ChunkState.Unloaded;
-
         _tiles = new Tile[Length, Height, Length];
-        _entities = new LinkedList<Entity>();
 
-        chunkGraphics = new ChunkRenderer(this);
+        _entities = new LinkedList<Entity>();
+        _collidables = new LinkedList<ICollidable<Entity>>();
 
         for (int i = 0; i < Length; i++)
         {
@@ -92,42 +105,55 @@ public class Chunk
     public void Update(float deltaTime)
     {
         LinkedListNode<Entity> node = _entities.First;
+
         while (node != null)
         {
             Entity entity = node.Value;
 
             if (entity.spawned)
                 entity.Update(deltaTime);
+
+            if (!GetPositionInChunk(entity.worldPosition))
+                entity.MoveToOtherChunk();
+
             if (!entity.spawned)
                 entity.OnDespawn();
 
             LinkedListNode<Entity> nextNode = node.Next;
             if (entity.chunk != this)
+            {
                 _entities.Remove(node);
+
+                if (entity.collider != null)
+                    _collidables.Remove(entity.collider);
+            }
 
             node = nextNode;
         }
 
-        if (state == ChunkState.Loaded && !chunkGraphics.initialized)
+        if (state == ChunkState.Loaded && !chunkRenderer.initialized)
         {
             foreach (Tile tile in _tiles)
             {
                 if (Tile.GetFullTile(tile))
-                    chunkGraphics.AddUpdateTile(tile);
+                    chunkRenderer.AddUpdateTile(tile);
             }
 
-            worldCamera.AddRenderer(chunkGraphics);
+            worldCamera.AddRenderer(chunkRenderer);
         }
     }
 
     public void AddEntity(Entity entity)
     {
         _entities.AddLast(entity);
+
+        if (entity.collider != null)
+            _collidables.AddLast(entity.collider);
     }
 
     public void OnTileBlockSet(Tile tile)
     {
-        chunkGraphics.AddUpdateTile(tile);
+        chunkRenderer.AddUpdateTile(tile);
 
         if (state == ChunkState.Loaded)
         {
@@ -203,22 +229,22 @@ public class Chunk
     {
         return Chunk.ToChunkCoordinate(position) == coordination;
     }
+    
+    public void GetCollidedEntites(Vector3 position, float width, float height, Action<Entity> callback)
+    {
+        LinkedListNode<ICollidable<Entity>> node = _collidables.First;
+        while (node != null)
+        {
+            ICollidable<Entity> collidable = node.Value;
+            if (collidable != null)
+            {
+                if (collidable.Collision(position, width, height))
+                    callback(collidable.owner);
+            }
 
-    //public void GetCollidedEntites(PhysicalEntity owner, Action<PhysicalEntity> callback)
-    //{
-    //    LinkedListNode<Entity> node = _entities.First;
-    //    while (node != null)
-    //    {
-    //        PhysicalEntity entity = node.Value as PhysicalEntity;
-    //        if (entity != null)
-    //        {
-    //            if (entity != owner && owner.GetCollisionWithOther(entity))
-    //                callback(entity);
-    //        }
-
-    //        node = node.Next;
-    //    }
-    //}
+            node = node.Next;
+        }
+    }
 
     public static bool IsEmptyTile(Tile tile)
     {

@@ -11,6 +11,8 @@ public class Bullet : Entity
     {
         _damage = damage;
 
+        AttachPhysics(0.2f, 0.2f);
+
         this.velocity = velocity;
 
         _part = new EntityPart(this, Futile.atlasManager.GetElementWithName("entities/bullet8"));

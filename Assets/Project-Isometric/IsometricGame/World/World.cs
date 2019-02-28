@@ -239,7 +239,7 @@ public class World
         Chunk chunk = GetChunkByCoordinate(Chunk.ToChunkCoordinate(tilePosition));
 
         if (chunk != null)
-            return chunk.chunkGraphics;
+            return chunk.chunkRenderer;
         return null;
     }
 

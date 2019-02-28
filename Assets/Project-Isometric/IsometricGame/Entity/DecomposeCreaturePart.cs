@@ -16,7 +16,7 @@ class DecomposeCreaturePart : Entity
         viewAngle = part.viewAngle;
         decayTime = Random.Range(5f, 10f);
 
-        _physics = new EntityPhysics(0.25f, 0.5f);
+        AttachPhysics(0.25f, 0.5f);
     }
 
     public override void Update(float deltaTime)
