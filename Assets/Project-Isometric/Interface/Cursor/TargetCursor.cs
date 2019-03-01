@@ -87,6 +87,7 @@ namespace Isometric.Interface
 
             float sin = Mathf.Sin(menu.time * Mathf.PI * 2f);
 
+            _sprites[0].SetPosition(Vector2.Lerp(Vector2.zero, Menu.mousePosition - position, 0.3f));
             _sprites[1].SetPosition(-halfSize.x - sin, halfSize.y + sin);
             _sprites[2].SetPosition(halfSize.x + sin, halfSize.y + sin);
             _sprites[3].SetPosition(-halfSize.x - sin, -halfSize.y - sin);
