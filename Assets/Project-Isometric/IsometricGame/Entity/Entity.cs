@@ -192,9 +192,9 @@ public abstract class Entity : IPositionable
         _collider = collider;
     }
 
-    public void AttachPhysics(float width, float height)
+    public void AttachPhysics(float width, float height, float gravityModifier = 1f)
     {
-        _physics = new EntityPhysics(new EntityAABBCollider(width, height));
+        _physics = new EntityPhysics(new EntityAABBCollider(width, height), gravityModifier);
     }
 
     public Tile GetTileAtWorldPosition(Vector3Int position)

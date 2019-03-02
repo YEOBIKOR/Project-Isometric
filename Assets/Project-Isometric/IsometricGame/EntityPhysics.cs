@@ -17,6 +17,8 @@ public class EntityPhysics
         { return _collider; }
     }
 
+    private float _gravityModifier;
+
     private Vector3 _velocity;
     public Vector3 velocity
     {
@@ -44,15 +46,19 @@ public class EntityPhysics
 
     private Action _onTileCallback;
 
-    public EntityPhysics(EntityAABBCollider collider, Action onTileCallback = null)
+    public EntityPhysics(EntityAABBCollider collider, float gravityModifier = 1f, Action onTileCallback = null)
     {
         _collider = collider;
         _onTileCallback = onTileCallback;
+
+        _gravityModifier = gravityModifier;
 
         _velocity = Vector3.zero;
         _landed = false;
         _airControl = false;
     }
+
+    private const float Gravity = -50f;
 
     public void ApplyPhysics(Chunk chunk, float deltaTime, ref Vector3 position)
     {
@@ -61,8 +67,8 @@ public class EntityPhysics
 
         position = position + _velocity * deltaTime;
 
-        if (!_landed)
-            _velocity += Vector3.up * -50f * deltaTime;
+        if (!_landed && _gravityModifier != 0f)
+            _velocity += Vector3.up * Gravity * _gravityModifier * deltaTime;
 
         if (_airControl || _landed)
         {

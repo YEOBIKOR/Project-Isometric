@@ -11,7 +11,7 @@ public class Bullet : Entity
     {
         _damage = damage;
 
-        AttachPhysics(0.2f, 0.2f);
+        AttachPhysics(0.2f, 0.2f, 0f);
 
         this.velocity = velocity;
 

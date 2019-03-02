@@ -20,7 +20,7 @@ namespace Isometric.Items
         public override void OnUseItem(World world, Player player, RayTrace rayTrace)
         {
             Vector3 shootPosition = player.worldPosition + CustomMath.HorizontalRotate(new Vector3(0.7f, 1f, 0f), player.viewAngle);
-            world.SpawnEntity(new Bullet(new Damage(player), (rayTrace.hitPosition - shootPosition).normalized * 25f), shootPosition);
+            world.SpawnEntity(new Bullet(new Damage(player), (rayTrace.hitPosition - shootPosition).normalized * 5f), shootPosition);
         }
     }
 }
