@@ -187,14 +187,14 @@ public abstract class Entity : IPositionable
             damage.OnApplyDamage(this);
     }
 
-    public void AttachCollider(EntityAABBCollider collider)
+    public void AttachCollider(float width, float height)
     {
-        _collider = collider;
+        _collider = new EntityAABBCollider(this, width, height);
     }
 
-    public void AttachPhysics(float width, float height, float gravityModifier = 1f)
+    public void AttachPhysics(float width, float height, float gravityModifier = 1f, System.Action onTileCallback = null)
     {
-        _physics = new EntityPhysics(new EntityAABBCollider(width, height), gravityModifier);
+        _physics = new EntityPhysics(new EntityAABBCollider(this, width, height), gravityModifier, onTileCallback);
     }
 
     public Tile GetTileAtWorldPosition(Vector3Int position)

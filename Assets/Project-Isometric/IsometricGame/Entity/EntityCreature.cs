@@ -54,6 +54,7 @@ public abstract class EntityCreature : Entity, ITarget
         _health = maxHealth;
         _maxHealth = maxHealth;
 
+        AttachCollider(radius * 2f, height);
         AttachPhysics(radius, height);
     }
 

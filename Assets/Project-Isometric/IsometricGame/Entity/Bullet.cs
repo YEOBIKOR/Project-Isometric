@@ -11,7 +11,7 @@ public class Bullet : Entity
     {
         _damage = damage;
 
-        AttachPhysics(0.2f, 0.2f, 0f);
+        AttachPhysics(0.2f, 0.2f, 0f, this.DespawnEntity);
 
         this.velocity = velocity;
 
@@ -25,6 +25,18 @@ public class Bullet : Entity
 
         _part.worldPosition = worldPosition;
 
+        chunk.GetCollidedEntites(worldPosition, 0.5f, 0.5f, OnCollision);
+
         base.Update(deltaTime);
+    }
+
+    private void OnCollision(Entity entity)
+    {
+        EntityCreature creature = entity as EntityCreature;
+
+        if (creature != null)
+        {
+            creature.ApplyDamage(_damage);
+        }
     }
 }
