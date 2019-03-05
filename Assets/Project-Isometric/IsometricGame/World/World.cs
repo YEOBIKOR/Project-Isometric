@@ -177,7 +177,7 @@ public class World
         {
             SpawnEntity(player, new Vector3(1f, GetSurface(new Vector2(1f, 1f)), 1f));
 
-            //SpawnEntity(new EntityBoss(), new Vector3(8f, 16f, 8f));
+            SpawnEntity(new EntityBoss(), new Vector3(8f, 16f, 8f));
 
             //for (int i = 0; i < 300; i++)
             //{

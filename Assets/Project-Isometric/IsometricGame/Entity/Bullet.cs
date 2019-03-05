@@ -3,20 +3,27 @@ using System.Collections;
 
 public class Bullet : Entity
 {
+    private Entity _owner;
+
     private Damage _damage;
 
     private EntityPart _part;
 
-    public Bullet(Damage damage, Vector3 velocity) : base(0.2f)
+    private AudioClip _hitAudio;
+
+    public Bullet(Entity owner, Damage damage, Vector3 velocity) : base(0f)
     {
+        _owner = owner;
         _damage = damage;
 
-        AttachPhysics(0.2f, 0.2f, 0f, this.DespawnEntity);
+        AttachPhysics(0.2f, 0.2f, 0f, Hit);
 
         this.velocity = velocity;
 
-        _part = new EntityPart(this, Futile.atlasManager.GetElementWithName("entities/bullet8"));
+        _part = new EntityPart(this, Futile.atlasManager.GetElementWithName("entities/bullet12"));
         entityParts.Add(_part);
+        
+        _hitAudio = Resources.Load<AudioClip>("SoundEffects/BulletHit");
     }
 
     public override void Update(float deltaTime)
@@ -32,11 +39,22 @@ public class Bullet : Entity
 
     private void OnCollision(Entity entity)
     {
-        EntityCreature creature = entity as EntityCreature;
-
-        if (creature != null)
+        if (spawned)
         {
-            creature.ApplyDamage(_damage);
+            EntityCreature creature = entity as EntityCreature;
+
+            if (creature != null && creature != _owner)
+            {
+                creature.ApplyDamage(_damage);
+                Hit();
+            }
         }
+    }
+
+    private void Hit()
+    {
+        world.worldCamera.worldMicroPhone.PlaySound(_hitAudio, this);
+
+        DespawnEntity();
     }
 }

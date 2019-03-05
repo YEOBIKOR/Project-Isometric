@@ -45,8 +45,7 @@ public class WorldCamera
     private float _lastViewAngle;
     private float _turn;
 
-    private float _shake;
-    private float _shakeTime;
+    private Vector2 _shakeOffset;
 
     public const int PixelsPerTile = 24;
     public const int PixelsPerHalfTile = PixelsPerTile / 2;
@@ -77,8 +76,7 @@ public class WorldCamera
         _lastViewAngle = viewAngle;
         _turn = 0f;
 
-        _shake = 0f;
-        _shakeTime = 0f;
+        _shakeOffset = Vector2.zero;
 
         worldCameraUI = new WorldCameraUI(this);
     }
@@ -93,13 +91,11 @@ public class WorldCamera
         viewAngle = Mathf.LerpAngle(_lastViewAngle, GetAngle(_viewDirection), CustomMath.Curve(1f - _turn, -3f));
         _turn -= deltaTime;
 
-        _shake = Mathf.Max(_shake - deltaTime, 0f);
-        _shakeTime += (_shake * 6f + 0.1f) * deltaTime;
+        _shakeOffset = Vector2.Lerp(_shakeOffset, Vector2.zero, deltaTime * 10f);
 
         if (_cameraTarget != null)
             _targetPosition = Vector3.Lerp(_targetPosition, _cameraTarget.worldPosition, deltaTime * 10f);
-        Vector2 cameraPosition = -GetScreenPosition(_targetPosition) +
-            new Vector2(Mathf.PerlinNoise(_shakeTime, 0f) - 0.5f, Mathf.PerlinNoise(0f, _shakeTime) - 0.5f) * (16f + _shake);
+        Vector2 cameraPosition = -GetScreenPosition(_targetPosition) + _shakeOffset;
         worldContainer.SetPosition(cameraPosition);
         _debugContainer.SetPosition(cameraPosition);
 
@@ -264,7 +260,7 @@ public class WorldCamera
 
     public void ShakeCamera(float amount)
     {
-        _shake = Mathf.Min(_shake + amount, 1f);
+        _shakeOffset = Random.insideUnitCircle.normalized * amount;
     }
 
     public void AddRenderer(IRenderer renderer)

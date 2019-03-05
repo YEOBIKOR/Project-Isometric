@@ -8,8 +8,6 @@ class DecomposeCreaturePart : Entity
 
     public DecomposeCreaturePart(EntityCreature creature, EntityPart part) : base(0.5f)
     {
-        velocity = CustomMath.HorizontalRotate(creature.velocity, Random.Range(-30f, 30f));
-
         entityParts.Add(new EntityPart(this, part.element));
         entityParts[0].sortZOffset = 1f;
 
@@ -17,6 +15,8 @@ class DecomposeCreaturePart : Entity
         decayTime = Random.Range(5f, 10f);
 
         AttachPhysics(0.25f, 0.5f);
+
+        velocity = CustomMath.HorizontalRotate(creature.velocity, Random.Range(-30f, 30f));
     }
 
     public override void Update(float deltaTime)

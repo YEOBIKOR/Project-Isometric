@@ -12,10 +12,10 @@ public class Damage
         { return _amount; }
     }
 
-    public Damage(Entity behaviour)
+    public Damage(Entity behaviour, float amount = 10f)
     {
         _behaviour = behaviour;
-        _amount = 10f;
+        _amount = amount;
     }
 
     public void OnApplyDamage(Entity target)
@@ -37,7 +37,6 @@ public class Damage
                 (target as EntityCreature).Damage(_amount);
 
             target.damagedCooldown = 0.3f;
-            _behaviour.worldCamera.ShakeCamera(2f);
             _behaviour.world.cameraHUD.IndicateDamage(this, target.worldPosition);
         }
     }

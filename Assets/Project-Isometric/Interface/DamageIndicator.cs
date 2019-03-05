@@ -15,7 +15,8 @@ namespace Isometric.Interface
         {
             _damage = damage;
 
-            _label = new FLabel("font", damage.amount.ToString());
+            string text = ((int)damage.amount).ToString();
+            _label = new FLabel("font", text);
             _label.scale = 1.2f;
 
             AddElement(_label);
@@ -26,6 +27,9 @@ namespace Isometric.Interface
         public override void Update(float deltaTime)
         {
             _time += deltaTime;
+
+            if (_time > 3f)
+                RemoveSelf();
 
             _label.SetPosition(0f, Mathf.Sqrt(_time * 4f) * 16f);
             _label.alpha = Mathf.Lerp(1f, 0f, _time);
