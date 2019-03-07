@@ -158,6 +158,9 @@ public class Player : EntityCreature
 
     public void UseItem(RayTrace rayTrace, bool clicked)
     {
+        Vector2 viewDirection = new Vector2(rayTrace.hitPosition.x - worldPosition.x, rayTrace.hitPosition.z - worldPosition.z);
+        viewAngle = Mathf.Atan2(viewDirection.y, viewDirection.x) * Mathf.Rad2Deg;
+
         if (pickItemStack != null)
         {
             if (!(itemUseCoolTime > 0f) && (pickItemStack.item.repeatableUse || clicked))
