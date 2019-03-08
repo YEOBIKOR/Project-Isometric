@@ -20,7 +20,7 @@ public class Bullet : Entity
 
         this.velocity = velocity;
 
-        _part = new EntityPart(this, Futile.atlasManager.GetElementWithName("entities/bullet12"));
+        _part = new EntityPart(this, Futile.atlasManager.GetElementWithName("entities/bullet8"));
         entityParts.Add(_part);
         
         _hitAudio = Resources.Load<AudioClip>("SoundEffects/BulletHit");
@@ -28,8 +28,6 @@ public class Bullet : Entity
 
     public override void Update(float deltaTime)
     {
-        worldPosition += velocity * deltaTime;
-
         _part.worldPosition = worldPosition;
 
         chunk.GetCollidedEntites(worldPosition, 0.5f, 0.5f, OnCollision);
@@ -53,7 +51,7 @@ public class Bullet : Entity
 
     private void Hit()
     {
-        world.worldCamera.worldMicroPhone.PlaySound(_hitAudio, this);
+        world.worldMicrophone.PlaySound(_hitAudio, this);
 
         DespawnEntity();
     }

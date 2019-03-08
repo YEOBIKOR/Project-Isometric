@@ -2,7 +2,7 @@
 
 namespace Isometric.Interface
 {
-    public class SpeechBubble : InterfaceObject
+    public class ChatBubble : InterfaceObject
     {
         private WorldCamera _camera;
 
@@ -17,7 +17,7 @@ namespace Isometric.Interface
 
         const float SpeechSpeed = 24f;
 
-        public SpeechBubble(WorldCamera camera, IPositionable behaviour, string text, Menu menu) : base(menu)
+        public ChatBubble(WorldCamera camera, IPositionable behaviour, string text, Menu menu) : base(menu)
         {
             _camera = camera;
 
@@ -27,8 +27,6 @@ namespace Isometric.Interface
 
             _rect = new SolidRoundedRect(menu);
             _label = new FLabel("font", string.Empty);
-
-            _label.scale = 0.5f;
 
             AddElement(_rect);
             AddElement(_label);
@@ -43,7 +41,7 @@ namespace Isometric.Interface
             if (_time * SpeechSpeed < _text.Length + 1)
                 _label.text = _text.Substring(0, (int)(_time * SpeechSpeed));
 
-            _rect.size = _label.textRect.size * 0.5f;
+            _rect.size = _label.textRect.size;
 
             if (_time > _duration)
             {

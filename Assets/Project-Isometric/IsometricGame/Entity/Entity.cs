@@ -134,6 +134,8 @@ public abstract class Entity : IPositionable
 
     public virtual void OnDespawn()
     {
+        world.OnDespawnEntity(this);
+
         _chunk = null;
 
         if (shadow != null)

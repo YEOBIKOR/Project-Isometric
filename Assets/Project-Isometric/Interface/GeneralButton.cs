@@ -26,7 +26,6 @@ namespace Isometric.Interface
             AddElement(rect2);
 
             label = new FLabel("font", name);
-            label.scale = 0.5f;
             container.AddChild(label);
 
             this.clickCallback = clickCallback;

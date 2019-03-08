@@ -27,6 +27,7 @@ class DecomposeCreaturePart : Entity
 
         entityParts[0].worldPosition = worldPosition;
         entityParts[0].viewAngle = viewAngle;
+        entityParts[0].color = new Color(0.8f, 0.8f, 0.8f);
         entityParts[0].alpha = Mathf.Clamp01(decayTime);
 
         base.Update(deltaTime);

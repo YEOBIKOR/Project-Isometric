@@ -24,7 +24,7 @@ namespace Isometric.Interface
 
         public void Speech(IPositionable behaviour, string text)
         {
-            SpeechBubble bubble = new SpeechBubble(_camera, behaviour, text, this);
+            ChatBubble bubble = new ChatBubble(_camera, behaviour, text, this);
             AddElement(bubble);
         }
 

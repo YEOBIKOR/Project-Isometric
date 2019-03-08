@@ -20,11 +20,11 @@ namespace Isometric.Items
             registry.Add("block_sand", new ItemBlock("Sand Block", "sand"));
             registry.Add("block_sandstone", new ItemBlock("Sandstone Block", "sandstone"));
             registry.Add("block_wood", new ItemBlock("Wood Block", "wood"));
-            registry.Add("gunak47", new ItemGun("AK47", "gunak47"));
-            registry.Add("guncannon", new ItemGun("Cannon", "guncannon"));
-            registry.Add("gungranade", new ItemGun("Granade Launcher", "gungranade"));
-            registry.Add("gunpistol", new ItemGun("Pistol", "gunpistol"));
-            registry.Add("gunshot", new ItemGun("Shotgun", "gunshot"));
+            registry.Add("gunak47", new ItemGun("AK47", "gunak47", 0.08f, true));
+            registry.Add("guncannon", new ItemGun("Cannon", "guncannon", 1f, false));
+            registry.Add("gungranade", new ItemGranadeLauncher("Granade Launcher", "gungranade"));
+            registry.Add("gunpistol", new ItemGun("Pistol", "gunpistol", 0.5f, false));
+            registry.Add("gunshot", new ItemShotgun("Shotgun", "gunshot", 0.8f, false));
         }
 
         public static Item GetItemByID(int id)

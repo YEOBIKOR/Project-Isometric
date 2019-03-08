@@ -1,0 +1,20 @@
+{"frames": {
+
+"font.png":
+{
+	"frame": {"x":0,"y":0,"w":256,"h":256},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":256},
+	"sourceSize": {"w":256,"h":256}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "fontatlas.png",
+	"format": "RGBA8888",
+	"size": {"w":256,"h":256},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:36d276917f9e627a8409f474d0137ea6:59fbfcb9cf553cba844cb45d1ed710ba:58e034211116fe6319f0b11a7a08c04f$"
+}
+}

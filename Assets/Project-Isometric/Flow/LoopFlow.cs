@@ -103,7 +103,7 @@ public class LoopFlow
         loopFlow._owner = this;
         loopFlow.OnActivate();
 
-        Debug.Log(string.Concat(this, " sub ", loopFlow));
+        Debug.Log(string.Concat(this, "\n> ", loopFlow));
     }
 
     public void RemoveSubLoopFlow(LoopFlow loopFlow)
@@ -113,7 +113,7 @@ public class LoopFlow
             loopFlow._owner = null;
             loopFlow.OnTerminate();
 
-            Debug.Log(string.Concat(this, " remove ", loopFlow));
+            Debug.Log(string.Concat(this, "\nX ", loopFlow));
         }
     }
 }

@@ -6,8 +6,8 @@ using Isometric.Interface;
 
 public class Player : EntityCreature
 {
-    private PlayerGraphics playerGraphics;
-    private PlayerInterface playerInterface;
+    private PlayerGraphics _playerGraphics;
+    private PlayerInterface _playerInterface;
 
     private ItemContainer[] _inventory;
     public ItemContainer[] inventory
@@ -20,16 +20,16 @@ public class Player : EntityCreature
         get
         { return inventory.Length; }
     }
-    private ItemContainer pickedItemContainer;
+    private ItemContainer _pickedItemContainer;
     public ItemStack pickItemStack
     {
         get
-        { return pickedItemContainer.itemStack; }
+        { return _pickedItemContainer.itemStack; }
     }
 
-    private Damage playerAttackDamage;
+    private Damage _playerAttackDamage;
 
-    private float itemUseCoolTime;
+    private float _itemUseCoolTime;
     
     public Player() : base(0.3f, 2.0f, 100f)
     {
@@ -40,12 +40,12 @@ public class Player : EntityCreature
         for (int index = 0; index < _inventory.Length; index++)
             _inventory[index] = new ItemContainer();
 
-        playerGraphics = new PlayerGraphics(this);
-        playerInterface = new PlayerInterface(this);
+        _playerGraphics = new PlayerGraphics(this);
+        _playerInterface = new PlayerInterface(this);
 
-        pickedItemContainer = inventory[0];
+        _pickedItemContainer = inventory[0];
 
-        playerAttackDamage = new Damage(this);
+        _playerAttackDamage = new Damage(this);
 
         Item[] items = Item.GetItemAll();
         for (int index = 0; index < inventorySize; index++)
@@ -61,18 +61,39 @@ public class Player : EntityCreature
     {
         base.OnSpawn(chunk, position);
 
-        game.AddSubLoopFlow(playerInterface);
+        game.AddSubLoopFlow(_playerInterface);
         worldCamera.SetCameraTarget(this);
     }
 
     public override void OnDespawn()
     {
-        playerInterface.Terminate();
+        _playerInterface.Terminate();
 
         base.OnDespawn();
     }
 
     public override void Update(float deltaTime)
+    {
+        UpdateMovement(deltaTime);
+
+        _itemUseCoolTime = Mathf.Max(_itemUseCoolTime - deltaTime, 0f);
+
+        CursorType type = CursorType.None;
+
+        if (!_pickedItemContainer.blank)
+        {
+            Item pickingItem = pickItemStack.item;
+            type = pickingItem.cursorType;
+        }
+
+        _playerInterface.SetCursor(type);
+
+        base.Update(deltaTime);
+
+        _playerGraphics.Update(deltaTime);
+    }
+
+    private void UpdateMovement(float deltaTime)
     {
         moveSpeed = Input.GetKey(KeyCode.LeftShift) ? 8f : 4f;
 
@@ -83,7 +104,7 @@ public class Player : EntityCreature
             KillCreature();
 
         if (Input.GetKeyDown(KeyCode.T))
-            DropItem(pickedItemContainer);
+            DropItem(_pickedItemContainer);
 
         Vector2 moveDirectionByScreen = Vector2.zero;
 
@@ -103,22 +124,6 @@ public class Player : EntityCreature
             MoveTo(moveDirection, 50f * deltaTime);
             viewAngle = Mathf.LerpAngle(viewAngle, Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg, deltaTime * 10f);
         }
-
-        itemUseCoolTime = Mathf.Max(itemUseCoolTime - deltaTime, 0f);
-
-        CursorType type = CursorType.None;
-
-        if (!pickedItemContainer.blank)
-        {
-            Item pickingItem = pickItemStack.item;
-            type = pickingItem.cursorType;
-        }
-
-        playerInterface.SetCursor(type);
-
-        base.Update(deltaTime);
-
-        playerGraphics.Update(deltaTime);
     }
 
     public void AcquireItem(ItemStack itemStack)
@@ -153,7 +158,7 @@ public class Player : EntityCreature
 
     public void PickItem(ItemContainer itemContainer)
     {
-        pickedItemContainer = itemContainer;
+        _pickedItemContainer = itemContainer;
     }
 
     public void UseItem(RayTrace rayTrace, bool clicked)
@@ -163,11 +168,11 @@ public class Player : EntityCreature
 
         if (pickItemStack != null)
         {
-            if (!(itemUseCoolTime > 0f) && (pickItemStack.item.repeatableUse || clicked))
+            if (!(_itemUseCoolTime > 0f) && (pickItemStack.item.repeatableUse || clicked))
             {
                 pickItemStack.OnUseItem(world, this, rayTrace);
 
-                itemUseCoolTime = pickItemStack.item.useCoolTime;
+                _itemUseCoolTime = pickItemStack.item.useCoolTime;
             }
         }
     }
@@ -265,7 +270,7 @@ public class Player : EntityCreature
             EntityPart item = GetEntityPart(PartType.Item);
             item.element = null;
 
-            if (!player.pickedItemContainer.blank)
+            if (!player._pickedItemContainer.blank)
             {
                 Item pickingItem = player.pickItemStack.item;
 

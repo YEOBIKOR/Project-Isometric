@@ -7,13 +7,20 @@ public class World
     private IsometricGame _game;
     public IsometricGame game
     {
-        get { return _game; }
+        get
+        { return _game; }
     }
 
     private WorldCamera _worldCamera;
     public WorldCamera worldCamera
     {
-        get { return _worldCamera; }
+        get
+        { return _worldCamera; }
+    }
+    public WorldMicrophone worldMicrophone
+    {
+        get
+        { return _worldCamera.worldMicrophone; }
     }
 
     private float _worldTime;
@@ -177,13 +184,13 @@ public class World
         {
             SpawnEntity(player, new Vector3(1f, GetSurface(new Vector2(1f, 1f)), 1f));
 
-            SpawnEntity(new EntityBoss(), new Vector3(8f, 16f, 8f));
+            // SpawnEntity(new EntityBoss(), new Vector3(8f, 16f, 8f));
 
-            //for (int i = 0; i < 300; i++)
-            //{
-            //    Vector2 position = Vector2.one * 10f;
-            //    SpawnEntity(new EntityPpyongppyong(), new Vector3(position.x, 30f, position.y));
-            //}
+            for (int i = 0; i < 300; i++)
+            {
+                Vector2 position = Vector2.one * 10f;
+                SpawnEntity(new EntityPpyongppyong(), new Vector3(position.x, 30f, position.y));
+            }
         }
 
         int spawnCount = (int)RXRandom.Range(0f, 1.1f);
@@ -338,6 +345,12 @@ public class World
         }
         else
             Debug.LogWarning(string.Concat("Entity ", entity.GetType(), " has already spawn."));
+    }
+
+    public void OnDespawnEntity(Entity entity)
+    {
+        if (entity is ITarget && entity != player)
+            _targets.Remove(entity as ITarget);
     }
 
     public void AddCosmeticDrawble(CosmeticRenderer cosmeticDrawable)

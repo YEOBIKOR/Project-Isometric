@@ -22,7 +22,8 @@ namespace Isometric.Items
         public ItemStack(Item item, int stackSize)
         {
             _item = item;
-            _stackSize = stackSize;
+
+            _stackSize = Mathf.Min(stackSize, item.maxStack);
         }
 
         public void OnUseItem(World world, Player player, RayTrace rayTrace)

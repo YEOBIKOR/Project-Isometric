@@ -16,7 +16,7 @@ public class WorldCamera
     private World _world;
 
     private WorldMicrophone _worldMicrophone;
-    public WorldMicrophone worldMicroPhone
+    public WorldMicrophone worldMicrophone
     {
         get
         { return _worldMicrophone; }
@@ -45,7 +45,7 @@ public class WorldCamera
     private float _lastViewAngle;
     private float _turn;
 
-    private Vector2 _shakeOffset;
+    private float _shake;
 
     public const int PixelsPerTile = 24;
     public const int PixelsPerHalfTile = PixelsPerTile / 2;
@@ -76,7 +76,7 @@ public class WorldCamera
         _lastViewAngle = viewAngle;
         _turn = 0f;
 
-        _shakeOffset = Vector2.zero;
+        _shake = 0f;
 
         worldCameraUI = new WorldCameraUI(this);
     }
@@ -91,11 +91,11 @@ public class WorldCamera
         viewAngle = Mathf.LerpAngle(_lastViewAngle, GetAngle(_viewDirection), CustomMath.Curve(1f - _turn, -3f));
         _turn -= deltaTime;
 
-        _shakeOffset = Vector2.Lerp(_shakeOffset, Vector2.zero, deltaTime * 10f);
+        _shake = Mathf.Lerp(_shake, 0f, deltaTime * 10f);
 
         if (_cameraTarget != null)
             _targetPosition = Vector3.Lerp(_targetPosition, _cameraTarget.worldPosition, deltaTime * 10f);
-        Vector2 cameraPosition = -GetScreenPosition(_targetPosition) + _shakeOffset;
+        Vector2 cameraPosition = -GetScreenPosition(_targetPosition) + Random.insideUnitCircle * _shake;
         worldContainer.SetPosition(cameraPosition);
         _debugContainer.SetPosition(cameraPosition);
 
@@ -260,7 +260,7 @@ public class WorldCamera
 
     public void ShakeCamera(float amount)
     {
-        _shakeOffset = Random.insideUnitCircle.normalized * amount;
+        _shake += amount;
     }
 
     public void AddRenderer(IRenderer renderer)

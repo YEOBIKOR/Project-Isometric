@@ -53,9 +53,8 @@ public class IsometricMain : MonoBehaviour
         Futile.atlasManager.LoadAtlas("Atlases/isogame");
         Futile.atlasManager.LoadAtlas("Atlases/uiatlas");
 
-        Futile.atlasManager.LoadAtlas("Atlases/fontAtlas");
+        Futile.atlasManager.LoadAtlas("Atlases/fontatlas");
         Futile.atlasManager.LoadFont("font", "font", "Atlases/font", 0f, 0f);
-        Futile.atlasManager.LoadFont("DisplayFont", "DisplayFont", "Atlases/DisplayFont", 0f, 0f);
     }
 
     private void LoadShaders()

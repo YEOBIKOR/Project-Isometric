@@ -4,14 +4,14 @@ using Custom;
 
 namespace Isometric.Items
 {
-    public class ItemGun : ItemTool
+    public class ItemShotgun : ItemTool
     {
         private AudioClip _shotAudio;
 
         private float _useCoolTime;
         private bool _repeatableUse;
-
-        public ItemGun(string name, string textureName, float useCoolTime, bool repeatableUse) : base(name, textureName)
+        
+        public ItemShotgun(string name, string textureName, float useCoolTime, bool repeatableUse) : base(name, textureName)
         {
             _useCoolTime = useCoolTime;
             _repeatableUse = repeatableUse;
@@ -22,10 +22,14 @@ namespace Isometric.Items
         public override void OnUseItem(World world, Player player, RayTrace rayTrace)
         {
             Vector3 shootPosition = player.worldPosition + CustomMath.HorizontalRotate(new Vector3(1.5f, 1f, 0f), player.viewAngle);
-            Vector3 targetPosition = rayTrace.hitPosition + Vector3.up + Random.insideUnitSphere;
-            Vector3 bulletVelocity = (targetPosition - shootPosition).normalized * 24f;
 
-            world.SpawnEntity(new Bullet(player, new Damage(player, Random.Range(10f, 20f)), bulletVelocity), shootPosition);
+            for (int i = 0; i < 5; i++)
+            {
+                Vector3 targetPosition = rayTrace.hitPosition + Vector3.up + Random.insideUnitSphere;
+                Vector3 bulletVelocity = (targetPosition - shootPosition).normalized * 24f;
+
+                world.SpawnEntity(new Bullet(player, new Damage(player, Random.Range(10f, 20f)), bulletVelocity), shootPosition);
+            }
             world.worldMicrophone.PlaySound(_shotAudio, new FixedPosition(player.worldPosition));
             world.worldCamera.ShakeCamera(4f);
         }
