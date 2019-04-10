@@ -36,7 +36,7 @@ namespace Isometric.Interface
         {
             _time = _time + deltaTime;
 
-            position = _camera.GetScreenPosition(_behaviour.worldPosition) + _camera.worldContainer.GetPosition() + new Vector2(0f, 48f + Mathf.Sin(_time * 12f) * 0.5f);
+            position = _camera.GetScreenPosition(_behaviour.worldPosition) + _camera.worldContainer.GetPosition() + new Vector2(0f, 48f); // + Mathf.Sin(_time * 12f) * 0.5f);
 
             if (_time * SpeechSpeed < _text.Length + 1)
                 _label.text = _text.Substring(0, (int)(_time * SpeechSpeed));

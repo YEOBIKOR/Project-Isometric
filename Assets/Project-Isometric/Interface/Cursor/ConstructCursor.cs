@@ -37,7 +37,7 @@ namespace Isometric.Interface
 
             if (!camera.turning)
             {
-                RayTrace rayTrace = camera.GetRayAtScreenPosition(Menu.mousePosition - camera.worldContainer.GetPosition());
+                RayTrace rayTrace = camera.GetRayAtScreenPosition(cursorPosition - camera.worldContainer.GetPosition());
 
                 if (rayTrace.hit)
                 {

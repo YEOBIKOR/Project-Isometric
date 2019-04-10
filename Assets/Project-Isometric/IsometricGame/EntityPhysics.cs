@@ -58,7 +58,7 @@ public class EntityPhysics
         _airControl = false;
     }
 
-    private const float Gravity = -50f;
+    private const float Gravity = -39.24f;
 
     public void ApplyPhysics(Chunk chunk, float deltaTime, ref Vector3 position)
     {

@@ -186,7 +186,7 @@ public class World
 
             // SpawnEntity(new EntityBoss(), new Vector3(8f, 16f, 8f));
 
-            for (int i = 0; i < 300; i++)
+            for (int i = 0; i < 10; i++)
             {
                 Vector2 position = Vector2.one * 10f;
                 SpawnEntity(new EntityPpyongppyong(), new Vector3(position.x, 30f, position.y));

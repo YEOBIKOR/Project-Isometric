@@ -13,6 +13,9 @@ namespace Isometric.Interface
         private Vector2 _targetScreenPosition;
         private Vector2 _lastScreenPosition;
 
+        private Vector2 _targetSize;
+        private Vector2 _lastSize;
+
         private float _lastTime;
 
         public TargetCursor(PlayerInterface menu) : base(menu)
@@ -41,47 +44,63 @@ namespace Isometric.Interface
             WorldCamera camera = world.worldCamera;
             List<ITarget> targets = world.targets;
 
-            if (targets.Count > 0)
+            ITarget nearestTarget = null;
+
+            Vector2 screenPositionA, screenPositionB;
+
+            screenPositionA = new Vector2(1920f, 1080f);
+
+            for (int index = 0; index < targets.Count; index++)
             {
-                Vector2 screenPositionA, screenPositionB, mousePosition;
-                ITarget nearestTarget = targets[0];
+                screenPositionB = camera.GetScreenPosition(targets[index].worldPosition) + camera.worldContainer.GetPosition();
 
-                screenPositionA = camera.GetScreenPosition(nearestTarget.worldPosition) + camera.worldContainer.GetPosition();
-
-                for (int index = 1; index < targets.Count; index++)
+                if ((screenPositionB.x > Menu.screenWidth * 0.5f || screenPositionB.x < Menu.screenWidth * -0.5f) ||
+                    (screenPositionB.y > Menu.screenHeight * 0.5f || screenPositionB.y < Menu.screenHeight * -0.5f))
                 {
-                    screenPositionB = camera.GetScreenPosition(targets[index].worldPosition) + camera.worldContainer.GetPosition();
-
-                    mousePosition = Menu.mousePosition;
-
-                    if ((screenPositionA - mousePosition).sqrMagnitude > (screenPositionB - mousePosition).sqrMagnitude)
-                    {
-                        nearestTarget = targets[index];
-                        screenPositionA = screenPositionB;
-                    }
+                    continue;
                 }
 
-                _targetScreenPosition = screenPositionA;
-
-                if (_currentTarget != nearestTarget)
+                if ((screenPositionA - cursorPosition).sqrMagnitude > (screenPositionB - cursorPosition).sqrMagnitude)
                 {
-                    _lastScreenPosition = position;
-                    _currentTarget = nearestTarget;
-                    _lastTime = menu.time;
+                    nearestTarget = targets[index];
+                    screenPositionA = screenPositionB;
                 }
+            }
+            
+            if (_currentTarget != nearestTarget)
+            {
+                _lastScreenPosition = position;
+                _lastSize = size;
 
-                if (Input.GetKey(KeyCode.Mouse0) && _currentTarget != null)
+                _currentTarget = nearestTarget;
+                _lastTime = menu.time;
+            }
+
+            if (_currentTarget != null)
+            {
+                _targetScreenPosition = screenPositionA + nearestTarget.boundRect.position;
+                _targetSize = nearestTarget.boundRect.size;
+
+                if (Input.GetKey(KeyCode.Mouse0))
                 {
                     RayTrace rayTrace = new RayTrace(_currentTarget.worldPosition, Vector3.zero, Vector3Int.zero);
                     player.UseItem(rayTrace, Input.GetKeyDown(KeyCode.Mouse0));
                 }
             }
+
+            else
+            {
+                _targetScreenPosition = cursorPosition;
+                _targetSize = new Vector2(12f, 12f);
+            }
         }
 
         public override void Update(float deltaTime)
         {
-            position = Vector2.Lerp(_lastScreenPosition, _targetScreenPosition, CustomMath.Curve((menu.time - _lastTime) * 2f, -5f)) + _currentTarget.boundRect.position;
-            size = Vector2.Lerp(size, _currentTarget.boundRect.size, deltaTime * 10f);
+            float t = CustomMath.Curve((menu.time - _lastTime) * 2f, -5f);
+
+            position = Vector2.Lerp(_lastScreenPosition, _targetScreenPosition, t);
+            size = Vector2.Lerp(_lastSize, _targetSize, t);
 
             Vector2 halfSize = size * 0.5f;
 

@@ -83,7 +83,7 @@ namespace Isometric.Interface
                     AddSubLoopFlow(inventoryMenu);
 
                 if (_currentCursor != null)
-                    _currentCursor.CursorUpdate(player.world, player, mousePosition);
+                    _currentCursor.CursorUpdate(player.world, player, Menu.mousePosition);
             }
 
             base.Update(deltaTime);
