@@ -117,7 +117,11 @@ public class Chunk
                 entity.MoveToOtherChunk();
 
             if (!entity.spawned)
+            {
+                _world.OnDespawnEntity(entity);
+
                 entity.OnDespawn();
+            }
 
             LinkedListNode<Entity> nextNode = node.Next;
             if (entity.chunk != this)

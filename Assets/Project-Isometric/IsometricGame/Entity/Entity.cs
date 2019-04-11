@@ -6,19 +6,23 @@ public abstract class Entity : IPositionable
     private Chunk _chunk;
     public Chunk chunk
     {
-        get { return _chunk; }
+        get
+        { return _chunk; }
     }
     public World world
     {
-        get { return _chunk.world; }
+        get
+        { return _chunk.world; }
     }
     public WorldCamera worldCamera
     {
-        get { return _chunk.worldCamera; }
+        get
+        { return _chunk.worldCamera; }
     }
     public IsometricGame game
     {
-        get { return _chunk.game; }
+        get
+        { return _chunk.game; }
     }
 
     private Vector3 _worldPosition;
@@ -134,9 +138,9 @@ public abstract class Entity : IPositionable
 
     public virtual void OnDespawn()
     {
-        world.OnDespawnEntity(this);
-
         _chunk = null;
+
+        Debug.Log("Despawn " + this);
 
         if (shadow != null)
             shadow.Erase();
