@@ -58,12 +58,6 @@ public class LoopFlow
 
     public virtual void RawUpdate(float deltaTime)
     {
-        timeScale = Mathf.Lerp(timeScale,
-                Input.GetKey(KeyCode.Keypad1) ? 0f :
-                Input.GetKey(KeyCode.Keypad2) ? 0.3f :
-                Input.GetKey(KeyCode.Keypad3) ? 3f :
-                1f, deltaTime * 10f);
-
         if (!paused)
             Update(deltaTime * timeScale);
 
@@ -110,8 +104,8 @@ public class LoopFlow
     {
         if (subLoopFlows.Remove(loopFlow))
         {
-            loopFlow._owner = null;
             loopFlow.OnTerminate();
+            loopFlow._owner = null;
 
             Debug.Log(string.Concat(this, "\nX ", loopFlow));
         }

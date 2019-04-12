@@ -8,11 +8,6 @@ public class IsometricGame : LoopFlow
 
     private PauseMenu pauseMenu;
 
-    public IsometricGame() : base()
-    {
-
-    }
-
     public override void OnActivate()
     {
         base.OnActivate();
@@ -23,7 +18,7 @@ public class IsometricGame : LoopFlow
 
     public override void RawUpdate(float deltaTime)
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !pauseMenu.activated)
+        if (Input.GetKeyDown(KeyCode.Escape) && !pauseMenu.activated && !flowManager.popup)
             AddSubLoopFlow(pauseMenu);
         if (Input.GetKeyDown(KeyCode.Home))
             flowManager.RequestSwitchLoopFlow(new IsometricGame());

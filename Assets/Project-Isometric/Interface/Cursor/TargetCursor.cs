@@ -54,13 +54,16 @@ namespace Isometric.Interface
             {
                 screenPositionB = camera.GetScreenPosition(targets[index].worldPosition) + camera.worldContainer.GetPosition();
 
-                if ((screenPositionB.x > Menu.screenWidth * 0.5f || screenPositionB.x < Menu.screenWidth * -0.5f) ||
-                    (screenPositionB.y > Menu.screenHeight * 0.5f || screenPositionB.y < Menu.screenHeight * -0.5f))
+                float sqrMagnitude = (screenPositionB - cursorPosition).sqrMagnitude;
+
+                //if ((screenPositionB.x > Menu.screenWidth * 0.5f || screenPositionB.x < Menu.screenWidth * -0.5f) ||
+                //    (screenPositionB.y > Menu.screenHeight * 0.5f || screenPositionB.y < Menu.screenHeight * -0.5f))
+                if (sqrMagnitude > 4096f)
                 {
                     continue;
                 }
 
-                if ((screenPositionA - cursorPosition).sqrMagnitude > (screenPositionB - cursorPosition).sqrMagnitude)
+                else if ((screenPositionA - cursorPosition).sqrMagnitude > sqrMagnitude)
                 {
                     nearestTarget = targets[index];
                     screenPositionA = screenPositionB;

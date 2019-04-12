@@ -45,7 +45,13 @@ public class IsometricMain : MonoBehaviour
 
     private void Update()
     {
-        flowManager.RawUpdate(Time.deltaTime);
+        float timeScale =
+                Input.GetKey(KeyCode.Keypad1) ? 0f :
+                Input.GetKey(KeyCode.Keypad2) ? 0.3f :
+                Input.GetKey(KeyCode.Keypad3) ? 3f :
+                1f;
+
+        flowManager.RawUpdate(Time.deltaTime * timeScale);
     }
 
     private void LoadAtlases()

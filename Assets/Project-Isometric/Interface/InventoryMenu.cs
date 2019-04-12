@@ -28,7 +28,7 @@ namespace Isometric.Interface
 
         private GeneralButton exitButton;
 
-        public InventoryMenu(PlayerInterface playerInterface) : base(null, true, 0.2f, 0.2f)
+        public InventoryMenu(PlayerInterface playerInterface) : base(null, true, 0.2f, 0.1f)
         {
             this.playerInterface = playerInterface;
 

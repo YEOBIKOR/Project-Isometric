@@ -37,6 +37,9 @@ namespace Isometric.Interface
             terminating = false;
             _factor = 0f;
 
+            if (escToExit)
+                flowManager.AddPopup(this);
+
             if (pausingTarget != null)
                 pausingTarget.paused = true;
         }
@@ -46,15 +49,9 @@ namespace Isometric.Interface
             if (pausingTarget != null)
                 pausingTarget.paused = false;
 
+            flowManager.RemovePopup(this);
+
             base.OnTerminate();
-        }
-
-        public override void RawUpdate(float deltaTime)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape) && escToExit && !paused && time > 0f)
-                RequestTerminate();
-
-            base.RawUpdate(deltaTime);
         }
 
         public override void Update(float deltaTime)
