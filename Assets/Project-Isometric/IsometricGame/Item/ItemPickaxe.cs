@@ -20,7 +20,7 @@ namespace Isometric.Items
         public override CursorType cursorType
         {
             get
-            { return CursorType.Construct; }
+            { return CursorType.Destruct; }
         }
     }
 }

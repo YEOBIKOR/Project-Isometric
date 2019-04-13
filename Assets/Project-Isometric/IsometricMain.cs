@@ -34,13 +34,11 @@ public class IsometricMain : MonoBehaviour
         LoadTextures();
 
         _camera = Futile.instance.camera;
-        InitializePixelPerfectCamera(_camera, screenSize);
+        // InitializePixelPerfectCamera(_camera, screenSize);
 
         audioEngine = new AudioEngine(this);
         flowManager = new FlowManager(this);
         flowManager.SwitchLoopFlow(new IsometricGame());
-
-        Cursor.visible = false;
     }
 
     private void Update()

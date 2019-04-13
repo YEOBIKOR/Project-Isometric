@@ -8,6 +8,7 @@ namespace Isometric.Interface
     {
         None,
         Construct,
+        Destruct,
         Target
     }
 
@@ -45,6 +46,7 @@ namespace Isometric.Interface
             {
                 null,
                 new ConstructCursor(this, worldCamera),
+                new DestructCursor(this, worldCamera),
                 new TargetCursor(this)
             };
 
