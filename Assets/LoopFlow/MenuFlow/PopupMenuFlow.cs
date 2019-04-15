@@ -4,7 +4,7 @@ using Isometric.Interface;
 
 namespace Isometric.Interface
 {
-    public class PopupMenu : Menu
+    public class PopupMenuFlow : MenuFlow
     {
         private LoopFlow pausingTarget;
 
@@ -21,7 +21,7 @@ namespace Isometric.Interface
             { return _factor; }
         }
 
-        public PopupMenu(LoopFlow pausingTarget, bool escToExit, float appearingTime = 0f, float disappearingTime = 0f) : base()
+        public PopupMenuFlow(LoopFlow pausingTarget, bool escToExit, float appearingTime = 0f, float disappearingTime = 0f) : base()
         {
             this.pausingTarget = pausingTarget;
             this.escToExit = escToExit;

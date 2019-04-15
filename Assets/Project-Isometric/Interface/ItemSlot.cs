@@ -15,7 +15,7 @@ namespace Isometric.Interface
         private ItemContainer itemContainer;
         private ItemContainerVisualizer visualizer;
 
-        public ItemSlot(InventoryMenu menu, ItemContainer itemContainer) : base(menu, string.Empty, null)
+        public ItemSlot(InventoryMenu menu, ItemContainer itemContainer) : base(menu, string.Empty, null, false)
         {
             this.itemContainer = itemContainer;
 

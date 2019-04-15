@@ -4,7 +4,7 @@ using Custom;
 
 namespace Isometric.Interface
 {
-    public class OptionsMenu : PopupMenu
+    public class OptionsMenu : PopupMenuFlow
     {
         private FSprite fadePanel;
         private RoundedRect panel;

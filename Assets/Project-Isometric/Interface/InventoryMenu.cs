@@ -5,7 +5,7 @@ using Isometric.Items;
 
 namespace Isometric.Interface
 {
-    public class InventoryMenu : PopupMenu
+    public class InventoryMenu : PopupMenuFlow
     {
         private PlayerInterface playerInterface;
 
@@ -64,7 +64,7 @@ namespace Isometric.Interface
             inventoryCursor = new InventoryCursor(this);
             AddElement(inventoryCursor);
 
-            exitButton = new GeneralButton(this, "X", RequestTerminate);
+            exitButton = new GeneralButton(this, "X", RequestTerminate, false);
             exitButton.position = rightUp + new Vector2(-24f, -24f);
             exitButton.size = new Vector2(16f, 16f);
             AddElement(exitButton);
@@ -116,8 +116,8 @@ namespace Isometric.Interface
 
         public override void Update(float deltaTime)
         {
-            visualizer.position = Menu.mousePosition;
-            inspector.position = Menu.mousePosition;
+            visualizer.position = MenuFlow.mousePosition;
+            inspector.position = MenuFlow.mousePosition;
 
             base.Update(deltaTime);
         }

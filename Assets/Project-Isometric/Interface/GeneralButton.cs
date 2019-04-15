@@ -13,11 +13,12 @@ namespace Isometric.Interface
         private Action clickCallback;
 
         private float hoverfactor;
+        private bool pressAudio;
 
         private static AudioClip _onHoverAudio;
         private static AudioClip _onPressAudio;
 
-        public GeneralButton(Menu menu, string name, Action clickCallback) : base(menu)
+        public GeneralButton(MenuFlow menu, string name, Action clickCallback, bool pressAudio = true) : base(menu)
         {
             rect1 = new RoundedRect(menu);
             rect2 = new RoundedRect(menu);
@@ -29,6 +30,7 @@ namespace Isometric.Interface
             container.AddChild(label);
 
             this.clickCallback = clickCallback;
+            this.pressAudio = pressAudio;
 
             if (_onHoverAudio == null)
             {
@@ -76,7 +78,8 @@ namespace Isometric.Interface
             if (clickCallback != null)
                 clickCallback();
 
-            AudioEngine.PlaySound(_onPressAudio);
+            if (pressAudio)
+                AudioEngine.PlaySound(_onPressAudio);
         }
 
         public override void OnPressDown()

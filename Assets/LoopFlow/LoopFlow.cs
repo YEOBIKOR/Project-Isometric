@@ -10,10 +10,10 @@ public abstract class LoopFlow
         { return _owner; }
     }
 
-    public FlowManager flowManager
+    public LoopFlowManager loopFlowManager
     {
         get
-        { return this is FlowManager ? this as FlowManager : _owner.flowManager; }
+        { return this is LoopFlowManager ? this as LoopFlowManager : _owner.loopFlowManager; }
     }
     
     public bool activated

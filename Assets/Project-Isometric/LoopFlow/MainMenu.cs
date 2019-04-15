@@ -3,7 +3,7 @@ using Custom;
 
 namespace Isometric.Interface
 {
-    public class MainMenu : Menu
+    public class MainMenu : MenuFlow
     {
         private OptionsMenu optionsMenu;
 
@@ -37,7 +37,7 @@ namespace Isometric.Interface
             buttons = new GeneralButton[3];
             buttons[0] = new GeneralButton(this, "Start", OnGameStart);
             buttons[1] = new GeneralButton(this, "Options", OpenOptions);
-            buttons[2] = new GeneralButton(this, "Quit", Application.Quit);
+            buttons[2] = new GeneralButton(this, "Quit", OnApplicationQuit);
 
             buttons[0].position = new Vector2(0f, 88f - screenHeight * 0.5f);
             buttons[0].size = new Vector2(48f, 48f);
@@ -72,14 +72,26 @@ namespace Isometric.Interface
             base.Update(deltaTime);
         }
 
+        public override bool OnExecuteEscape()
+        {
+            OnApplicationQuit();
+
+            return false;
+        }
+
         public void OnGameStart()
         {
-            flowManager.RequestSwitchLoopFlow(new IsometricGame());
+            loopFlowManager.RequestSwitchLoopFlow(new IsometricGame());
         }
 
         public void OpenOptions()
         {
             AddSubLoopFlow(optionsMenu);
+        }
+
+        public void OnApplicationQuit()
+        {
+            Application.Quit();
         }
 
         public void OnVisitDevLog()

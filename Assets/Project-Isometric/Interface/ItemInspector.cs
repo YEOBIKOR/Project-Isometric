@@ -11,7 +11,7 @@ namespace Isometric.Interface
         private FLabel _itemName;
         private FLabel _itemInformation;
 
-        public ItemInspector(Menu menu) : base(menu)
+        public ItemInspector(MenuFlow menu) : base(menu)
         {
             _rect = new SolidRoundedRect(menu);
             _rect.size = new Vector2(100f, 20f);

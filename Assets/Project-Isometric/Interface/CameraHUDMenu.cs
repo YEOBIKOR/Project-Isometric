@@ -4,7 +4,7 @@ using Custom;
 
 namespace Isometric.Interface
 {
-    public class CameraHUDMenu : Menu
+    public class CameraHUDMenu : MenuFlow
     {
         private IsometricGame _game;
 

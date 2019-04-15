@@ -16,7 +16,7 @@ namespace Isometric.Interface
         private FSprite itemSprite;
         private FLabel itemAmount;
 
-        public ItemContainerVisualizer(Menu menu, ItemContainer itemContainer) : base(menu)
+        public ItemContainerVisualizer(MenuFlow menu, ItemContainer itemContainer) : base(menu)
         {
             this._itemContainer = itemContainer;
 

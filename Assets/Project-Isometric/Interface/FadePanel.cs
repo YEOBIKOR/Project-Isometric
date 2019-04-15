@@ -8,12 +8,12 @@ namespace Isometric.Interface
 	{
         private FSprite sprite;
 
-		public FadePanel(PopupMenu menu) : base(menu)
+		public FadePanel(PopupMenuFlow menu) : base(menu)
 		{
             sprite = new FSprite("pixel");
 
-            sprite.scaleX = Menu.screenWidth;
-            sprite.scaleY = Menu.screenHeight;
+            sprite.scaleX = MenuFlow.screenWidth;
+            sprite.scaleY = MenuFlow.screenHeight;
 
             sprite.color = new Color(0f, 0f, 0f, 0.5f);
             sprite.alpha = 0f;
@@ -23,7 +23,7 @@ namespace Isometric.Interface
 
         public override void Update(float deltaTime)
         {
-            sprite.alpha = CustomMath.Curve((menu as PopupMenu).factor, -3f);
+            sprite.alpha = CustomMath.Curve((menu as PopupMenuFlow).factor, -3f);
 
             base.Update(deltaTime);
         }

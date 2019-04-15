@@ -11,7 +11,7 @@ namespace Isometric.Interface
         private EntityPart backGround;
         private EntityPart foreGround;
 
-        public HealthBar(EntityCreature owner, Menu menu) : base(menu)
+        public HealthBar(EntityCreature owner, MenuFlow menu) : base(menu)
         {
             this.owner = owner;
 

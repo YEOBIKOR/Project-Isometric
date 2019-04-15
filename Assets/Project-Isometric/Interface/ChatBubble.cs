@@ -17,7 +17,7 @@ namespace Isometric.Interface
 
         const float SpeechSpeed = 24f;
 
-        public ChatBubble(WorldCamera camera, IPositionable behaviour, string text, Menu menu) : base(menu)
+        public ChatBubble(WorldCamera camera, IPositionable behaviour, string text, MenuFlow menu) : base(menu)
         {
             _camera = camera;
 

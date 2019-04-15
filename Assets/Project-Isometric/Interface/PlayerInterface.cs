@@ -12,7 +12,7 @@ namespace Isometric.Interface
         Target
     }
 
-    public class PlayerInterface : Menu
+    public class PlayerInterface : MenuFlow
     {
         private Player _player;
         public Player player
@@ -85,13 +85,13 @@ namespace Isometric.Interface
                     AddSubLoopFlow(inventoryMenu);
 
                 if (_currentCursor != null)
-                    _currentCursor.CursorUpdate(player.world, player, Menu.mousePosition);
+                    _currentCursor.CursorUpdate(player.world, player, MenuFlow.mousePosition);
             }
 
             base.Update(deltaTime);
         }
 
-        public class ItemSelect : Menu
+        public class ItemSelect : MenuFlow
         {
             public const int length = 8;
 

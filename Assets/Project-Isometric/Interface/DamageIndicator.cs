@@ -11,7 +11,7 @@ namespace Isometric.Interface
 
         private float _time;
 
-        public DamageIndicator(Menu menu, Damage damage) : base(menu)
+        public DamageIndicator(MenuFlow menu, Damage damage) : base(menu)
         {
             _damage = damage;
 

@@ -3,7 +3,7 @@ using Custom;
 
 namespace Isometric.Interface
 {
-    public class PauseMenu : PopupMenu
+    public class PauseMenu : PopupMenuFlow
     {
         private LoopFlow pauseTarget;
         private OptionsMenu optionsMenu;
@@ -46,9 +46,9 @@ namespace Isometric.Interface
                 AddElement(buttons[index]);
             }
 
-            buttons[0].position = Menu.rightDown + Vector2.right * -30f;
-            buttons[1].position = Menu.leftDown + Vector2.right * 30f;
-            buttons[2].position = Menu.leftDown + Vector2.right * 90f;
+            buttons[0].position = MenuFlow.rightDown + Vector2.right * -30f;
+            buttons[1].position = MenuFlow.leftDown + Vector2.right * 30f;
+            buttons[2].position = MenuFlow.leftDown + Vector2.right * 90f;
 
             if (_onPauseAudio == null)
             {
@@ -65,7 +65,7 @@ namespace Isometric.Interface
                 cinematicEdge[index].scaleY = Mathf.Lerp(0f, 72f, CustomMath.Curve(factor, -3f));
 
             for (int index = 0; index < buttons.Length; index++)
-                buttons[index].position = new Vector2(buttons[index].position.x,Menu.screenHeight * -0.5f + Mathf.Lerp(-16f, 16f, CustomMath.Curve(factor * 4f - (index + 1), -1f)));
+                buttons[index].position = new Vector2(buttons[index].position.x,MenuFlow.screenHeight * -0.5f + Mathf.Lerp(-16f, 16f, CustomMath.Curve(factor * 4f - (index + 1), -1f)));
 
             base.Update(deltaTime);
         }
@@ -87,7 +87,7 @@ namespace Isometric.Interface
 
         public void BackToMenu()
         {
-            flowManager.RequestSwitchLoopFlow(new MainMenu());
+            loopFlowManager.RequestSwitchLoopFlow(new MainMenu());
         }
 
         public void OpenOptions()

@@ -5,8 +5,8 @@ namespace Isometric.Interface
 {
     public abstract class InterfaceObject
     {
-        private Menu _menu;
-        public virtual Menu menu
+        private MenuFlow _menu;
+        public virtual MenuFlow menu
         {
             get
             { return _menu; }
@@ -56,7 +56,7 @@ namespace Isometric.Interface
             { return _container; }
         }
 
-        public InterfaceObject(Menu menu)
+        public InterfaceObject(MenuFlow menu)
         {
             _menu = menu;
             _elements = new List<InterfaceObject>();
@@ -132,7 +132,7 @@ namespace Isometric.Interface
         {
             get
             {
-                Vector2 mousePos = Menu.mousePosition;
+                Vector2 mousePos = MenuFlow.mousePosition;
 
                 return mousePos.x > position.x - size.x * 0.5f && mousePos.x < position.x + size.x * 0.5f &&
                     mousePos.y > position.y - size.y * 0.5f && mousePos.y < position.y + size.y * 0.5f;

@@ -8,7 +8,7 @@ namespace Isometric.Interface
         public bool hovering { get; private set; }
         public bool pressing { get; private set; }
 
-        public ButtonBase(Menu menu) : base(menu)
+        public ButtonBase(MenuFlow menu) : base(menu)
 		{
             hovering = false;
             pressing = false;

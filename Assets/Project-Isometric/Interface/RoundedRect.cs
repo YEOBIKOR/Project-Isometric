@@ -7,7 +7,7 @@ namespace Isometric.Interface
 	{
         private FSprite[] sprites;
 
-		public RoundedRect(Menu menu) : base(menu)
+		public RoundedRect(MenuFlow menu) : base(menu)
 		{
             sprites = new FSprite[8];
 
@@ -65,7 +65,7 @@ namespace Isometric.Interface
     {
         private FSprite[] sprites;
 
-        public SolidRoundedRect(Menu menu) : base(menu)
+        public SolidRoundedRect(MenuFlow menu) : base(menu)
         {
             sprites = new FSprite[9];
 

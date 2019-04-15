@@ -16,14 +16,6 @@ public class IsometricGame : LoopFlow
         pauseMenu = new PauseMenu(this);
     }
 
-    public override void RawUpdate(float deltaTime)
-    {
-        if (Input.GetKeyDown(KeyCode.Home))
-            flowManager.RequestSwitchLoopFlow(new IsometricGame());
-
-        base.RawUpdate(deltaTime);
-    }
-
     public override void Update(float deltaTime)
     {
         world.Update(deltaTime);

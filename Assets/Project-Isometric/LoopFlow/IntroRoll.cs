@@ -4,7 +4,7 @@ using Custom;
 
 namespace Isometric.Interface
 {
-    public class IntroRoll : Menu
+    public class IntroRoll : MenuFlow
     {
         private FContainer logoContainer;
         private FSprite logoSprite;
@@ -66,7 +66,7 @@ namespace Isometric.Interface
             logoSprite.x = Mathf.Lerp(0f, 11f, t);
 
             if (time > 4f)
-                flowManager.RequestSwitchLoopFlow(new MainMenu());
+                loopFlowManager.RequestSwitchLoopFlow(new MainMenu());
 
             base.Update(deltaTime);
         }
