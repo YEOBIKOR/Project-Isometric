@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class LoopFlow
+public abstract class LoopFlow
 {
     private LoopFlow _owner;
     public LoopFlow owner
@@ -46,14 +46,14 @@ public class LoopFlow
         get { return _time; }
     }
 
-    private List<LoopFlow> subLoopFlows;
+    private List<LoopFlow> _subLoopFlows;
 
     public LoopFlow()
     {
         _timeScale = 1f;
         _paused = false;
 
-        subLoopFlows = new List<LoopFlow>();
+        _subLoopFlows = new List<LoopFlow>();
     }
 
     public virtual void RawUpdate(float deltaTime)
@@ -61,8 +61,8 @@ public class LoopFlow
         if (!paused)
             Update(deltaTime * timeScale);
 
-        for (int index = 0; index < subLoopFlows.Count; index++)
-            subLoopFlows[index].RawUpdate(deltaTime);
+        for (int index = 0; index < _subLoopFlows.Count; index++)
+            _subLoopFlows[index].RawUpdate(deltaTime);
     }
 
     public virtual void Update(float deltaTime)
@@ -83,7 +83,7 @@ public class LoopFlow
 
     public virtual void OnTerminate()
     {
-        foreach (var subLoopFlow in subLoopFlows)
+        foreach (var subLoopFlow in _subLoopFlows)
             subLoopFlow.OnTerminate();
     }
 
@@ -92,7 +92,7 @@ public class LoopFlow
         if (loopFlow.activated)
             loopFlow.Terminate();
 
-        subLoopFlows.Add(loopFlow);
+        _subLoopFlows.Add(loopFlow);
 
         loopFlow._owner = this;
         loopFlow.OnActivate();
@@ -102,12 +102,30 @@ public class LoopFlow
 
     public void RemoveSubLoopFlow(LoopFlow loopFlow)
     {
-        if (subLoopFlows.Remove(loopFlow))
+        if (_subLoopFlows.Remove(loopFlow))
         {
             loopFlow.OnTerminate();
             loopFlow._owner = null;
 
             Debug.Log(string.Concat(this, "\nX ", loopFlow));
         }
+    }
+
+    public virtual bool HandleExecuteEscape()
+    {
+        for (int index = _subLoopFlows.Count - 1; !(index < 0); index--)
+        {
+            if (_subLoopFlows[index].HandleExecuteEscape())
+            {
+                return true;
+            }
+        }
+
+        return OnExecuteEscape();
+    }
+
+    public virtual bool OnExecuteEscape()
+    {
+        return false;
     }
 }

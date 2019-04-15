@@ -18,8 +18,6 @@ public class IsometricGame : LoopFlow
 
     public override void RawUpdate(float deltaTime)
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !pauseMenu.activated && !flowManager.popup)
-            AddSubLoopFlow(pauseMenu);
         if (Input.GetKeyDown(KeyCode.Home))
             flowManager.RequestSwitchLoopFlow(new IsometricGame());
 
@@ -38,5 +36,12 @@ public class IsometricGame : LoopFlow
         world.OnTerminate();
 
         base.OnTerminate();
+    }
+
+    public override bool OnExecuteEscape()
+    {
+        AddSubLoopFlow(pauseMenu);
+
+        return false;
     }
 }

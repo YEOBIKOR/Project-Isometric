@@ -37,9 +37,6 @@ namespace Isometric.Interface
             terminating = false;
             _factor = 0f;
 
-            if (escToExit)
-                flowManager.AddPopup(this);
-
             if (pausingTarget != null)
                 pausingTarget.paused = true;
         }
@@ -48,8 +45,6 @@ namespace Isometric.Interface
         {
             if (pausingTarget != null)
                 pausingTarget.paused = false;
-
-            flowManager.RemovePopup(this);
 
             base.OnTerminate();
         }
@@ -66,6 +61,13 @@ namespace Isometric.Interface
         public void RequestTerminate()
         {
             terminating = true;
+        }
+
+        public override bool OnExecuteEscape()
+        {
+            RequestTerminate();
+
+            return true;
         }
     }
 }

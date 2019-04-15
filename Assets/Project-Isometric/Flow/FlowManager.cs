@@ -11,18 +11,9 @@ public class FlowManager : LoopFlow
     private FSprite fadeSprite;
     private FLabel fadeLabel;
 
-    private LinkedList<PopupMenu> popupMenus;
-
     private bool transiting;
     private float transitTime;
     private float transitFactor;
-
-    private bool _popup;
-    public bool popup
-    {
-        get
-        { return _popup; }
-    }
 
     public FlowManager(IsometricMain main) : base()
     {
@@ -34,22 +25,14 @@ public class FlowManager : LoopFlow
         fadeLabel = new FLabel("font", "Loading...");
         fadeLabel.alignment = FLabelAlignment.Right;
         fadeLabel.SetPosition(Menu.rightDown + new Vector2(-10f, 10f));
-
-        popupMenus = new LinkedList<PopupMenu>();
-        _popup = false;
     }
 
     public override void RawUpdate(float deltaTime)
     {
-        if (_popup && !(popupMenus.Count > 0))
-            _popup = false;
-        else if (!_popup && (popupMenus.Count > 0))
-            _popup = true;
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-            ClosePopup();
-
         base.RawUpdate(Mathf.Min(deltaTime, 0.05f));
+        
+        if (Input.GetKeyDown(KeyCode.Escape))
+            HandleExecuteEscape();
     } 
 
     public override void Update(float deltaTime)
@@ -95,25 +78,13 @@ public class FlowManager : LoopFlow
         Futile.stage.RemoveChild(fadeLabel);
     }
 
-    public void AddPopup(PopupMenu popupMenu)
-    {
-        popupMenus.AddLast(popupMenu);
-    }
+    //public override bool HandleExecuteEscape()
+    //{
+    //    if (currentLoopFlow.HandleExecuteEscape())
+    //    {
+    //        return true;
+    //    }
 
-    public void RemovePopup(PopupMenu popupMenu)
-    {
-        popupMenus.Remove(popupMenu);
-    }
-
-    public void ClosePopup()
-    {
-        if (popupMenus.Count > 0)
-        {
-            PopupMenu close = popupMenus.Last.Value;
-
-            close.RequestTerminate();
-
-            popupMenus.RemoveLast();
-        }
-    }
+    //    return base.HandleExecuteEscape();
+    //}
 }
