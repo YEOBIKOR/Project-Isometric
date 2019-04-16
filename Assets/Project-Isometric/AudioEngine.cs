@@ -9,7 +9,7 @@ public class AudioEngine : Single <AudioEngine>
     private List<AudioSource> _pooledAudios;
     private Transform _pooledObjectsowner;
 
-    public AudioEngine(IsometricMain main) : base()
+    public AudioEngine() : base()
     {
         _pooledAudios = new List<AudioSource>();
         _pooledObjectsowner = new GameObject("Sound Objects").GetComponent<Transform>();

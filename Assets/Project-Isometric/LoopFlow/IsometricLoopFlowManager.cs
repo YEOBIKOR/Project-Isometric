@@ -10,7 +10,7 @@ public class IsometricLoopFlowManager : LoopFlowManager
 
     private float transitFactor;
 
-    public IsometricLoopFlowManager(IsometricMain main) : base()
+    public IsometricLoopFlowManager() : base()
     {
         fadeSprite = new FSprite("pixel");
         fadeSprite.scaleX = MenuFlow.screenWidth;

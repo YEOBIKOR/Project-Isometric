@@ -30,6 +30,10 @@ public class Player : EntityCreature
     private Damage _playerAttackDamage;
 
     private float _itemUseCoolTime;
+
+    private Vector2 _moveDirectionByScreen;
+
+    private ICommand[] _commands;
     
     public Player() : base(0.3f, 2.0f, 100f)
     {
@@ -55,6 +59,41 @@ public class Player : EntityCreature
 
             inventory[index].SetItem(new ItemStack(items[index], 30));
         }
+
+        CreateCommand();
+    }
+
+    private void CreateCommand()
+    {
+        _commands = new ICommand[]
+        {
+            new CommandPlayerMove(this, Vector2.up),
+            new CommandPlayerMove(this, Vector2.left),
+            new CommandPlayerMove(this, Vector2.down),
+            new CommandPlayerMove(this, Vector2.right),
+            new CommandPlayerJump(this),
+        };
+    }
+
+    private void AddCommand()
+    {
+        InputManager inputManager = InputManager.Instance;
+
+        inputManager.AddCommand("move_up", _commands[0]);
+        inputManager.AddCommand("move_left", _commands[1]);
+        inputManager.AddCommand("move_down", _commands[2]);
+        inputManager.AddCommand("move_right", _commands[3]);
+        inputManager.AddCommand("jump", _commands[4]);
+    }
+
+    private void RemoveCommand()
+    {
+        InputManager inputManager = InputManager.Instance;
+
+        for (int index = 0; index < _commands.Length; index++)
+        {
+            inputManager.RemoveCommand(_commands[index]);
+        }
     }
 
     public override void OnSpawn(Chunk chunk, Vector3 position)
@@ -62,11 +101,16 @@ public class Player : EntityCreature
         base.OnSpawn(chunk, position);
 
         game.AddSubLoopFlow(_playerInterface);
+
         worldCamera.SetCameraTarget(this);
+
+        AddCommand();
     }
 
     public override void OnDespawn()
     {
+        RemoveCommand();
+
         _playerInterface.Terminate();
 
         base.OnDespawn();
@@ -93,12 +137,14 @@ public class Player : EntityCreature
         _playerGraphics.Update(deltaTime);
     }
 
+    public void Jump()
+    {
+        _physics.AddForce(new Vector3(0f, 12f, 0f));
+    }
+
     private void UpdateMovement(float deltaTime)
     {
         moveSpeed = Input.GetKey(KeyCode.LeftShift) ? 8f : 4f;
-
-        if (Input.GetKey(KeyCode.Space) && _physics.landed)
-            _physics.AddForce(new Vector3(0f, 12f, 0f));
 
         if (Input.GetKey(KeyCode.Return))
             KillCreature();
@@ -106,23 +152,14 @@ public class Player : EntityCreature
         if (Input.GetKeyDown(KeyCode.T))
             DropItem(_pickedItemContainer);
 
-        Vector2 moveDirectionByScreen = Vector2.zero;
-
-        if (Input.GetKey(KeyCode.W))
-            moveDirectionByScreen += Vector2.up;
-        if (Input.GetKey(KeyCode.S))
-            moveDirectionByScreen += Vector2.down;
-        if (Input.GetKey(KeyCode.A))
-            moveDirectionByScreen += Vector2.left;
-        if (Input.GetKey(KeyCode.D))
-            moveDirectionByScreen += Vector2.right;
-
-        if (moveDirectionByScreen != Vector2.zero)
+        if (_moveDirectionByScreen != Vector2.zero)
         {
-            Vector2 moveDirection = worldCamera.ScreenToWorldDirection(moveDirectionByScreen);
+            Vector2 moveDirection = worldCamera.ScreenToWorldDirection(_moveDirectionByScreen);
 
             MoveTo(moveDirection, 50f * deltaTime);
             viewAngle = Mathf.LerpAngle(viewAngle, Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg, deltaTime * 10f);
+
+            _moveDirectionByScreen = Vector2.zero;
         }
     }
 
@@ -287,6 +324,61 @@ public class Player : EntityCreature
         private EntityPart GetEntityPart(PartType type)
         {
             return entityParts[(int)type];
+        }
+    }
+
+    public class CommandPlayerMove : ICommand
+    {
+        private Player _player;
+
+        private Vector2 _moveDirection;
+
+        public CommandPlayerMove(Player player, Vector2 moveDirection)
+        {
+            _player = player;
+
+            _moveDirection = moveDirection;
+        }
+
+        public void OnKey()
+        {
+            _player._moveDirectionByScreen += _moveDirection;
+        }
+
+        public void OnKeyDown()
+        {
+
+        }
+
+        public void OnKeyUp()
+        {
+
+        }
+    }
+
+    public class CommandPlayerJump : ICommand
+    {
+        private Player _player;
+
+        public CommandPlayerJump(Player player)
+        {
+            _player = player;
+        }
+
+        public void OnKey()
+        {
+            if (_player.physics.landed)
+                _player.Jump();
+        }
+
+        public void OnKeyDown()
+        {
+
+        }
+
+        public void OnKeyUp()
+        {
+
         }
     }
 }

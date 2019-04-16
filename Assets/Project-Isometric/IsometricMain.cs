@@ -4,6 +4,7 @@ using UnityEngine.U2D;
 
 public class IsometricMain : MonoBehaviour
 {
+    private InputManager inputManager;
     private AudioEngine audioEngine;
     private IsometricLoopFlowManager flowManager;
 
@@ -36,8 +37,10 @@ public class IsometricMain : MonoBehaviour
         _camera = Futile.instance.camera;
         // InitializePixelPerfectCamera(_camera, screenSize);
 
-        audioEngine = new AudioEngine(this);
-        flowManager = new IsometricLoopFlowManager(this);
+        inputManager = new InputManager();
+        audioEngine = new AudioEngine();
+        flowManager = new IsometricLoopFlowManager();
+
         flowManager.SwitchLoopFlow(new Isometric.Interface.IntroRoll());
     }
 
@@ -52,7 +55,11 @@ public class IsometricMain : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Home))
             flowManager.RequestSwitchLoopFlow(new IsometricGame());
 
-        flowManager.RawUpdate(Time.deltaTime * timeScale);
+        float deltaTime = Time.deltaTime * timeScale;
+
+        inputManager.Update(deltaTime);
+
+        flowManager.RawUpdate(deltaTime);
     }
 
     private void LoadAtlases()
