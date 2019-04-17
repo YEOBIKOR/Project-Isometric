@@ -12,12 +12,18 @@ namespace Isometric.Interface
             { return menu as InventoryMenu; }
         }
 
-        private ItemContainer itemContainer;
+        private ItemContainer _itemContainer;
+        public ItemContainer itemContainer
+        {
+            get
+            { return _itemContainer; }
+        }
+
         private ItemContainerVisualizer visualizer;
 
         public ItemSlot(InventoryMenu menu, ItemContainer itemContainer) : base(menu, string.Empty, null, false)
         {
-            this.itemContainer = itemContainer;
+            this._itemContainer = itemContainer;
 
             position = position;
             size = Vector2.one * 24f;
@@ -30,7 +36,7 @@ namespace Isometric.Interface
         {
             base.OnHover();
 
-            inventoryMenu.InspectItem(itemContainer);
+            inventoryMenu.InspectItem(this);
         }
 
         public override void OnHoverOut()
@@ -42,7 +48,7 @@ namespace Isometric.Interface
         {
             base.OnPressUp();
 
-            ItemStack returnItemStack = itemContainer.SetItem(inventoryMenu.cursorItemContainer.itemStack);
+            ItemStack returnItemStack = _itemContainer.SetItem(inventoryMenu.cursorItemContainer.itemStack);
             inventoryMenu.cursorItemContainer.SetItem(returnItemStack);
         }
     }

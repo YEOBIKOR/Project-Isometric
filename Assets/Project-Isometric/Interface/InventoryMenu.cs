@@ -94,9 +94,9 @@ namespace Isometric.Interface
             base.Update(deltaTime);
         }
 
-        public void InspectItem(ItemContainer itemContainer)
+        public void InspectItem(ItemSlot itemSlot)
         {
-            inventoryCursor.InspectItem(itemContainer);
+            inventoryCursor.InspectItem(itemSlot);
         }
     }
 
@@ -117,14 +117,23 @@ namespace Isometric.Interface
         public override void Update(float deltaTime)
         {
             visualizer.position = MenuFlow.mousePosition;
-            inspector.position = MenuFlow.mousePosition;
 
             base.Update(deltaTime);
         }
 
-        public void InspectItem(ItemContainer itemContainer)
+        public void InspectItem(ItemSlot itemSlot)
         {
-            inspector.InspectItem(itemContainer);
+            if (itemSlot != null)
+            {
+                inspector.position = itemSlot.position + Vector2.down * 28f;
+
+                inspector.InspectItem(itemSlot.itemContainer);
+            }
+
+            else
+            {
+                inspector.InspectItem(null);
+            }
         }
     }
 }

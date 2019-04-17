@@ -169,10 +169,7 @@ public class Player : EntityCreature
 
         for (int i = 0; i < inventorySize; i++)
         {
-            if (inventory[i].blank)
-                returnItemStack = inventory[i].SetItem(returnItemStack);
-
-            else if (itemStack == inventory[i].itemStack)
+            if (inventory[i].blank || inventory[i].itemStack.item == itemStack.item)
                 returnItemStack = inventory[i].SetItem(returnItemStack);
 
             if (returnItemStack == null)

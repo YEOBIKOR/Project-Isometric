@@ -19,7 +19,6 @@ namespace Isometric.Interface
             AddElement(_rect);
 
             _itemName = new FLabel("font", string.Empty);
-            _itemName.scale = 0.5f;
             _itemInformation = new FLabel("font", string.Empty);
             _itemInformation.scale = 0.3f;
 
@@ -45,7 +44,7 @@ namespace Isometric.Interface
 
                 _itemName.text = name;
 
-                Vector2 contentSize = _itemName.textRect.size * 0.5f;
+                Vector2 contentSize = _itemName.textRect.size;
                 // _rect.position = new Vector2(contentSize.x * 0.5f, contentSize.y * -0.5f);
                 _rect.size = contentSize;
             }
