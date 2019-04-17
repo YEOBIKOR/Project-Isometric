@@ -112,6 +112,9 @@ namespace Isometric.Interface
             private float scrollAmount;
             private float selectSpriteAngle;
 
+            private FLabel selectedItemLabel;
+            private FLabel selectedItemLabelShadow;
+
             public ItemSelect(PlayerInterface playerInterface) : base()
             {
                 this.playerInterface = playerInterface;
@@ -127,6 +130,13 @@ namespace Isometric.Interface
                 sleepTime = 0f;
                 scrollAmount = 0f;
                 selectSpriteAngle = 0f;
+
+                selectedItemLabel = new FLabel("font", string.Empty);
+                selectedItemLabelShadow = new FLabel("font", string.Empty);
+                selectedItemLabelShadow.color = Color.black;
+
+                container.AddChild(selectedItemLabelShadow);
+                container.AddChild(selectedItemLabel);
             }
 
             public override void Update(float deltaTime)
@@ -145,19 +155,35 @@ namespace Isometric.Interface
                 int oldSelectedIndex = selectedIndex;
                 selectedIndex = (int)Mathf.Repeat(scrollAmount, length);
 
-                if (oldSelectedIndex != selectedIndex)
-                    player.PickItem(player.inventory[selectedIndex]);
-
-                selectSpriteAngle = Mathf.LerpAngle(selectSpriteAngle, (float)selectedIndex / length * 360f, deltaTime * 10f);
+                selectSpriteAngle = Mathf.LerpAngle(selectSpriteAngle, (float)selectedIndex / length * 360f - 90f, deltaTime * 10f);
 
                 for (int index = 0; index < length; index++)
                 {
                     bool selected = index == selectedIndex;
-                    float radian = (index + 1f - factor) / length * Mathf.PI * 2f;
+                    float radian = ((float)index / length - selectSpriteAngle / 360f) * Mathf.PI * 2f;
 
-                    visualizer[index].position = Vector2.Lerp(visualizer[index].position, anchorPosition + (new Vector2(Mathf.Cos(radian), Mathf.Sin(radian)) * factor * (selected ? 40f : 32f)), deltaTime * 10f);
+                    visualizer[index].position = anchorPosition + (new Vector2(Mathf.Cos(radian), Mathf.Sin(radian)) * factor * (selected ? 40f : 32f));
+                    visualizer[index].scale = Vector2.Lerp(visualizer[index].scale, Vector2.one * (selected ? 2f : 1f), deltaTime * 10f);
                     visualizer[index].container.alpha = factor;
                 }
+
+                ItemContainer pickedItemContainer = player.inventory[selectedIndex];
+
+                if (pickedItemContainer.blank)
+                    selectedItemLabel.text = string.Empty;
+                else
+                    selectedItemLabel.text = pickedItemContainer.itemStack.item.name;
+
+                selectedItemLabelShadow.text = selectedItemLabel.text;
+
+                selectedItemLabel.SetPosition(anchorPosition + new Vector2(0f, 24f));
+                selectedItemLabelShadow.SetPosition(anchorPosition + new Vector2(0f, 23f));
+
+                selectedItemLabel.alpha = factor;
+                selectedItemLabelShadow.alpha = factor;
+
+                if (oldSelectedIndex != selectedIndex)
+                    player.PickItem(pickedItemContainer);
 
                 base.Update(deltaTime);
             }

@@ -18,6 +18,8 @@ public class IsometricMain : MonoBehaviour
 
     public static bool doesDebugging = false;
 
+    public bool pixelPerfect;
+
     private void Start()
     {
         Vector2 screenSize;
@@ -35,7 +37,8 @@ public class IsometricMain : MonoBehaviour
         LoadTextures();
 
         _camera = Futile.instance.camera;
-        // InitializePixelPerfectCamera(_camera, screenSize);
+        if (pixelPerfect)
+            InitializePixelPerfectCamera(_camera, screenSize);
 
         inputManager = new InputManager();
         audioEngine = new AudioEngine();

@@ -34,6 +34,7 @@ public class Explosion : IPositionable
             chunk.GetCollidedEntites(_position - Vector3.down, 10f, 10f, EffectEntity);
         }
 
+        _world.QuakeAtPosition(_position);
         _world.worldCamera.ShakeCamera(24f);
         _world.worldCamera.worldMicrophone.PlaySound(_explosionAudio, this);
     }

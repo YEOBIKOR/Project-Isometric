@@ -126,7 +126,9 @@ public class EntityBoss : EntityCreature
             rune.onControl = newState != RuneState.Drop;
 
             if (newState == RuneState.Drop)
+            {
                 rune.velocity += Vector3.down * 64f;
+            }
         }
     }
 
@@ -143,6 +145,8 @@ public class EntityBoss : EntityCreature
         public RuneState state;
         public Vector3 targetPosition;
         public bool onControl;
+
+        private bool faint;
 
         private Vector3 offsetPosition;
 
@@ -178,8 +182,20 @@ public class EntityBoss : EntityCreature
 
             entityParts[0].worldPosition = worldPosition + Vector3.up * 1.2f;
             entityParts[1].worldPosition = worldPosition + Vector3.up * 1.2f;
+            
+            if (state != RuneState.Drop)
+            {
+                faint = false;
+            }
 
-            bool faint = state == RuneState.Drop && _physics.landed;
+            else if (!faint && _physics.landed)
+            {
+                faint = true;
+
+                world.QuakeAtPosition(worldPosition);
+                worldCamera.ShakeCamera(24f);
+            }
+
             if (!faint)
                 entityParts[1].positionOffset = UnityEngine.Random.insideUnitCircle * 1.2f;
             entityParts[1].color = Color.Lerp(entityParts[1].color, faint ? Color.clear :

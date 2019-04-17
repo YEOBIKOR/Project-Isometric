@@ -40,6 +40,7 @@
 			uniform float _WorldTime;
 			uniform float3 _CameraPosition;
 			uniform float3 _SkyColor;
+			uniform float4 _Epicenter;
 
 			sampler2D _NoiseTex;
 
@@ -53,6 +54,15 @@
 				o.scrPos = ComputeScreenPos(o.vertex);
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				o.color = v.color;
+
+				float d = distance(float2(o.color.r, o.color.b), _Epicenter);
+				float t = _WorldTime - _Epicenter.b;
+
+				float w = sin(clamp((t * 1.2 - d * 0.05) * 8.0, 0.0, 3.14));
+				float f = saturate(1 - d * 0.04) * -0.15f;
+
+				o.vertex.y += w * f;
+
 				return o;
 			}
 			

@@ -140,8 +140,6 @@ public abstract class Entity : IPositionable
     {
         _chunk = null;
 
-        Debug.Log("Despawn " + this);
-
         if (shadow != null)
             shadow.Erase();
 

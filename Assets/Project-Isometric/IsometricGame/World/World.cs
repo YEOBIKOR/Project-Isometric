@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Isometric.Interface;
+using Isometric.Items;
 
 public class World
 {
@@ -60,7 +61,7 @@ public class World
 
         _worldCamera = new WorldCamera(this);
 
-        _worldTime = System.DateTime.Now.Second;
+        _worldTime = 0f;
 
         _chunkGenerator = new ChunkGenerator(this);
         _chunks = new LinkedList<Chunk>();
@@ -76,9 +77,11 @@ public class World
         _cameraHUD = new CameraHUDMenu(_game, _worldCamera);
         game.AddSubLoopFlow(_cameraHUD);
 
-        _cameraHUD.Speech(player, "W A S D : Move the character\nSpace : Jump the character\nQ, E : Move the camera\nEsc : Exit the game");
+        // _cameraHUD.Speech(player, "W A S D : Move the character\nSpace : Jump the character\nQ, E : Move the camera\nEsc : Exit the game");
 
         worldProfiler = new WorldProfiler(this);
+
+        Shader.SetGlobalVector("_Epicenter", new Vector4(0f, 0f, -10f));
     }
 
     public void Update(float deltaTime)
@@ -184,7 +187,7 @@ public class World
         {
             SpawnEntity(player, new Vector3(1f, GetSurface(new Vector2(1f, 1f)), 1f));
 
-            // SpawnEntity(new EntityBoss(), new Vector3(8f, 16f, 8f));
+            SpawnEntity(new EntityBoss(), new Vector3(8f, 16f, 8f));
 
             for (int i = 0; i < 10; i++)
             {
@@ -368,11 +371,26 @@ public class World
 
     public void DestroyBlock(Vector3Int tilePosition)
     {
-        if (tilePosition.y > 0)
-        {
-            Tile tile = GetTileAtPosition(tilePosition);
+        Tile tile = GetTileAtPosition(tilePosition);
 
-            tile.SetBlock(Block.GetBlockByKey("air"));
-        }
+        if (tile == null)
+            return;
+
+        Item item = Item.GetItemByKey("block_grass");
+        Entity droppedItem = new DroppedItem(new ItemStack(item, 1));
+        SpawnEntity(droppedItem, tilePosition + Vector3.one * 0.5f);
+
+        tile.SetBlock(Block.GetBlockByKey("air"));
+    }
+
+    public void QuakeAtPosition(Vector3 epicenter)
+    {
+        Vector4 vector = new Vector4();
+
+        vector.x = epicenter.x;
+        vector.y = epicenter.z;
+        vector.z = _worldTime;
+
+        Shader.SetGlobalVector("_Epicenter", vector);
     }
 }
