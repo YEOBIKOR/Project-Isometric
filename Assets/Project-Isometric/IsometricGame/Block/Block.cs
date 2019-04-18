@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Isometric.Items;
 
 public abstract class Block
 {
@@ -12,14 +13,14 @@ public abstract class Block
 
         _blockAir = new BlockAir();
         registry.Add("air", _blockAir);
-        registry.Add("dirt", new BlockSolid("b1"));
-        registry.Add("grass", new BlockSolid("b2"));
-        registry.Add("stone", new BlockSolid("b3"));
-        registry.Add("mossy_stone", new BlockSolid("b4"));
-        registry.Add("sand", new BlockSolid("b5"));
-        registry.Add("sandstone", new BlockSolid("b6"));
-        registry.Add("wood", new BlockSolid("b7"));
-        registry.Add("bedrock", new BlockSolid("b26"));
+        registry.Add("dirt", new BlockSolid("block_dirt", "b1"));
+        registry.Add("grass", new BlockSolid("block_dirt", "b2"));
+        registry.Add("stone", new BlockSolid("block_stone", "b3"));
+        registry.Add("mossy_stone", new BlockSolid("block_stone", "b4"));
+        registry.Add("sand", new BlockSolid("block_sand", "b5"));
+        registry.Add("sandstone", new BlockSolid("block_sandstone", "b6"));
+        registry.Add("wood", new BlockSolid("block_wood", "b7"));
+        registry.Add("bedrock", new BlockSolid(null, "b26"));
     }
 
     public static Block GetBlockByKey(string key)
@@ -52,6 +53,11 @@ public abstract class Block
         get
         { return null; }
     }
+
+    public virtual ItemStack OnDropItem()
+    {
+        return null;
+    }
 }
 
 public class BlockAir : Block
@@ -71,10 +77,14 @@ public class BlockAir : Block
 
 public class BlockSolid : Block
 {
+    private string _dropItem;
+
     private FAtlasElement _sprite;
 
-    public BlockSolid(string elementName) : base()
+    public BlockSolid(string dropItem, string elementName) : base()
     {
+        _dropItem = dropItem;
+
         _sprite = Futile.atlasManager.GetElementWithName(string.Concat("blocks/", elementName));
     }
 
@@ -88,5 +98,10 @@ public class BlockSolid : Block
     {
         get
         { return _sprite; }
+    }
+
+    public override ItemStack OnDropItem()
+    {
+        return new ItemStack(Item.GetItemByKey(_dropItem), 1);
     }
 }

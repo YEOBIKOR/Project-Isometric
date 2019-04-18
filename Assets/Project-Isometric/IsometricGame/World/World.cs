@@ -376,9 +376,12 @@ public class World
         if (tile == null)
             return;
 
-        Item item = Item.GetItemByKey("block_grass");
-        Entity droppedItem = new DroppedItem(new ItemStack(item, 1));
-        SpawnEntity(droppedItem, tilePosition + Vector3.one * 0.5f);
+        ItemStack item = tile.block.OnDropItem();
+        if (item != null)
+        {
+            Entity droppedItem = new DroppedItem(item);
+            SpawnEntity(droppedItem, tilePosition + Vector3.one * 0.5f);
+        }
 
         tile.SetBlock(Block.GetBlockByKey("air"));
     }

@@ -21,9 +21,7 @@ namespace Isometric.Interface
             this._itemContainer = itemContainer;
 
             itemAmount = new FLabel("font", string.Empty);
-            itemAmount.SetPosition(new Vector2(8f, -8f));
-            itemAmount.scale = 0.5f;
-            container.AddChild(itemAmount);
+            itemAmount.SetPosition(new Vector2(4f, -4f));
 
             itemContainer.SignalItemChange += OnItemChanged;
         }
@@ -45,6 +43,7 @@ namespace Isometric.Interface
                     itemSprite = new FSprite(itemContainer.itemStack.item.element);
 
                     container.AddChild(itemSprite);
+                    container.AddChild(itemAmount);
                 }
                 else
                     itemSprite.element = itemContainer.itemStack.item.element;
