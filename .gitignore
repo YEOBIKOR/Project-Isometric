@@ -33,4 +33,5 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
-AtlasResources/
+/AtlasResources/
+/SaveData/

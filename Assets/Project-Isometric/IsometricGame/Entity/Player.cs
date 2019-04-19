@@ -102,8 +102,6 @@ public class Player : EntityCreature
 
         game.AddSubLoopFlow(_playerInterface);
 
-        worldCamera.SetCameraTarget(this);
-
         AddCommand();
     }
 

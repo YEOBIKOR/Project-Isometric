@@ -271,6 +271,9 @@ public class Chunk : ISerializable <Chunk.Serialized>
     {
         Serialized data = new Serialized();
 
+        data.coordinationX = _coordination.x;
+        data.coordinationY = _coordination.y;
+
         data.tiles = new int[Length, Height, Length];
         for (int x = 0; x < Length; x++)
         {
@@ -288,6 +291,9 @@ public class Chunk : ISerializable <Chunk.Serialized>
 
     public void Deserialize(Serialized data)
     {
+        _coordination.x = data.coordinationX;
+        _coordination.y = data.coordinationY;
+
         for (int x = 0; x < Length; x++)
         {
             for (int y = 0; y < Height; y++)
@@ -298,11 +304,15 @@ public class Chunk : ISerializable <Chunk.Serialized>
                 }
             }
         }
+
+        state = ChunkState.Loaded;
     }
 
     [Serializable]
     public struct Serialized
     {
+        public int coordinationX;
+        public int coordinationY;
         public int[,,] tiles;
     }
 }

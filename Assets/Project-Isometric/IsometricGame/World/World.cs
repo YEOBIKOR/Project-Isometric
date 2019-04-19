@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+
 using Isometric.Interface;
 using Isometric.Items;
 
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-
-public class World
+public class World : ISerializable<World.Serialized>
 {
     private IsometricGame _game;
     public IsometricGame game
@@ -25,6 +24,13 @@ public class World
     {
         get
         { return _worldCamera.worldMicrophone; }
+    }
+
+    private string _worldName;
+    public string worldName
+    {
+        get
+        { return _worldName; }
     }
 
     private float _worldTime;
@@ -58,9 +64,10 @@ public class World
 
     private WorldProfiler worldProfiler;
 
-    public World(IsometricGame game)
+    public World(IsometricGame game, string worldName)
     {
         _game = game;
+        _worldName = worldName;
 
         _worldCamera = new WorldCamera(this);
 
@@ -75,7 +82,6 @@ public class World
         _targets = new List<ITarget>();
 
         player = new Player();
-        RequestLoadChunk(new Vector2Int(0, 0));
 
         _cameraHUD = new CameraHUDMenu(_game, _worldCamera);
         game.AddSubLoopFlow(_cameraHUD);
@@ -175,13 +181,20 @@ public class World
         {
             chunk = new Chunk(this, coordination);
 
-            _chunks.AddLast(chunk);
-            _chunkMap.Add((coordination.x << 16) + coordination.y, chunk);
+            AddChunk(chunk);
             _chunkGenerator.RequestGenerateChunk(chunk);
         }
 
         else if (chunk.state == ChunkState.Unloaded)
             chunk.LoadChunk();
+    }
+
+    public void AddChunk(Chunk chunk)
+    {
+        Vector2Int coordination = chunk.coordination;
+        
+        _chunks.AddLast(chunk);
+        _chunkMap.Add((coordination.x << 16) + coordination.y, chunk);
     }
 
     public void OnChunkGenerated(Chunk chunk)
@@ -190,30 +203,32 @@ public class World
         {
             SpawnEntity(player, new Vector3(1f, GetSurface(new Vector2(1f, 1f)), 1f));
 
-            SpawnEntity(new EntityBoss(), new Vector3(8f, 16f, 8f));
+            worldCamera.SetCameraTarget(player, true);
 
-            for (int i = 0; i < 10; i++)
-            {
-                Vector2 position = Vector2.one * 10f;
-                SpawnEntity(new EntityPpyongppyong(), new Vector3(position.x, 30f, position.y));
-            }
+            // SpawnEntity(new EntityBoss(), new Vector3(8f, 16f, 8f));
+
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    Vector2 position = Vector2.one * 10f;
+            //    SpawnEntity(new EntityPpyongppyong(), new Vector3(position.x, 30f, position.y));
+            //}
         }
 
-        int spawnCount = (int)RXRandom.Range(0f, 1.1f);
+        //int spawnCount = (int)RXRandom.Range(0f, 1.1f);
 
-        for (int i = 0; i < spawnCount; i++)
-        {
-            Vector2 position = (chunk.coordination * Chunk.Length) + new Vector2(RXRandom.Range(0f, 16f), RXRandom.Range(0f, 16f));
-            SpawnEntity(new EntityPpyongppyong(), new Vector3(position.x, GetSurface(new Vector3(position.x, 0f, position.y)), position.y));
-        }
+        //for (int i = 0; i < spawnCount; i++)
+        //{
+        //    Vector2 position = (chunk.coordination * Chunk.Length) + new Vector2(RXRandom.Range(0f, 16f), RXRandom.Range(0f, 16f));
+        //    SpawnEntity(new EntityPpyongppyong(), new Vector3(position.x, GetSurface(new Vector3(position.x, 0f, position.y)), position.y));
+        //}
 
-        spawnCount = (int)RXRandom.Range(0f, 1.05f);
+        //spawnCount = (int)RXRandom.Range(0f, 1.05f);
 
-        for (int i = 0; i < spawnCount; i++)
-        {
-            Vector2 position = (chunk.coordination * Chunk.Length) + new Vector2(RXRandom.Range(0f, 16f), RXRandom.Range(0f, 16f));
-            SpawnEntity(new EntityDipper(), new Vector3(position.x, GetSurface(new Vector3(position.x, 0f, position.y)), position.y));
-        }
+        //for (int i = 0; i < spawnCount; i++)
+        //{
+        //    Vector2 position = (chunk.coordination * Chunk.Length) + new Vector2(RXRandom.Range(0f, 16f), RXRandom.Range(0f, 16f));
+        //    SpawnEntity(new EntityDipper(), new Vector3(position.x, GetSurface(new Vector3(position.x, 0f, position.y)), position.y));
+        //}
 
         Vector2Int[] nearbyCoordinations = new Vector2Int[]
         {
@@ -398,5 +413,64 @@ public class World
         vector.z = _worldTime;
 
         Shader.SetGlobalVector("_Epicenter", vector);
+    }
+
+    public Serialized Serialize()
+    {
+        Serialized data = new Serialized();
+
+        data.chunks = new Chunk.Serialized[_chunks.Count];
+
+        LinkedListNode<Chunk> node = _chunks.First;
+        for (int index = 0; index < _chunks.Count; index++, node = node.Next)
+        {
+            data.chunks[index] = node.Value.Serialize();
+        }
+
+        data.playerPositionX = player.worldPosition.x;
+        data.playerPositionY = player.worldPosition.y;
+        data.playerPositionZ = player.worldPosition.z;
+        data.playerViewAngle = player.viewAngle;
+
+        return data;
+    }
+
+    public void Deserialize(Serialized data)
+    {
+        for (int index = 0; index < data.chunks.Length; index++)
+        {
+            Chunk.Serialized chunkData = data.chunks[index];
+
+            Vector2Int coordination = new Vector2Int();
+
+            coordination.x = chunkData.coordinationX;
+            coordination.y = chunkData.coordinationY;
+
+            Chunk chunk = new Chunk(this, coordination);
+            AddChunk(chunk);
+
+            chunk.Deserialize(chunkData);
+            OnChunkGenerated(chunk);
+        }
+
+        player.worldPosition = new Vector3(
+            data.playerPositionX,
+            data.playerPositionY,
+            data.playerPositionZ
+            );
+        player.viewAngle = data.playerViewAngle;
+
+        worldCamera.SetCameraTarget(player, true);
+    }
+
+    [Serializable]
+    public struct Serialized
+    {
+        public Chunk.Serialized[] chunks;
+
+        public float playerPositionX;
+        public float playerPositionY;
+        public float playerPositionZ;
+        public float playerViewAngle;
     }
 }

@@ -147,9 +147,12 @@ public class WorldCamera
         return _world.RayTraceTile(startRaytracePosition, CustomMath.HorizontalRotate(new Vector3(1f, -1f, 1f), _viewAngle - 45f), 0f);
     }
 
-    public void SetCameraTarget(IPositionable target)
+    public void SetCameraTarget(IPositionable target, bool fix = false)
     {
         _cameraTarget = target;
+
+        if (fix)
+            _targetPosition = target.worldPosition;
     }
 
     public void TurnViewDirection(bool right)
