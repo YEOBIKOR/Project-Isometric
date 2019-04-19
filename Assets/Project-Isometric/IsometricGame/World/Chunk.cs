@@ -9,7 +9,7 @@ public enum ChunkState
     Loaded
 }
 
-public class Chunk
+public class Chunk : ISerializable <Chunk.Serialized>
 {
     private World _world;
     public World world
@@ -265,6 +265,45 @@ public class Chunk
     public static Vector2Int ToChunkCoordinate(Vector3Int worldPosition)
     {
         return new Vector2Int(worldPosition.x >> 4, worldPosition.z >> 4);
+    }
+
+    public Serialized Serialize()
+    {
+        Serialized data = new Serialized();
+
+        data.tiles = new int[Length, Height, Length];
+        for (int x = 0; x < Length; x++)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                for (int z = 0; z < Length; z++)
+                {
+                    data.tiles[x, y, z] = Block.GetIDByBlock(_tiles[x, y, z].block);
+                }
+            }
+        }
+
+        return data;
+    }
+
+    public void Deserialize(Serialized data)
+    {
+        for (int x = 0; x < Length; x++)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                for (int z = 0; z < Length; z++)
+                {
+                    _tiles[x, y, z].SetBlock (Block.GetBlockByID(data.tiles[x, y, z]));
+                }
+            }
+        }
+    }
+
+    [Serializable]
+    public struct Serialized
+    {
+        public int[,,] tiles;
     }
 }
 

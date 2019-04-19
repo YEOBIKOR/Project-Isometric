@@ -1,5 +1,7 @@
-﻿public interface ISerializable
+﻿using System;
+
+public interface ISerializable <T> where T : struct
 {
-    byte[] Serialize();
-    void Deserialize(byte[] bytes);
+    T Serialize();
+    void Deserialize(T data);
 }

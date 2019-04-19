@@ -65,6 +65,11 @@ public class IsometricMain : MonoBehaviour
         flowManager.RawUpdate(deltaTime);
     }
 
+    private void OnApplicationQuit()
+    {
+        flowManager.OnTerminate();
+    }
+
     private void LoadAtlases()
     {
         Futile.atlasManager.LoadAtlas("Atlases/isogame");

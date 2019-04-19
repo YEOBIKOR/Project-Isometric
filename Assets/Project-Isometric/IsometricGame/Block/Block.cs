@@ -23,6 +23,22 @@ public abstract class Block
         registry.Add("bedrock", new BlockSolid(null, "b26"));
     }
 
+    public static int GetIDByBlock(Block block)
+    {
+        if (registry == null)
+            RegisterBlocks();
+
+        return registry.GetID(block);
+    }
+
+    public static Block GetBlockByID(int id)
+    {
+        if (registry == null)
+            RegisterBlocks();
+
+        return registry[id];
+    }
+
     public static Block GetBlockByKey(string key)
     {
         if (registry == null)

@@ -34,6 +34,11 @@ public class Registry <T>
         { return dictionary[key]; }
     }
 
+    public int GetID(T item)
+    {
+        return list.IndexOf(item);
+    }
+
     public int Count
     {
         get

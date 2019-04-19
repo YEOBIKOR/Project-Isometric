@@ -1,6 +1,6 @@
 ﻿using System;
 
-public class Preferences : ISerializable
+public class Preferences : ISerializable <SerializedPreferences>
 {
     private bool _bgmVolume;
     private bool _sfxVolume;
@@ -15,13 +15,19 @@ public class Preferences : ISerializable
 
     }
 
-    public void Deserialize(byte[] bytes)
-    {
-
-    }
-
-    public byte[] Serialize()
+    SerializedPreferences ISerializable<SerializedPreferences>.Serialize()
     {
         throw new NotImplementedException();
     }
+
+    public void Deserialize(SerializedPreferences data)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+[Serializable]
+public struct SerializedPreferences
+{
+
 }

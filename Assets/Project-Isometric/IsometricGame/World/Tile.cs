@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using Custom;
 
-public class Tile : IPositionable
+public class Tile : IPositionable, ISerializable<Tile.Serialized>
 {
     private Chunk _chunk;
     public Chunk chunk
@@ -77,5 +76,27 @@ public class Tile : IPositionable
             return !tile.block.fullBlock;
 
         return true;
+    }
+
+    public Serialized Serialize()
+    {
+        Serialized data = new Serialized();
+
+        data.blockID = Block.GetIDByBlock(block);
+
+        return data;
+    }
+
+    public void Deserialize(Serialized data)
+    {
+        Block block = Block.GetBlockByID(data.blockID);
+
+        SetBlock(block);
+    }
+
+    [Serializable]
+    public struct Serialized
+    {
+        public int blockID;
     }
 }
