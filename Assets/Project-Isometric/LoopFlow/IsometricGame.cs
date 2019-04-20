@@ -1,8 +1,7 @@
-﻿using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-
-using UnityEngine;
+﻿using UnityEngine;
 using Isometric.Interface;
+
+using System.IO;
 
 public class IsometricGame : LoopFlow
 {
@@ -10,16 +9,21 @@ public class IsometricGame : LoopFlow
 
     private PauseMenu pauseMenu;
 
+    private FileSerialization<World.Serialized> _worldFile;
+
     public override void OnActivate()
     {
         base.OnActivate();
 
         world = new World(this, "World_0");
+
         pauseMenu = new PauseMenu(this);
+
+        _worldFile = new FileSerialization<World.Serialized>("SaveData/" + world.worldName + ".dat");
 
         try
         {
-            LoadWorldData();
+            world.Deserialize(_worldFile.LoadFile());
         }
         catch (FileNotFoundException)
         {
@@ -38,7 +42,7 @@ public class IsometricGame : LoopFlow
 
     public override void OnTerminate()
     {
-        SaveWorldData();
+        _worldFile.SaveFile(world.Serialize());
 
         world.OnTerminate();
 
@@ -50,29 +54,5 @@ public class IsometricGame : LoopFlow
         AddSubLoopFlow(pauseMenu);
 
         return false;
-    }
-
-    public void SaveWorldData()
-    {
-        FileStream stream = new FileStream("SaveData/" + world.worldName + ".dat", FileMode.Create);
-
-        BinaryFormatter formatter = new BinaryFormatter();
-
-        formatter.Serialize(stream, world.Serialize());
-
-        stream.Close();
-    }
-
-    public void LoadWorldData()
-    {
-        FileStream stream = new FileStream("SaveData/" + world.worldName + ".dat", FileMode.Open);
-
-        BinaryFormatter formatter = new BinaryFormatter();
-
-        World.Serialized serial = (World.Serialized)formatter.Deserialize(stream);
-
-        world.Deserialize(serial);
-
-        stream.Close();
     }
 }
