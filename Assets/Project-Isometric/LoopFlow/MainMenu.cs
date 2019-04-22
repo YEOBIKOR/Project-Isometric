@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using Custom;
 
+using System.IO;
+
 namespace Isometric.Interface
 {
     public class MainMenu : MenuFlow
@@ -53,6 +55,14 @@ namespace Isometric.Interface
             visitDevLog.position = new Vector2(0f, screenHeight * -0.5f + 24f);
             visitDevLog.size = new Vector2(96f, 16f);
             AddElement(visitDevLog);
+
+            string[] paths = Directory.GetFiles("SaveData/", "*.dat");
+
+            string str = string.Empty;
+            foreach (var path in paths)
+                str += path + '\n';
+
+            Debug.Log(str);
         }
 
         public override void Update(float deltaTime)

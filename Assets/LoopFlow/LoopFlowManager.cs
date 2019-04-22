@@ -11,6 +11,12 @@ public class LoopFlowManager : LoopFlow
     protected float transitTime;
     protected bool transiting;
 
+    public bool Transiting
+    {
+        get
+        { return transiting; }
+    }
+
     public LoopFlowManager() : base()
     {
         currentLoopFlow = null;

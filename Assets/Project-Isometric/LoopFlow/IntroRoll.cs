@@ -65,7 +65,7 @@ namespace Isometric.Interface
             logoSprite.alpha = Mathf.Lerp(0f, 1f, flicker * (flicker < 1f ? Mathf.PerlinNoise(time * 12f, 0f) : 1f));
             logoSprite.x = Mathf.Lerp(0f, 11f, t);
 
-            if (time > 4f)
+            if (time > 4f && !loopFlowManager.Transiting)
                 loopFlowManager.RequestSwitchLoopFlow(new MainMenu());
 
             base.Update(deltaTime);
