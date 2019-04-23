@@ -1,16 +1,19 @@
 ﻿using System;
 
-public class WorldParticle
+public class WorldParticle : WorldEffect
 {
-    private World _world;
-
     public WorldParticle()
     {
 
     }
 
-    public void Emit(World world)
+    public override void Emit(World world)
     {
+        base.Emit(world);
+    }
 
+    public override void Update(float deltaTime)
+    {
+        base.Update(deltaTime);
     }
 }

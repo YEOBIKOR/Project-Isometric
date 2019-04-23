@@ -72,6 +72,8 @@ public class Player : EntityCreature
             new CommandPlayerMove(this, Vector2.down),
             new CommandPlayerMove(this, Vector2.right),
             new CommandPlayerJump(this),
+            new CommandPlayerSprint(this),
+            new CommandCallback(delegate { DropItem(_pickedItemContainer); } )
         };
     }
 
@@ -84,6 +86,8 @@ public class Player : EntityCreature
         inputManager.AddCommand("move_down", _commands[2]);
         inputManager.AddCommand("move_right", _commands[3]);
         inputManager.AddCommand("jump", _commands[4]);
+        inputManager.AddCommand("sprint", _commands[5]);
+        inputManager.AddCommand("drop_item", _commands[6]);
     }
 
     private void RemoveCommand()
@@ -142,14 +146,6 @@ public class Player : EntityCreature
 
     private void UpdateMovement(float deltaTime)
     {
-        moveSpeed = Input.GetKey(KeyCode.LeftShift) ? 8f : 4f;
-
-        if (Input.GetKey(KeyCode.Return))
-            KillCreature();
-
-        if (Input.GetKeyDown(KeyCode.T))
-            DropItem(_pickedItemContainer);
-
         if (_moveDirectionByScreen != Vector2.zero)
         {
             Vector2 moveDirection = worldCamera.ScreenToWorldDirection(_moveDirectionByScreen);
@@ -159,6 +155,8 @@ public class Player : EntityCreature
 
             _moveDirectionByScreen = Vector2.zero;
         }
+
+        moveSpeed = 4f;
     }
 
     public void AcquireItem(ItemStack itemStack)
@@ -364,6 +362,31 @@ public class Player : EntityCreature
         {
             if (_player.physics.landed)
                 _player.Jump();
+        }
+
+        public void OnKeyDown()
+        {
+
+        }
+
+        public void OnKeyUp()
+        {
+
+        }
+    }
+
+    public class CommandPlayerSprint : ICommand
+    {
+        private Player _player;
+
+        public CommandPlayerSprint(Player player)
+        {
+            _player = player;
+        }
+
+        public void OnKey()
+        {
+            _player.moveSpeed = 8f;
         }
 
         public void OnKeyDown()

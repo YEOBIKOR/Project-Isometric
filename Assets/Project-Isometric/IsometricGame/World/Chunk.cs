@@ -274,17 +274,29 @@ public class Chunk : ISerializable <Chunk.Serialized>
         data.coordinationX = _coordination.x;
         data.coordinationY = _coordination.y;
 
-        data.tiles = new int[Length, Height, Length];
-        for (int x = 0; x < Length; x++)
+        List<ushort> tiles = new List<ushort>();
+
+        Block blockA = _tiles[0, 0, 0].block;
+
+        int i = 0;
+        for (int j = 0; j < Length * Height * Length; i++, j++)
         {
-            for (int y = 0; y < Height; y++)
+            Block blockB = _tiles[(j / Length) % Length, j / (Length * Length), j % Length].block;
+
+            if (blockA != blockB)
             {
-                for (int z = 0; z < Length; z++)
-                {
-                    data.tiles[x, y, z] = Block.GetIDByBlock(_tiles[x, y, z].block);
-                }
+                tiles.Add((ushort)i);
+                tiles.Add((ushort)Block.GetIDByBlock(blockA));
+
+                i = 0;
+                blockA = blockB;
             }
         }
+
+        tiles.Add((ushort)i);
+        tiles.Add((ushort)Block.GetIDByBlock(blockA));
+
+        data.tiles = tiles.ToArray();
 
         return data;
     }
@@ -294,14 +306,14 @@ public class Chunk : ISerializable <Chunk.Serialized>
         _coordination.x = data.coordinationX;
         _coordination.y = data.coordinationY;
 
-        for (int x = 0; x < Length; x++)
+        int i = 0;
+        for (int j = 0; j < data.tiles.Length; j += 2)
         {
-            for (int y = 0; y < Height; y++)
+            Block block = Block.GetBlockByID(data.tiles[j + 1]);
+
+            for (int k = 0; k < data.tiles[j]; i++, k++)
             {
-                for (int z = 0; z < Length; z++)
-                {
-                    _tiles[x, y, z].SetBlock (Block.GetBlockByID(data.tiles[x, y, z]));
-                }
+                _tiles[(i / Length) % Length, i / (Length * Length), i % Length].SetBlock(block);
             }
         }
 
@@ -313,7 +325,7 @@ public class Chunk : ISerializable <Chunk.Serialized>
     {
         public int coordinationX;
         public int coordinationY;
-        public int[,,] tiles;
+        public ushort[] tiles;
     }
 }
 

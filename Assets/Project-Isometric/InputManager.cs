@@ -36,6 +36,9 @@ public class InputManager : Single<InputManager>
         _keyInfos.Add("move_down", new KeyInfo("Move Down", KeyCode.S));
         _keyInfos.Add("move_right", new KeyInfo("Move Right", KeyCode.D));
         _keyInfos.Add("jump", new KeyInfo("Jump", KeyCode.Space));
+        _keyInfos.Add("sprint", new KeyInfo("Sprint", KeyCode.LeftShift));
+        _keyInfos.Add("drop_item", new KeyInfo("Drop Item", KeyCode.T));
+        _keyInfos.Add("inventory", new KeyInfo("Inventory", KeyCode.I));
     }
 
     public void AddCommand(string key, ICommand command)
@@ -93,4 +96,29 @@ public interface ICommand
     void OnKey();
     void OnKeyDown();
     void OnKeyUp();
+}
+
+public class CommandCallback : ICommand
+{
+    private System.Action _callback;
+
+    public CommandCallback(System.Action callback)
+    {
+        _callback = callback;
+    }
+
+    public void OnKey()
+    {
+
+    }
+
+    public void OnKeyDown()
+    {
+        _callback();
+    }
+
+    public void OnKeyUp()
+    {
+
+    }
 }
