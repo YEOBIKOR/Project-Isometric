@@ -77,14 +77,6 @@ namespace Isometric.Interface
             base.OnTerminate();
         }
 
-        public override void RawUpdate(float deltaTime)
-        {
-            if (Input.GetKeyDown(KeyCode.I) && time > 0f)
-                RequestTerminate();
-
-            base.RawUpdate(deltaTime);
-        }
-
         public override void Update(float deltaTime)
         {
             playerInterface.player.game.timeScale = Mathf.Lerp(1f, 0.02f, factor);

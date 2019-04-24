@@ -60,8 +60,6 @@ public class IsometricMain : MonoBehaviour
 
         float deltaTime = Time.deltaTime * timeScale;
 
-        inputManager.Update(deltaTime);
-
         flowManager.RawUpdate(deltaTime);
     }
 

@@ -3,33 +3,11 @@ using UnityEngine;
 
 public class InputManager : Single<InputManager>
 {
-    private class KeyInfo
-    {
-        public string keyName;
-        public KeyCode keyCode;
-
-        public KeyInfo(string keyName, KeyCode keyCode)
-        {
-            this.keyName = keyName;
-            this.keyCode = keyCode;
-        }
-    }
-
-    private struct KeyCommandPair
-    {
-        public ICommand command;
-        public KeyInfo keyInfo;
-    }
-
     private Dictionary<string, KeyInfo> _keyInfos;
-
-    private List<KeyCommandPair> _commands;
 
     public InputManager() : base()
     {
         _keyInfos = new Dictionary<string, KeyInfo>();
-
-        _commands = new List<KeyCommandPair>();
 
         _keyInfos.Add("move_up", new KeyInfo("Move Up", KeyCode.W));
         _keyInfos.Add("move_left", new KeyInfo("Move Left", KeyCode.A));
@@ -41,53 +19,9 @@ public class InputManager : Single<InputManager>
         _keyInfos.Add("inventory", new KeyInfo("Inventory", KeyCode.I));
     }
 
-    public void AddCommand(string key, ICommand command)
+    public KeyInfo GetKeyInfo(string key)
     {
-        try
-        {
-            KeyInfo keyInfo = _keyInfos[key];
-
-            KeyCommandPair pair = new KeyCommandPair();
-
-            pair.command = command;
-            pair.keyInfo = keyInfo;
-
-            _commands.Add(pair);
-        }
-
-        catch (KeyNotFoundException exception)
-        {
-            Debug.LogError(exception.Message);
-        }
-    }
-
-    public void RemoveCommand(ICommand command)
-    {
-        int index = _commands.FindIndex(delegate (KeyCommandPair pair) { return pair.command == command; });
-
-        if (index < 0)
-            return;
-
-        _commands.RemoveAt(index);
-    }
-
-    public void Update(float deltaTime)
-    {
-        for (int index = 0; index < _commands.Count; index++)
-        {
-            ICommand command = _commands[index].command;
-
-            KeyCode key = _commands[index].keyInfo.keyCode;
-
-            if (Input.GetKey(key))
-                command.OnKey();
-
-            if (Input.GetKeyDown(key))
-                command.OnKeyDown();
-
-            if (Input.GetKeyUp(key))
-                command.OnKeyUp();
-        }
+        return _keyInfos[key];
     }
 }
 
@@ -120,5 +54,74 @@ public class CommandCallback : ICommand
     public void OnKeyUp()
     {
 
+    }
+}
+
+public class CommandDelegate
+{
+    private List<KeyCommandPair> _commands;
+
+    public CommandDelegate()
+    {
+        _commands = new List<KeyCommandPair>();
+    }
+
+    public CommandDelegate(KeyCommandPair[] commands)
+    {
+        _commands = new List<KeyCommandPair>(commands);
+    }
+
+    public void Add(string key, ICommand command)
+    {
+        KeyCommandPair pair = new KeyCommandPair();
+
+        pair.command = command;
+        pair.keyInfo = InputManager.Instance.GetKeyInfo(key);
+
+        _commands.Add(pair);
+    }
+
+    public KeyCommandPair[] ToArray()
+    {
+        return _commands.ToArray();
+    }
+
+    public void Update(float deltaTime)
+    {
+        for (int index = 0; index < _commands.Count; index++)
+        {
+            ICommand command = _commands[index].command;
+
+            KeyCode key = _commands[index].keyInfo.keyCode;
+
+            if (Input.GetKey(key))
+                command.OnKey();
+
+            if (Input.GetKeyDown(key))
+                command.OnKeyDown();
+
+            if (Input.GetKeyUp(key))
+                command.OnKeyUp();
+        }
+    }
+}
+
+public struct KeyCommandPair
+{
+    public ICommand command;
+
+    public KeyInfo keyInfo;
+}
+
+public class KeyInfo
+{
+    public string keyName;
+
+    public KeyCode keyCode;
+
+    public KeyInfo(string keyName, KeyCode keyCode)
+    {
+        this.keyName = keyName;
+        this.keyCode = keyCode;
     }
 }

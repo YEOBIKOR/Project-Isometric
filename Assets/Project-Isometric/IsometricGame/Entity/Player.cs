@@ -33,7 +33,7 @@ public class Player : EntityCreature
 
     private Vector2 _moveDirectionByScreen;
 
-    private ICommand[] _commands;
+    private CommandDelegate _playerCommand;
     
     public Player() : base(0.3f, 2.0f, 100f)
     {
@@ -65,39 +65,15 @@ public class Player : EntityCreature
 
     private void CreateCommand()
     {
-        _commands = new ICommand[]
-        {
-            new CommandPlayerMove(this, Vector2.up),
-            new CommandPlayerMove(this, Vector2.left),
-            new CommandPlayerMove(this, Vector2.down),
-            new CommandPlayerMove(this, Vector2.right),
-            new CommandPlayerJump(this),
-            new CommandPlayerSprint(this),
-            new CommandCallback(delegate { DropItem(_pickedItemContainer); } )
-        };
-    }
+        _playerCommand = new CommandDelegate();
 
-    private void AddCommand()
-    {
-        InputManager inputManager = InputManager.Instance;
-
-        inputManager.AddCommand("move_up", _commands[0]);
-        inputManager.AddCommand("move_left", _commands[1]);
-        inputManager.AddCommand("move_down", _commands[2]);
-        inputManager.AddCommand("move_right", _commands[3]);
-        inputManager.AddCommand("jump", _commands[4]);
-        inputManager.AddCommand("sprint", _commands[5]);
-        inputManager.AddCommand("drop_item", _commands[6]);
-    }
-
-    private void RemoveCommand()
-    {
-        InputManager inputManager = InputManager.Instance;
-
-        for (int index = 0; index < _commands.Length; index++)
-        {
-            inputManager.RemoveCommand(_commands[index]);
-        }
+        _playerCommand.Add("move_up", new CommandPlayerMove(this, Vector2.up));
+        _playerCommand.Add("move_left", new CommandPlayerMove(this, Vector2.left));
+        _playerCommand.Add("move_down", new CommandPlayerMove(this, Vector2.down));
+        _playerCommand.Add("move_right", new CommandPlayerMove(this, Vector2.right));
+        _playerCommand.Add("jump", new CommandPlayerJump(this));
+        _playerCommand.Add("sprint", new CommandPlayerSprint(this));
+        _playerCommand.Add("drop_item", new CommandCallback(delegate { DropItem(_pickedItemContainer); } ));
     }
 
     public override void OnSpawn(Chunk chunk, Vector3 position)
@@ -105,14 +81,10 @@ public class Player : EntityCreature
         base.OnSpawn(chunk, position);
 
         game.AddSubLoopFlow(_playerInterface);
-
-        AddCommand();
     }
 
     public override void OnDespawn()
     {
-        RemoveCommand();
-
         _playerInterface.Terminate();
 
         base.OnDespawn();
@@ -120,6 +92,8 @@ public class Player : EntityCreature
 
     public override void Update(float deltaTime)
     {
+        _playerCommand.Update(deltaTime);
+
         UpdateMovement(deltaTime);
 
         _itemUseCoolTime = Mathf.Max(_itemUseCoolTime - deltaTime, 0f);

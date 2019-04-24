@@ -30,12 +30,24 @@ namespace Isometric.Interface
         private WorldCursor[] _cursors;
         private WorldCursor _currentCursor;
 
+        private CommandDelegate _playerCommand;
+
         public PlayerInterface(Player player) : base()
         {
             _player = player;
 
             itemSelect = new ItemSelect(this);
             inventoryMenu = new InventoryMenu(this);
+
+            _playerCommand = new CommandDelegate();
+
+            _playerCommand.Add("inventory", new CommandCallback(delegate
+            {
+                if (inventoryMenu.activated)
+                    inventoryMenu.RequestTerminate();
+                else
+                    AddSubLoopFlow(inventoryMenu);
+            }));
         }
 
         public override void OnActivate()
@@ -72,7 +84,11 @@ namespace Isometric.Interface
         public override void RawUpdate(float deltaTime)
         {
             if (!player.game.paused)
+            {
+                _playerCommand.Update(deltaTime);
+
                 base.RawUpdate(deltaTime);
+            }
         }
 
         public override void Update(float deltaTime)
@@ -81,8 +97,6 @@ namespace Isometric.Interface
             {
                 if (Input.mouseScrollDelta.y != 0f && !itemSelect.activated)
                     AddSubLoopFlow(itemSelect);
-                if (Input.GetKey(KeyCode.I))
-                    AddSubLoopFlow(inventoryMenu);
 
                 if (_currentCursor != null)
                     _currentCursor.CursorUpdate(player.world, player, MenuFlow.mousePosition);
