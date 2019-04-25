@@ -10,12 +10,24 @@ public class ChunkGenerator
     private Queue<Chunk> _inChunkQueue;
     private Queue<Chunk> _outChunkQueue;
 
+    private List<IChunkGenerateProgress> _progresses;
+
     public ChunkGenerator(World world)
     {
         _world = world;
 
         _inChunkQueue = new Queue<Chunk>();
         _outChunkQueue = new Queue<Chunk>();
+
+        _progresses = new List<IChunkGenerateProgress>();
+        InitializeProgresses();
+    }
+
+    public void InitializeProgresses()
+    {
+        _progresses.Add(new ChunkBedrockGenerateProgress());
+        _progresses.Add(new ChunkTerrainGenerateProgress());
+        _progresses.Add(new ChunkGrowGrassProgress());
     }
 
     public void RequestGenerateChunk(Chunk chunk)
@@ -54,37 +66,10 @@ public class ChunkGenerator
 
     public void GenerateChunk(Chunk chunk)
     {
-        Vector2Int coordination = chunk.coordination;
         chunk.state = ChunkState.Loading;
-        
-        for (int i = 0; i < Chunk.Length; i++)
-        {
-            for (int j = 0; j < Chunk.Length; j++)
-            {
-                int y = Mathf.CeilToInt(Mathf.PerlinNoise((i + coordination.x * Chunk.Length + 1024f) * 0.1f, (j + coordination.y * Chunk.Length + 1024f) * 0.1f) * 4f) + 2;
-                //int y = 1;
-                //if ((i == 2 && j > 2 && j < 6) || (i > 0 && i < 4 && j == 3)) y = 3;//Hi
 
-                for (int k = 0; k < Chunk.Height; k++)
-                {
-                    Block block = Block.BlockAir;
-
-                    if (k == 0)
-                        block = Block.GetBlockByKey("bedrock");
-                    else if (k < y)
-                    {
-                        int biome = 0; //Mathf.RoundToInt(Mathf.PerlinNoise((i + coordination.x * Chunk.Length + 1024f) * 0.01f, (j + coordination.y * Chunk.Length + 1024f) * 0.01f));
-
-                        if (biome > 0)
-                            block = Block.GetBlockByKey("sand");
-                        else
-                            block = Block.GetBlockByKey(k > 2 + RXRandom.Range(0, 5) ? "stone" : (k + 1 == y) ? "grass" : "dirt");
-                    }
-
-                    chunk[i, k, j].SetBlock(block);
-                }
-            }
-        }
+        foreach (var progress in _progresses)
+            progress.Generate(chunk);
 
         chunk.state = ChunkState.Loaded;
     }
