@@ -25,7 +25,7 @@ namespace Isometric.Interface
             container.AddChild(_itemName);
             container.AddChild(_itemInformation);
 
-            activated = false;
+            visible = false;
         }
 
         public void InspectItem(ItemContainer itemContainer)
@@ -40,7 +40,7 @@ namespace Isometric.Interface
 
             if (name != string.Empty)
             {
-                activated = true;
+                visible = true;
 
                 _itemName.text = name;
 
@@ -50,7 +50,7 @@ namespace Isometric.Interface
             }
             else
             {
-                activated = false;
+                visible = false;
             }
         }
     }

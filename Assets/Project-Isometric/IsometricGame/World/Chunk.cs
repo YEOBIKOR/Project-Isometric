@@ -236,17 +236,27 @@ public class Chunk : ISerializable <Chunk.Serialized>
     
     public void GetCollidedEntites(Vector3 position, float width, float height, Action<Entity> callback)
     {
-        LinkedListNode<ICollidable<Entity>> node = _collidables.First;
-        while (node != null)
+        Action<Chunk> action = delegate (Chunk chunk)
         {
-            ICollidable<Entity> collidable = node.Value;
-            if (collidable != null)
+            LinkedListNode<ICollidable<Entity>> node = chunk._collidables.First;
+            while (node != null)
             {
-                if (collidable.Collision(position, width, height))
-                    callback(collidable.owner);
-            }
+                ICollidable<Entity> collidable = node.Value;
+                if (collidable != null)
+                {
+                    if (collidable.Collision(position, width, height))
+                        callback(collidable.owner);
+                }
 
-            node = node.Next;
+                node = node.Next;
+            }
+        };
+
+        action(this);
+        for (int index = 0; index < _nearbyChunks.Length; index++)
+        {
+            if (_nearbyChunks[index] != null)
+                action(_nearbyChunks[index]);
         }
     }
 

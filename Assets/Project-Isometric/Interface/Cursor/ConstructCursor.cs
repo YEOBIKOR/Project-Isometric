@@ -15,6 +15,7 @@ namespace Isometric.Interface
             _worldCamera = worldCamera;
 
             _previewSprite = new FSprite(Item.GetItemByID(0).element);
+            _previewSprite.shader = FShader.Additive;
         }
 
         public override void OnActivate()

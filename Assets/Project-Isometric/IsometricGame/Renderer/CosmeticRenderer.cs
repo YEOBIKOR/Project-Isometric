@@ -82,6 +82,15 @@ public class CosmeticRenderer : IRenderer
         { _color.a = value; }
     }
 
+    private FShader _shader;
+    public FShader shader
+    {
+        get
+        { return _shader; }
+        set
+        { _shader = value; }
+    }
+
     public CosmeticRenderer(FAtlasElement element)
     {
         this._element = element;
@@ -93,6 +102,7 @@ public class CosmeticRenderer : IRenderer
         this._sortZOffset = 0f;
         this._color = Color.white;
         this._scale = Vector2.one;
+        this._shader = FShader.defaultShader;
     }
 
     public virtual void OnShow(World world)
@@ -114,7 +124,7 @@ public class CosmeticRenderer : IRenderer
     public virtual void OnInitializeSprite(SpriteLeaser spriteLeaser, WorldCamera camera)
     {
         FSprite sprite = new FSprite(element == null ? Futile.whiteElement : element);
-        // sprite.shader = IsometricMain.GetShader("WorldObject");
+        sprite.shader = shader;
 
         spriteLeaser.sprites.Add(sprite);
     }

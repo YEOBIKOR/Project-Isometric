@@ -8,6 +8,7 @@ namespace Isometric.Interface
         private Damage _damage;
 
         private FLabel _label;
+        private FLabel _labelShadow;
 
         private float _time;
 
@@ -19,6 +20,11 @@ namespace Isometric.Interface
             _label = new FLabel("font", text);
             _label.scale = 1.2f;
 
+            _labelShadow = new FLabel("font", text);
+            _labelShadow.scale = 1.2f;
+            _labelShadow.color = Color.black;
+
+            AddElement(_labelShadow);
             AddElement(_label);
 
             _time = 0f;
@@ -31,8 +37,13 @@ namespace Isometric.Interface
             if (_time > 3f)
                 RemoveSelf();
 
-            _label.SetPosition(0f, Mathf.Sqrt(_time * 4f) * 16f);
+            Vector2 position = new Vector2(0f, Mathf.Sqrt(_time * 4f) * 16f);
+
+            _label.SetPosition(position);
             _label.alpha = Mathf.Lerp(1f, 0f, _time);
+
+            _labelShadow.SetPosition(position + Vector2.down);
+            _labelShadow.alpha = Mathf.Lerp(1f, 0f, _time);
 
             base.Update(deltaTime);
         }

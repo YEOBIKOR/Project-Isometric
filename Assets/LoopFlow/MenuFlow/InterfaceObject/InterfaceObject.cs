@@ -16,7 +16,7 @@ namespace Isometric.Interface
 
         private List<InterfaceObject> _elements;
         
-        public bool activated
+        public bool visible
         {
             get
             { return container.isVisible; }
@@ -84,7 +84,7 @@ namespace Isometric.Interface
 
         public void AddElement(InterfaceObject element)
         {
-            if (activated)
+            if (visible)
                 element.OnActivate();
 
             element._parent = this;
@@ -107,7 +107,7 @@ namespace Isometric.Interface
             if (index < 0)
                 return;
 
-            if (activated)
+            if (visible)
                 element.OnDeactivate();
 
             element._parent = null;
@@ -118,7 +118,7 @@ namespace Isometric.Interface
 
         public void RemoveSelf()
         {
-            if (activated)
+            if (visible)
             {
                 if (_parent == null)
                     _menu.RemoveElement(this);

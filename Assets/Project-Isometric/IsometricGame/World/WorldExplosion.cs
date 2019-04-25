@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Explosion : IPositionable
+public class WorldExplosion : IPositionable
 {
     private World _world;
 
@@ -10,7 +10,7 @@ public class Explosion : IPositionable
 
     private AudioClip _explosionAudio;
 
-    public Explosion(World world, Vector3 position, float power)
+    public WorldExplosion(World world, Vector3 position, float power)
     {
         _world = world;
         _position = position;

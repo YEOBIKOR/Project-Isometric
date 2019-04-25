@@ -51,7 +51,7 @@ public class Granade : Entity
 
     private void Explode()
     {
-        new Explosion(world, worldPosition, 32f).Execute();
+        new WorldExplosion(world, worldPosition, 32f).Execute();
 
         DespawnEntity();
     }
