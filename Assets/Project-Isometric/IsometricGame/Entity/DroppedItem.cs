@@ -24,6 +24,7 @@ public class DroppedItem : Entity
         entityParts.Add(new EntityPart(this, itemStack.item.element));
         entityParts[0].sortZOffset = 1f;
         entityParts[0].scale = Vector2.one * 0.5f;
+        entityParts[0].shader = IsometricMain.GetShader("DroppedItem");
 
         _acquirable = false;
         _acquired = false;

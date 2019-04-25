@@ -18,6 +18,14 @@ namespace Isometric.Interface
         private static AudioClip _onHoverAudio;
         private static AudioClip _onPressAudio;
 
+        public string text
+        {
+            get
+            { return label.text; }
+            set
+            { label.text = value; }
+        }
+
         public GeneralButton(MenuFlow menu, string name, Action clickCallback, bool pressAudio = true) : base(menu)
         {
             rect1 = new RoundedRect(menu);

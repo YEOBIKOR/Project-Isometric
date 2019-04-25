@@ -56,7 +56,7 @@ public class IsometricMain : MonoBehaviour
                 1f;
 
         if (Input.GetKeyDown(KeyCode.Home))
-            flowManager.RequestSwitchLoopFlow(new IsometricGame());
+            flowManager.RequestSwitchLoopFlow(new IsometricGame("SaveData/World_0.dat"));
 
         float deltaTime = Time.deltaTime * timeScale;
 
@@ -81,8 +81,14 @@ public class IsometricMain : MonoBehaviour
     {
         _shaders = new Dictionary<string, FShader>();
 
-        FShader shader = FShader.CreateShader("WorldObject", Resources.Load<Shader>("Shaders/WorldObject"));
-        _shaders.Add(shader.name, shader);
+        FShader[] array = new FShader[]
+        {
+            FShader.CreateShader("WorldObject", Resources.Load<Shader>("Shaders/WorldObject")),
+            FShader.CreateShader("DroppedItem", Resources.Load<Shader>("Shaders/DroppedItem"))
+        };
+
+        foreach (var shader in array)
+            _shaders.Add(shader.name, shader);
     }
 
     private void LoadTextures()

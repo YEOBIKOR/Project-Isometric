@@ -5,53 +5,60 @@ using System.IO;
 
 public class IsometricGame : LoopFlow
 {
-    private World world;
+    private World _world;
 
-    private PauseMenu pauseMenu;
+    private PauseMenu _pauseMenu;
 
     private FileSerialization<World.Serialized> _worldFile;
+
+    private string _worldFileToLoad;
+
+    public IsometricGame(string worldFileToLoad)
+    {
+        _worldFileToLoad = worldFileToLoad;
+    }
 
     public override void OnActivate()
     {
         base.OnActivate();
 
-        world = new World(this, "World_0");
+        _world = new World(this, "World_0");
 
-        pauseMenu = new PauseMenu(this);
+        _pauseMenu = new PauseMenu(this);
 
-        _worldFile = new FileSerialization<World.Serialized>("SaveData/" + world.worldName + ".dat");
+        _worldFile = new FileSerialization<World.Serialized>(_worldFileToLoad);
 
         try
         {
-            world.Deserialize(_worldFile.LoadFile());
+            _world.Deserialize(_worldFile.LoadFile());
         }
         catch (FileNotFoundException)
         {
             Debug.Log("The save file cannot be found, create a new save file.");
 
-            world.RequestLoadChunk(Vector2Int.zero);
+            _world.RequestLoadChunk(Vector2Int.zero);
         }
     }
 
     public override void Update(float deltaTime)
     {
-        world.Update(deltaTime);
+        _world.Update(deltaTime);
 
         base.Update(deltaTime);
     }
 
     public override void OnTerminate()
     {
-        _worldFile.SaveFile(world.Serialize());
+        _worldFile.SaveFile(_world.Serialize());
 
-        world.OnTerminate();
+        _world.OnTerminate();
 
         base.OnTerminate();
     }
 
     public override bool OnExecuteEscape()
     {
-        AddSubLoopFlow(pauseMenu);
+        AddSubLoopFlow(_pauseMenu);
 
         return false;
     }

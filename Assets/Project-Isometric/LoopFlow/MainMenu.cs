@@ -13,6 +13,7 @@ namespace Isometric.Interface
         private FSprite[] titleSprites;
         private GeneralButton[] buttons;
         private GeneralButton visitDevLog;
+        private WorldSelect worldSelect;
 
         public MainMenu() : base()
         {
@@ -37,7 +38,7 @@ namespace Isometric.Interface
             }
 
             buttons = new GeneralButton[3];
-            buttons[0] = new GeneralButton(this, "Start", OnGameStart);
+            buttons[0] = new GeneralButton(this, "Start", OnWorldSelect);
             buttons[1] = new GeneralButton(this, "Options", OpenOptions);
             buttons[2] = new GeneralButton(this, "Quit", OnApplicationQuit);
 
@@ -51,18 +52,14 @@ namespace Isometric.Interface
             for (int index = 0; index < buttons.Length; index++)
                 AddElement(buttons[index]);
 
+            worldSelect = new WorldSelect(this);
+            worldSelect.visible = false;
+            AddElement(worldSelect);
+
             visitDevLog = new GeneralButton(this, "Wanna See Devlog?", OnVisitDevLog);
             visitDevLog.position = new Vector2(0f, screenHeight * -0.5f + 24f);
             visitDevLog.size = new Vector2(96f, 16f);
             AddElement(visitDevLog);
-
-            string[] paths = Directory.GetFiles("SaveData/", "*.dat");
-
-            string str = string.Empty;
-            foreach (var path in paths)
-                str += path + '\n';
-
-            Debug.Log(str);
         }
 
         public override void Update(float deltaTime)
@@ -89,9 +86,16 @@ namespace Isometric.Interface
             return false;
         }
 
-        public void OnGameStart()
+        public void OnWorldSelect()
         {
-            loopFlowManager.RequestSwitchLoopFlow(new IsometricGame());
+            worldSelect.visible = !worldSelect.visible;
+        }
+
+        public void OnGameStart(string worldFile)
+        {
+            IsometricGame game = new IsometricGame(worldFile);
+
+            loopFlowManager.RequestSwitchLoopFlow(game);
         }
 
         public void OpenOptions()
@@ -107,6 +111,50 @@ namespace Isometric.Interface
         public void OnVisitDevLog()
         {
             Application.OpenURL("https://twitter.com/i/moments/987507190041739264");
+        }
+    }
+
+    public class WorldSelect : InterfaceObject
+    {
+        private string[] _worldNames;
+        private string[] _worldPaths;
+
+        private GeneralButton[] _worldSelects;
+
+        public const int WorldNumber = 3;
+
+        public WorldSelect(MainMenu menu) : base(menu)
+        {
+            _worldNames = new string[WorldNumber];
+            _worldPaths = new string[WorldNumber];
+
+            _worldSelects = new GeneralButton[WorldNumber];
+            
+            for (int index = 0; index < WorldNumber; index++)
+            {
+                string worldName = "World_" + index;
+                string worldPath = "SaveData/" + worldName + ".dat";
+
+                _worldNames[index] = worldName;
+                _worldPaths[index] = worldPath;
+
+                _worldSelects[index] = new GeneralButton(menu, "World_#", delegate { menu.OnGameStart(worldPath); } );
+                _worldSelects[index].position = new Vector2(-MenuFlow.screenWidth * 0.5f + 40f + index * 64f, 144f - MenuFlow.screenHeight * 0.5f);
+                _worldSelects[index].size = new Vector2(48f, 48f);
+
+                AddElement(_worldSelects[index]);
+            }
+        }
+
+        public override void OnActivate()
+        {
+            base.OnActivate();
+
+            for (int index = 0; index < WorldNumber; index++)
+            {
+                string displayString = File.Exists(_worldPaths[index]) ? _worldNames[index] : "Create New";
+                _worldSelects[index].text = displayString;
+            }
         }
     }
 }
