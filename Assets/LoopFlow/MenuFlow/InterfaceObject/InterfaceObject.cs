@@ -15,6 +15,12 @@ namespace Isometric.Interface
         private InterfaceObject _parent;
 
         private List<InterfaceObject> _elements;
+
+        public bool activated
+        {
+            get
+            { return container.container != null; }
+        }
         
         public bool visible
         {
@@ -114,6 +120,13 @@ namespace Isometric.Interface
 
             _elements.RemoveAt(index);
             _container.RemoveChild(element.container);
+        }
+
+        public FNode RemoveElement(FNode element)
+        {
+            _container.RemoveChild(element);
+
+            return element;
         }
 
         public void RemoveSelf()

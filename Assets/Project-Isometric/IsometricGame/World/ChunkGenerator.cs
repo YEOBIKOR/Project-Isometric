@@ -19,12 +19,13 @@ public class ChunkGenerator
         _inChunkQueue = new Queue<Chunk>();
         _outChunkQueue = new Queue<Chunk>();
 
-        _progresses = new List<IChunkGenerateProgress>();
         InitializeProgresses();
     }
 
     public void InitializeProgresses()
     {
+        _progresses = new List<IChunkGenerateProgress>();
+
         _progresses.Add(new ChunkBedrockGenerateProgress());
         _progresses.Add(new ChunkTerrainGenerateProgress());
         _progresses.Add(new ChunkGrowGrassProgress());

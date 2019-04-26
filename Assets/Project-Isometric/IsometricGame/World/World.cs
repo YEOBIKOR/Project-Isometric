@@ -134,9 +134,9 @@ public class World : ISerializable<World.Serialized>
 
         Queue<Chunk> loadedChunkQueue = _chunkGenerator.GetLoadedChunkQueue();
 
-        while (loadedChunkQueue.Count > 0)
+        lock (loadedChunkQueue)
         {
-            lock (loadedChunkQueue)
+            while (loadedChunkQueue.Count > 0)
             {
                 Chunk loadedChunk = loadedChunkQueue.Dequeue();
                 OnChunkGenerated(loadedChunk);
@@ -207,11 +207,11 @@ public class World : ISerializable<World.Serialized>
 
             // SpawnEntity(new EntityBoss(), new Vector3(8f, 16f, 8f));
 
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    Vector2 position = Vector2.one * 10f;
-            //    SpawnEntity(new EntityPpyongppyong(), new Vector3(position.x, 30f, position.y));
-            //}
+            for (int i = 0; i < 10; i++)
+            {
+                Vector2 position = Vector2.one * 10f;
+                SpawnEntity(new EntityPpyongppyong(), new Vector3(position.x, 30f, position.y));
+            }
         }
 
         //int spawnCount = (int)RXRandom.Range(0f, 1.1f);

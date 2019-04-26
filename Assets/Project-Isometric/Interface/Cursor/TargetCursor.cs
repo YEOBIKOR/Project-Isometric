@@ -18,6 +18,8 @@ namespace Isometric.Interface
 
         private float _lastTime;
 
+        private TargetInspector _targetInspector;
+
         public TargetCursor(PlayerInterface menu) : base(menu)
         {
             _sprites = new FSprite[5];
@@ -37,6 +39,11 @@ namespace Isometric.Interface
             {
                 AddElement(_sprites[index]);
             }
+
+            _targetInspector = new TargetInspector(menu);
+            _targetInspector.position = new Vector2(0f, 32f);
+
+            AddElement(_targetInspector);
         }
 
         public override void CursorUpdate(World world, Player player, Vector2 cursorPosition)
@@ -77,6 +84,8 @@ namespace Isometric.Interface
 
                 _currentTarget = nearestTarget;
                 _lastTime = menu.time;
+
+                _targetInspector.InspectTarget(_currentTarget);
             }
 
             if (_currentTarget != null)
@@ -95,6 +104,14 @@ namespace Isometric.Interface
             {
                 _targetScreenPosition = cursorPosition;
                 _targetSize = new Vector2(12f, 12f);
+
+                if (Input.GetKey(KeyCode.Mouse0))
+                {
+                    RayTrace rayTrace = camera.GetRayAtScreenPosition(cursorPosition - camera.worldContainer.GetPosition());
+
+                    if (rayTrace.hit)
+                        player.UseItem(rayTrace, Input.GetKeyDown(KeyCode.Mouse0));
+                }
             }
         }
 
@@ -114,6 +131,66 @@ namespace Isometric.Interface
             _sprites[2].SetPosition(halfSize.x + sin, halfSize.y + sin);
             _sprites[3].SetPosition(-halfSize.x - sin, -halfSize.y - sin);
             _sprites[4].SetPosition(halfSize.x + sin, -halfSize.y - sin);
+
+            base.Update(deltaTime);
+        }
+    }
+
+    public class TargetInspector : InterfaceObject
+    {
+        private ShadowedLabel _inspectLabel;
+
+        private FSprite _bar;
+        private FSprite _barCase;
+
+        private EntityCreature _target;
+
+        public TargetInspector(MenuFlow menu) : base(menu)
+        {
+            _inspectLabel = new ShadowedLabel(menu, "## : ## / ##");
+            _inspectLabel.position = new Vector2(0f, 10f);
+
+            _bar = new FSprite("uipixel");
+            _bar.scaleY = 4f;
+
+            _barCase = new FSprite("targethealth");
+        }
+
+        public void InspectTarget(ITarget target)
+        {
+            EntityCreature creature = target as EntityCreature;
+
+            if (creature != null)
+            {
+                _inspectLabel.text = string.Concat(creature.GetType());
+                
+                AddElement(_inspectLabel);
+
+                AddElement(_bar);
+                AddElement(_barCase);
+            }
+            
+            else
+            {
+                RemoveElement(_inspectLabel);
+
+                RemoveElement(_bar);
+                RemoveElement(_barCase);
+            }
+
+            _target = creature;
+        }
+
+        public override void Update(float deltaTime)
+        {
+            if (_target != null)
+            {
+                float length = 48f * _target.health / _target.maxHealth;
+
+                _bar.x = length * 0.5f - 24f;
+                _bar.scaleX = length;
+                _bar.color = Color.Lerp(Color.red, new Color32(0xAC, 0xEF, 0x2A, 0xFF), _target.health / _target.maxHealth);
+            }
 
             base.Update(deltaTime);
         }

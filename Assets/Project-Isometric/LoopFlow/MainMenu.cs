@@ -53,8 +53,6 @@ namespace Isometric.Interface
                 AddElement(buttons[index]);
 
             worldSelect = new WorldSelect(this);
-            worldSelect.visible = false;
-            AddElement(worldSelect);
 
             visitDevLog = new GeneralButton(this, "Wanna See Devlog?", OnVisitDevLog);
             visitDevLog.position = new Vector2(0f, screenHeight * -0.5f + 24f);
@@ -88,7 +86,10 @@ namespace Isometric.Interface
 
         public void OnWorldSelect()
         {
-            worldSelect.visible = !worldSelect.visible;
+            if (worldSelect.activated)
+                RemoveElement(worldSelect);
+            else
+                AddElement(worldSelect);
         }
 
         public void OnGameStart(string worldFile)
