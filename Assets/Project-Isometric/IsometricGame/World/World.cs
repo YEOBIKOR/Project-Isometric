@@ -132,16 +132,8 @@ public class World : ISerializable<World.Serialized>
             }
         }
 
-        Queue<Chunk> loadedChunkQueue = _chunkGenerator.GetLoadedChunkQueue();
-
-        lock (loadedChunkQueue)
-        {
-            while (loadedChunkQueue.Count > 0)
-            {
-                Chunk loadedChunk = loadedChunkQueue.Dequeue();
-                OnChunkGenerated(loadedChunk);
-            }
-        }
+        foreach (var loadedChunk in _chunkGenerator.GetLoadedChunkQueue())
+            OnChunkGenerated(loadedChunk);
 
         DrawablesUpdate(deltaTime);
 

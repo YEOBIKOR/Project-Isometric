@@ -7,8 +7,7 @@ public class ChunkGenerator
 {
     private World _world;
 
-    private Queue<Chunk> _inChunkQueue;
-    private Queue<Chunk> _outChunkQueue;
+    private Task<Chunk> _chunkLoadTask;
 
     private List<IChunkGenerateProgress> _progresses;
 
@@ -16,8 +15,7 @@ public class ChunkGenerator
     {
         _world = world;
 
-        _inChunkQueue = new Queue<Chunk>();
-        _outChunkQueue = new Queue<Chunk>();
+        _chunkLoadTask = new Task<Chunk>(GenerateChunk);
 
         InitializeProgresses();
     }
@@ -33,36 +31,7 @@ public class ChunkGenerator
 
     public void RequestGenerateChunk(Chunk chunk)
     {
-        lock (_inChunkQueue)
-        {
-            _inChunkQueue.Enqueue(chunk);
-        }
-
-        if (_inChunkQueue.Count < 2)
-        {
-            Thread loadThread = new Thread(GenerateChunks);
-            loadThread.Start();
-        }
-    }
-
-    private void GenerateChunks()
-    {
-        do
-        {
-            Chunk chunk = _inChunkQueue.Peek();
-            GenerateChunk(chunk);
-
-            lock (_inChunkQueue)
-            {
-                _inChunkQueue.Dequeue();
-            }
-
-            lock (_outChunkQueue)
-            {
-                _outChunkQueue.Enqueue(chunk);
-            }
-
-        } while (_inChunkQueue.Count > 0);
+        _chunkLoadTask.AddTask(chunk);
     }
 
     public void GenerateChunk(Chunk chunk)
@@ -75,8 +44,8 @@ public class ChunkGenerator
         chunk.state = ChunkState.Loaded;
     }
 
-    public Queue<Chunk> GetLoadedChunkQueue()
+    public Chunk[] GetLoadedChunkQueue()
     {
-        return _outChunkQueue;
+        return _chunkLoadTask.GetCompletedTasks();
     }
 }
