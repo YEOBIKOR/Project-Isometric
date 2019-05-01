@@ -6,14 +6,14 @@ namespace Isometric.Interface
 {
     public class ItemInspector : InterfaceObject
     {
-        private SolidRoundedRect _rect;
+        private RoundedRect _rect;
 
         private FLabel _itemName;
         private FLabel _itemInformation;
 
         public ItemInspector(MenuFlow menu) : base(menu)
         {
-            _rect = new SolidRoundedRect(menu);
+            _rect = new RoundedRect(menu, true);
             _rect.size = new Vector2(100f, 20f);
 
             AddElement(_rect);

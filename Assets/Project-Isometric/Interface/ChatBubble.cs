@@ -13,7 +13,7 @@ namespace Isometric.Interface
         private float _time;
 
         private FLabel _label;
-        private SolidRoundedRect _rect;
+        private RoundedRect _rect;
 
         const float SpeechSpeed = 24f;
 
@@ -25,7 +25,7 @@ namespace Isometric.Interface
             _text = text;
             _duration = 10f;
 
-            _rect = new SolidRoundedRect(menu);
+            _rect = new RoundedRect(menu, true);
             _label = new FLabel("font", string.Empty);
 
             AddElement(_rect);
