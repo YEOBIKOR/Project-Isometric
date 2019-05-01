@@ -103,9 +103,6 @@ namespace Isometric.Interface
             // _previewSprite.alpha = Mathf.Sin(menu.time * Mathf.PI) * 0.25f + 0.5f;
 
             _previewSprite.alpha = progress > 0f ? 1f : 0f;
-
-            Tile tile = player.world.GetTileAtPosition(Vector3Int.FloorToInt(tilePosition));
-
             _previewSprite.element = _destroyElements[Mathf.FloorToInt(Mathf.Clamp01(progress) * 7f)];    
         }
     }

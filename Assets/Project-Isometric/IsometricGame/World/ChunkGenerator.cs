@@ -14,7 +14,6 @@ public class ChunkGenerator
     public ChunkGenerator(World world)
     {
         _world = world;
-
         _chunkLoadTask = new Task<Chunk>(GenerateChunk);
 
         InitializeProgresses();

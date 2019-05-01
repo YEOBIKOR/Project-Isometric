@@ -145,6 +145,8 @@ namespace Isometric.Interface
 
         private EntityCreature _target;
 
+        private float _lastLength;
+
         public TargetInspector(MenuFlow menu) : base(menu)
         {
             _inspectLabel = new ShadowedLabel(menu, "## : ## / ##");
@@ -163,9 +165,10 @@ namespace Isometric.Interface
             if (creature != null)
             {
                 _inspectLabel.text = string.Concat(creature.GetType());
+
+                _lastLength = creature.health / creature.maxHealth;
                 
                 AddElement(_inspectLabel);
-
                 AddElement(_bar);
                 AddElement(_barCase);
             }
@@ -173,7 +176,6 @@ namespace Isometric.Interface
             else
             {
                 RemoveElement(_inspectLabel);
-
                 RemoveElement(_bar);
                 RemoveElement(_barCase);
             }
@@ -185,11 +187,11 @@ namespace Isometric.Interface
         {
             if (_target != null)
             {
-                float length = 48f * _target.health / _target.maxHealth;
+                _lastLength = Mathf.Lerp(_lastLength, _target.health / _target.maxHealth, deltaTime * 10f);
 
-                _bar.x = length * 0.5f - 24f;
-                _bar.scaleX = length;
-                _bar.color = Color.Lerp(Color.red, new Color32(0xAC, 0xEF, 0x2A, 0xFF), _target.health / _target.maxHealth);
+                _bar.x = _lastLength * 24f - 24f;
+                _bar.scaleX = _lastLength * 48f;
+                _bar.color = Color.Lerp(Color.red, new Color32(0xAC, 0xEF, 0x2A, 0xFF), _lastLength);
             }
 
             base.Update(deltaTime);

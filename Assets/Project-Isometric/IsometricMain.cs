@@ -63,7 +63,7 @@ public class IsometricMain : MonoBehaviour
         flowManager.RawUpdate(deltaTime);
     }
 
-    private void OnApplicationQuit()
+    private void OnDestroy()
     {
         flowManager.OnTerminate();
     }

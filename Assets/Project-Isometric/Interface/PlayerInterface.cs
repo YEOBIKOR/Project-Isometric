@@ -167,7 +167,7 @@ namespace Isometric.Interface
                 scrollAmount += scrollDelta;
 
                 int oldSelectedIndex = selectedIndex;
-                selectedIndex = (int)Mathf.Repeat(scrollAmount, length);
+                selectedIndex = (int)Mathf.Repeat(-scrollAmount, length);
 
                 selectSpriteAngle = Mathf.LerpAngle(selectSpriteAngle, (float)selectedIndex / length * 360f - 90f, deltaTime * 10f);
 

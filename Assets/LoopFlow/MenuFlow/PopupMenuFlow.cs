@@ -65,7 +65,8 @@ namespace Isometric.Interface
 
         public override bool OnExecuteEscape()
         {
-            RequestTerminate();
+            if (escToExit)
+                RequestTerminate();
 
             return true;
         }
