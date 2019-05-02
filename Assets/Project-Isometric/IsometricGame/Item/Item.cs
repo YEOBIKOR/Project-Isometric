@@ -3,7 +3,7 @@ using Isometric.Interface;
 
 namespace Isometric.Items
 {
-    public class Item
+    public abstract class Item
     {
         private static Registry<Item> registry;
 
@@ -76,12 +76,12 @@ namespace Isometric.Items
             _name = name;
         }
 
-        public virtual void OnUseItem(World world, Player player, RayTrace rayTrace)
+        public virtual void OnUseItem(World world, Player player, ItemContainer itemContainer, Vector3Int tilePosition)
         {
 
         }
 
-        public virtual void OnUseItem(World world, Player player, Vector3 targetPosition)
+        public virtual void OnUseItem(World world, Player player, ItemContainer itemContainer, Vector3 targetPosition)
         {
 
         }

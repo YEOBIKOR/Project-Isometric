@@ -48,8 +48,8 @@ namespace Isometric.Interface
         {
             base.OnPressUp();
 
-            ItemStack returnItemStack = _itemContainer.SetItem(inventoryMenu.cursorItemContainer.itemStack);
-            inventoryMenu.cursorItemContainer.SetItem(returnItemStack);
+            ItemStack returnItemStack = _itemContainer.Apply(inventoryMenu.cursorItemContainer.itemStack);
+            inventoryMenu.cursorItemContainer.Apply(returnItemStack);
         }
     }
 }

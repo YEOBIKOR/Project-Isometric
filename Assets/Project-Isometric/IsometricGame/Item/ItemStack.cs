@@ -26,11 +26,6 @@ namespace Isometric.Items
             _stackSize = Mathf.Min(stackSize, item.maxStack);
         }
 
-        public void OnUseItem(World world, Player player, RayTrace rayTrace)
-        {
-            _item.OnUseItem(world, player, rayTrace);
-        }
-
         public int StackUp(int amount)
         {
             _stackSize += amount;
@@ -68,6 +63,14 @@ namespace Isometric.Items
                 destination = source;
                 source = temp;
             }
+        }
+
+        public static void AddStack(ref ItemStack destination, int value)
+        {
+            destination.StackUp(value);
+
+            if (destination.stackSize <= 0)
+                destination = null;
         }
     }
 }

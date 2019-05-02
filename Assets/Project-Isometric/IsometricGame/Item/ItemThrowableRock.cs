@@ -11,14 +11,12 @@ namespace Isometric.Items
 
         }
 
-        public override void OnUseItem(World world, Player player, RayTrace rayTrace)
+        public override void OnUseItem(World world, Player player, ItemContainer itemContainer, Vector3 targetPosition)
         {
-            base.OnUseItem(world, player, rayTrace);
-
             ThrowableRock rock = new ThrowableRock(player);
 
-            Vector3 playerShotPosition = player.worldPosition + Vector3.up + (rayTrace.hitPosition - player.worldPosition).normalized * 0.5f;
-            Vector3 shotDirection = (rayTrace.hitPosition + Vector3.up - playerShotPosition).normalized;
+            Vector3 playerShotPosition = player.worldPosition + Vector3.up + (targetPosition - player.worldPosition).normalized * 0.5f;
+            Vector3 shotDirection = (targetPosition + Vector3.up - playerShotPosition).normalized;
 
             rock.velocity = player.velocity + shotDirection * 30f;
             world.SpawnEntity(rock, playerShotPosition);

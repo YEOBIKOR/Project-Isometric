@@ -45,7 +45,7 @@ namespace Isometric.Interface
                     bool inRange = (rayTrace.hitPosition - player.worldPosition).sqrMagnitude < 25f;
 
                     if (Input.GetKey(KeyCode.Mouse0) && inRange)
-                        player.UseItem(rayTrace, Input.GetKeyDown(KeyCode.Mouse0));
+                        player.UseItem(Vector3Int.FloorToInt(rayTrace.hitTilePosition + rayTrace.hitDirection), Input.GetKeyDown(KeyCode.Mouse0));
 
                     SetConstructionGuide(camera, player, rayTrace.hitTilePosition + Vector3.one * 0.5f, rayTrace.hitDirection, inRange);
                     _previewSprite.isVisible = true;

@@ -10,11 +10,9 @@ namespace Isometric.Items
 
         }
 
-        public override void OnUseItem(World world, Player player, RayTrace rayTrace)
+        public override void OnUseItem(World world, Player player, ItemContainer itemContainer, Vector3Int tilePosition)
         {
-            base.OnUseItem(world, player, rayTrace);
-
-            world.DestroyBlock(Vector3Int.FloorToInt(rayTrace.hitTilePosition));
+            world.DestroyBlock(tilePosition);
         }
 
         public override CursorType cursorType

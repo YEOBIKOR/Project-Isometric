@@ -19,7 +19,7 @@ namespace Isometric.Items
 
         public event Action SignalItemChange;
 
-        public ItemStack SetItem(ItemStack itemStack)
+        public ItemStack Apply(ItemStack itemStack)
         {
             ItemStack.Apply(ref _itemStack, ref itemStack);
 
@@ -27,6 +27,14 @@ namespace Isometric.Items
                 SignalItemChange();
 
             return itemStack;
+        }
+
+        public void Apply(int value)
+        {
+            ItemStack.AddStack(ref _itemStack, value);
+
+            if (SignalItemChange != null)
+                SignalItemChange();
         }
     }
 }

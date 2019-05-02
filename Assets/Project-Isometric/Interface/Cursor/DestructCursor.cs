@@ -83,7 +83,7 @@ namespace Isometric.Interface
                         if (clicked)
                             _progress = 0f;
 
-                        player.UseItem(rayTrace, clicked); // Input.GetKeyDown(KeyCode.Mouse0));
+                        player.UseItem(rayTrace.hitTilePosition, clicked); // Input.GetKeyDown(KeyCode.Mouse0));
                     }
 
                     SetConstructionGuide(camera, player, rayTrace.hitTilePosition, inRange, _progress);

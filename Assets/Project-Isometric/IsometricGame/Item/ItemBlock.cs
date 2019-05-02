@@ -13,11 +13,11 @@ namespace Isometric.Items
             this.block = Block.GetBlockByKey(blockKey);
         }
 
-        public override void OnUseItem(World world, Player player, RayTrace rayTrace)
+        public override void OnUseItem(World world, Player player, ItemContainer itemContainer, Vector3Int tilePosition)
         {
-            base.OnUseItem(world, player, rayTrace);
+            itemContainer.Apply(-1);
 
-            world.PlaceBlock(Vector3Int.FloorToInt(rayTrace.hitTilePosition + rayTrace.hitDirection), block);
+            world.PlaceBlock(tilePosition, block);
         }
 
         public override FAtlasElement element

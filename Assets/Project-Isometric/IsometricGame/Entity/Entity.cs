@@ -176,7 +176,11 @@ public abstract class Entity : IPositionable
     {
         Chunk newChunk = world.GetChunkByCoordinate(Chunk.ToChunkCoordinate(worldPosition));
 
-        if (newChunk != null)
+        bool chunkActivated = newChunk != null;
+        if (chunkActivated)
+            chunkActivated = newChunk.state == ChunkState.Loaded;
+
+        if (chunkActivated)
         {
             newChunk.AddEntity(this);
             OnOtherChunk(newChunk);

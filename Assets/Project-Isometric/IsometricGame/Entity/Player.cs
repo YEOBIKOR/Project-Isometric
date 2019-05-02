@@ -57,7 +57,7 @@ public class Player : EntityCreature
             if (index >= items.Length)
                 break;
 
-            inventory[index].SetItem(new ItemStack(items[index], 30));
+            inventory[index].Apply(new ItemStack(items[index], 30));
         }
 
         CreateCommand();
@@ -140,7 +140,7 @@ public class Player : EntityCreature
         for (int i = 0; i < inventorySize; i++)
         {
             if (inventory[i].blank || inventory[i].itemStack.item == itemStack.item)
-                returnItemStack = inventory[i].SetItem(returnItemStack);
+                returnItemStack = inventory[i].Apply(returnItemStack);
 
             if (returnItemStack == null)
                 break;
@@ -156,7 +156,7 @@ public class Player : EntityCreature
 
             world.SpawnEntity(droppedItem, worldPosition + Vector3.up);
 
-            itemContainer.SetItem(null);
+            itemContainer.Apply(null);
         }
     }
 
@@ -165,20 +165,42 @@ public class Player : EntityCreature
         _pickedItemContainer = itemContainer;
     }
 
-    public void UseItem(RayTrace rayTrace, bool clicked)
+    public void UseItem(Vector3Int tilePosition, bool clicked)
     {
-        Vector2 viewDirection = new Vector2(rayTrace.hitPosition.x - worldPosition.x, rayTrace.hitPosition.z - worldPosition.z);
-        viewAngle = Mathf.Atan2(viewDirection.y, viewDirection.x) * Mathf.Rad2Deg;
+        SetViewDirection(tilePosition + Vector3.one * 0.5f);
 
-        if (pickItemStack != null)
+        if (GetItemUsable(clicked))
         {
-            if (!(_itemUseCoolTime > 0f) && (pickItemStack.item.repeatableUse || clicked))
-            {
-                pickItemStack.OnUseItem(world, this, rayTrace);
+            pickItemStack.item.OnUseItem(world, this, _pickedItemContainer, tilePosition);
 
-                _itemUseCoolTime = pickItemStack.item.useCoolTime;
-            }
+            _itemUseCoolTime = pickItemStack.item.useCoolTime;
         }
+    }
+
+    public void UseItem(Vector3 targetPosition, bool clicked)
+    {
+        SetViewDirection(targetPosition);
+        
+        if (GetItemUsable(clicked))
+        {
+            pickItemStack.item.OnUseItem(world, this, _pickedItemContainer, targetPosition);
+
+            _itemUseCoolTime = pickItemStack.item.useCoolTime;
+        }
+    }
+
+    private void SetViewDirection(Vector3 targetPosition)
+    {
+        Vector2 viewDirection = new Vector2(targetPosition.x - worldPosition.x, targetPosition.z - worldPosition.z);
+        viewAngle = Mathf.Atan2(viewDirection.y, viewDirection.x) * Mathf.Rad2Deg;
+    }
+
+    private bool GetItemUsable(bool clicked)
+    {
+        if (pickItemStack == null)
+            return false;
+
+        return !(_itemUseCoolTime > 0f) && (pickItemStack.item.repeatableUse || clicked);
     }
 
     public class PlayerGraphics

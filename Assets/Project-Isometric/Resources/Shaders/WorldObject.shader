@@ -61,7 +61,7 @@
 				float w = sin(clamp((t * 1.2 - d * 0.05) * 8.0, 0.0, 3.14));
 				float f = saturate(1 - d * 0.04) * 0.15f;
 
-				o.vertex.y += w * f;
+				o.vertex.y -= w * f;
 
 				return o;
 			}

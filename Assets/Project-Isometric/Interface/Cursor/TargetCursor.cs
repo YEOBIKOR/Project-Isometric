@@ -95,8 +95,7 @@ namespace Isometric.Interface
 
                 if (Input.GetKey(KeyCode.Mouse0))
                 {
-                    RayTrace rayTrace = new RayTrace(_currentTarget.worldPosition, Vector3.zero, Vector3Int.zero);
-                    player.UseItem(rayTrace, Input.GetKeyDown(KeyCode.Mouse0));
+                    player.UseItem(_currentTarget.worldPosition, Input.GetKeyDown(KeyCode.Mouse0));
                 }
             }
 
@@ -109,8 +108,10 @@ namespace Isometric.Interface
                 {
                     RayTrace rayTrace = camera.GetRayAtScreenPosition(cursorPosition - camera.worldContainer.GetPosition());
 
+                    Vector3 targetPosition = new Vector3(rayTrace.hitPosition.x, player.worldPosition.y, rayTrace.hitPosition.z);
+
                     if (rayTrace.hit)
-                        player.UseItem(rayTrace, Input.GetKeyDown(KeyCode.Mouse0));
+                        player.UseItem(targetPosition, Input.GetKeyDown(KeyCode.Mouse0));
                 }
             }
         }

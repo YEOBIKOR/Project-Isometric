@@ -54,12 +54,15 @@ public class AnimationRigHandle : AnimationRig <AnimationRigHandle>
             rig._rArm.worldPosition = rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0.5f, 1.2f, -0.2f), rig.viewAngle);
             rig._lArm.worldPosition = rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0.3f, 1.2f, 0.2f), rig.viewAngle);
             rig._item.worldPosition = rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0.7f, 1.3f, 0f), rig.viewAngle);
+
             rig._item.rotation = 90f - rig.viewAngle + rig.cameraViewAngle;
+            rig._item.scale = new Vector2(-1f, rig._item.rotation < 90f ? 1f : -1f);
         }
 
         public override void End(AnimationRigHandle rig)
         {
             rig._item.rotation = 0f;
+            rig._item.scale = Vector2.one;
         }
     }
 
@@ -75,12 +78,15 @@ public class AnimationRigHandle : AnimationRig <AnimationRigHandle>
             rig._rArm.worldPosition = rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0.5f, 1.0f, -0.2f), rig.viewAngle);
             rig._lArm.worldPosition = rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0.3f, 1.0f, 0.2f), rig.viewAngle);
             rig._item.worldPosition = rig.worldPosition + CustomMath.HorizontalRotate(new Vector3(0.7f, 1.3f, 0f), rig.viewAngle);
+
             rig._item.rotation = 90f - rig.viewAngle + rig.cameraViewAngle;
+            rig._item.scale = new Vector2(-1f, rig._item.rotation < 90f ? 1f : -1f);
         }
 
         public override void End(AnimationRigHandle rig)
         {
             rig._item.rotation = 0f;
+            rig._item.scale = Vector2.one;
         }
     }
 
