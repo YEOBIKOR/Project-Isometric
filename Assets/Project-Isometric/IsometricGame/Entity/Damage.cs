@@ -37,7 +37,7 @@ public class Damage
                 (target as EntityCreature).Damage(_amount);
 
             target.damagedCooldown = 0.3f;
-            _behaviour.world.cameraHUD.IndicateDamage(this, target.worldPosition);
+            _behaviour.world.cameraHUD.IndicateDamage(this, new FixedPosition(target.worldPosition));
         }
     }
 }

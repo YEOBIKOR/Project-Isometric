@@ -28,11 +28,9 @@ namespace Isometric.Interface
             AddElement(bubble);
         }
 
-        public void IndicateDamage(Damage damage, Vector3 position)
+        public void IndicateDamage(Damage damage, IPositionable positionable)
         {
-            DamageIndicator indicator = new DamageIndicator(this, damage);
-            indicator.position = _camera.GetScreenPosition(position) + _camera.worldContainer.GetPosition();
-
+            DamageIndicator indicator = new DamageIndicator(_camera, positionable, damage, this);
             AddElement(indicator);
         }
     }
