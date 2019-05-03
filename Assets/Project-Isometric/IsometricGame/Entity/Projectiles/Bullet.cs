@@ -21,7 +21,7 @@ public class Bullet : Entity
         this.velocity = velocity;
 
         _part = new EntityPart(this, Futile.atlasManager.GetElementWithName("entities/bullet8"));
-        entityParts.Add(_part);
+        _entityParts.Add(_part);
         
         _hitAudio = Resources.Load<AudioClip>("SoundEffects/BulletHit");
     }

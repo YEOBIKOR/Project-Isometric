@@ -6,24 +6,25 @@ namespace Isometric.Interface
 {
     public class OptionsMenu : PopupMenuFlow
     {
-        private FSprite fadePanel;
-        private RoundedRect panel;
-        private FLabel label;
+        private FSprite _fadePanel;
+        private RoundedRect _panel;
+
+        private FLabel _label;
 
         public OptionsMenu(LoopFlow pausingTarget) : base(pausingTarget, true, 0.5f, 0.5f)
         {
             AddElement(new FadePanel(this));
 
-            panel = new RoundedRect(this);
-            AddElement(panel);
+            _panel = new RoundedRect(this);
+            AddElement(_panel);
 
-            label = new FLabel("font", "Not yet.");
-            container.AddChild(label);
+            _label = new FLabel("font", "Not yet.");
+            container.AddChild(_label);
         }
 
         public override void Update(float deltaTime)
         {
-            panel.size = Vector2.Lerp(Vector2.zero, new Vector2(240f, 240f), CustomMath.Curve(factor, -3f));
+            _panel.size = Vector2.Lerp(Vector2.zero, new Vector2(240f, 240f), CustomMath.Curve(factor, -3f));
 
             base.Update(deltaTime);
         }

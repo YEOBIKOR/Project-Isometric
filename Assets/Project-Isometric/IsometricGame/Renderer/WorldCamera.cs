@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using Custom;
+using System.Collections.Generic;
 using UnityEngine;
-using Custom;
 
 public enum CameraViewDirection : byte
 {
@@ -51,7 +50,7 @@ public class WorldCamera
     public const int PixelsPerHalfTile = PixelsPerTile / 2;
     public const int PixelsPerQuaterTile = PixelsPerTile / 4;
 
-    private WorldCameraUI worldCameraUI;
+    private WorldCameraUI _worldCameraUI;
 
     public WorldCamera(World world)
     {
@@ -78,7 +77,7 @@ public class WorldCamera
 
         _shake = 0f;
 
-        worldCameraUI = new WorldCameraUI(this);
+        _worldCameraUI = new WorldCameraUI(this);
     }
 
     public void GraphicUpdate(float deltaTime)
@@ -135,7 +134,7 @@ public class WorldCamera
 
         _worldMicrophone.Update(deltaTime);
 
-        worldCameraUI.Update(deltaTime);
+        _worldCameraUI.Update(deltaTime);
     }
 
     public RayTrace GetRayAtScreenPosition(Vector2 position)
@@ -302,7 +301,7 @@ public class WorldCamera
         worldContainer.RemoveFromContainer();
         _debugContainer.RemoveFromContainer();
 
-        worldCameraUI.CleanUp();
+        _worldCameraUI.CleanUp();
     }
 
     public bool turning
@@ -322,119 +321,119 @@ public class WorldCamera
 
     public class WorldCameraUI
     {
-        private WorldCamera worldCamera;
+        private WorldCamera _worldCamera;
 
-        private FContainer axisContainer;
-        private FSprite[] axisSprites;
-        private float axisShowFactor;
+        private FContainer _axisContainer;
+        private FSprite[] _axisSprites;
+        private float _axisShowFactor;
 
-        private FLabel debugLabel;
-        private FLabel tutorialLabel;
-        private const string tutorialText =
+        private FLabel _debugLabel;
+        private FLabel _tutorialLabel;
+        private const string TutorialText =
             "W A S D : Move the character\nSpace : Jump the character\nQ, E : Move the camera\nEsc : Exit the game";
 
         public WorldCameraUI(WorldCamera worldCamera)
         {
-            this.worldCamera = worldCamera;
+            _worldCamera = worldCamera;
 
-            axisContainer = new FContainer();
-            axisContainer.SetPosition(Futile.screen.halfWidth - 36f, Futile.screen.halfHeight - 20f);
-            axisContainer.scaleY = 0.5f;
-            Futile.stage.AddChild(axisContainer);
+            _axisContainer = new FContainer();
+            _axisContainer.SetPosition(Futile.screen.halfWidth - 36f, Futile.screen.halfHeight - 20f);
+            _axisContainer.scaleY = 0.5f;
+            Futile.stage.AddChild(_axisContainer);
 
-            axisSprites = new FSprite[4];
-            for (int index = 0; index < axisSprites.Length; index++)
+            _axisSprites = new FSprite[4];
+            for (int index = 0; index < _axisSprites.Length; index++)
             {
-                axisSprites[index] = new FSprite("Futile_White");
-                axisSprites[index].color = index == 3 ? Color.red : Color.black;
-                axisSprites[index].anchorY = 0f;
-                axisSprites[index].scaleY = 0f;
-                axisSprites[index].scaleX = 0.15f;
-                axisContainer.AddChild(axisSprites[index]);
+                _axisSprites[index] = new FSprite("Futile_White");
+                _axisSprites[index].color = index == 3 ? Color.red : Color.black;
+                _axisSprites[index].anchorY = 0f;
+                _axisSprites[index].scaleY = 0f;
+                _axisSprites[index].scaleX = 0.15f;
+                _axisContainer.AddChild(_axisSprites[index]);
             }
 
-            axisShowFactor = 0f;
+            _axisShowFactor = 0f;
 
-            if (IsometricMain.doesDebugging)
+            if (IsometricMain._doesDebugging)
             {
-                debugLabel = new FLabel("font", "DEBUG");
-                debugLabel.color = Color.red;
+                _debugLabel = new FLabel("font", "DEBUG");
+                _debugLabel.color = Color.red;
 
-                Futile.stage.AddChild(debugLabel);
+                Futile.stage.AddChild(_debugLabel);
             }
 
-            tutorialLabel = new FLabel("font", tutorialText);
-            tutorialLabel.alignment = FLabelAlignment.Left;
-            tutorialLabel.SetPosition(-Futile.screen.halfWidth + 4f, -Futile.screen.halfHeight + 32f);
-            tutorialLabel.scale = 1f;
+            _tutorialLabel = new FLabel("font", TutorialText);
+            _tutorialLabel.alignment = FLabelAlignment.Left;
+            _tutorialLabel.SetPosition(-Futile.screen.halfWidth + 4f, -Futile.screen.halfHeight + 32f);
+            _tutorialLabel.scale = 1f;
             // Futile.stage.AddChild(tutorialLabel);
         }
 
         public void Update(float deltaTime)
         {
-            axisShowFactor = Mathf.Clamp01(axisShowFactor + (worldCamera.turning ? deltaTime : -deltaTime) * 2f);
+            _axisShowFactor = Mathf.Clamp01(_axisShowFactor + (_worldCamera.turning ? deltaTime : -deltaTime) * 2f);
 
-            for (int index = 0; index < axisSprites.Length; index++)
+            for (int index = 0; index < _axisSprites.Length; index++)
             {
-                axisSprites[index].scaleY = Mathf.Lerp(0f, 2f, CustomMath.Curve(axisShowFactor, -2f));
+                _axisSprites[index].scaleY = Mathf.Lerp(0f, 2f, CustomMath.Curve(_axisShowFactor, -2f));
 
-                if (axisShowFactor > 0f)
+                if (_axisShowFactor > 0f)
                 {
-                    float angle = (worldCamera.viewAngle + (90f * index));
-                    axisSprites[index].rotation = angle;
+                    float angle = (_worldCamera.viewAngle + (90f * index));
+                    _axisSprites[index].rotation = angle;
                 }
             }
 
-            if (IsometricMain.doesDebugging)
-                debugLabel.text = string.Concat("view angle : ", worldCamera.viewAngle);
+            if (IsometricMain._doesDebugging)
+                _debugLabel.text = string.Concat("view angle : ", _worldCamera.viewAngle);
         }
 
         public void CleanUp()
         {
-            axisContainer.RemoveFromContainer();
-            tutorialLabel.RemoveFromContainer();
+            _axisContainer.RemoveFromContainer();
+            _tutorialLabel.RemoveFromContainer();
         }
     }
 }
 
 public class SpriteLeaser
 {
-    private WorldCamera camera;
+    private WorldCamera _camera;
 
     public IRenderer owner { get; private set; }
     public List<FSprite> sprites { get; private set; }
     public int spriteIndex { get; set; }
     public bool removeInNextFrame { get; set; }
 
-    private bool showing;
+    private bool _showing;
 
     public SpriteLeaser(WorldCamera camera, IRenderer owner)
     {
-        this.camera = camera;
+        _camera = camera;
         this.owner = owner;
 
         sprites = new List<FSprite>();
         spriteIndex = 0;
 
-        showing = false;
+        _showing = false;
     }
 
     public void GraphicUpdate()
     {
-        owner.RenderUpdate(this, camera);
+        owner.RenderUpdate(this, _camera);
 
-        if (showing && !owner.GetShownByCamera(this, camera))
+        if (_showing && !owner.GetShownByCamera(this, _camera))
             RemoveFromContainer();
-        else if (!showing && owner.GetShownByCamera(this, camera))
+        else if (!_showing && owner.GetShownByCamera(this, _camera))
             AddToContainer();
     }
 
     public void AddToContainer()
     {
         for (int index = 0; index < sprites.Count; index++)
-            camera.worldContainer.AddChild(sprites[index]);
+            _camera.worldContainer.AddChild(sprites[index]);
 
-        showing = true;
+        _showing = true;
     }
 
     public void RemoveFromContainer()
@@ -442,7 +441,7 @@ public class SpriteLeaser
         for (int index = 0; index < sprites.Count; index++)
             sprites[index].RemoveFromContainer();
 
-        showing = false;
+        _showing = false;
     }
 
     public void Erase()
@@ -452,7 +451,7 @@ public class SpriteLeaser
 
     public bool InScreenRect(FSprite sprite)
     {
-        Vector2 position = sprite.GetPosition() + camera.worldContainer.GetPosition();
+        Vector2 position = sprite.GetPosition() + _camera.worldContainer.GetPosition();
         Vector2 halfSize = new Vector2(sprite.width * sprite.scaleX, sprite.height * sprite.scaleY) * 0.5f;
 
         return (position.x + halfSize.x > -Futile.screen.halfWidth && position.x - halfSize.x < Futile.screen.halfWidth) &&

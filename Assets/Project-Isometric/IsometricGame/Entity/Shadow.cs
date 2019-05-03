@@ -3,34 +3,34 @@ using UnityEngine;
 
 public class Shadow : EntityPart
 {
-    private static FAtlasElement[] sprites;
+    private static FAtlasElement[] _sprites;
 
-    private float shadowScale;
+    private float _shadowScale;
 
     public override FAtlasElement element
     {
         get
         {
-            float scaleFactor = shadowScale / ((owner.worldPosition.y - worldPosition.y) * 0.2f + 1f);
-            return sprites[(int)(Mathf.Clamp01(scaleFactor) * 12f)];
+            float scaleFactor = _shadowScale / ((owner.worldPosition.y - worldPosition.y) * 0.2f + 1f);
+            return _sprites[(int)(Mathf.Clamp01(scaleFactor) * 12f)];
         }
     }
 
     public Shadow(Entity owner, float shadowScale) : base(owner, null as FAtlasElement)
     {
         sortZOffset = 0.5f;
-        this.shadowScale = shadowScale;
+        this._shadowScale = shadowScale;
 
         color = Color.black;
         alpha = 0.5f;
     }
 
-    private static void LoadTexture()
+    private static void LoadSprites()
     {
-        sprites = new FAtlasElement[13];
+        _sprites = new FAtlasElement[13];
 
-        for (int index = 0; index < sprites.Length; index++)
-            sprites[index] = Futile.atlasManager.GetElementWithName(string.Concat("entities/shadow", index + 1));
+        for (int index = 0; index < _sprites.Length; index++)
+            _sprites[index] = Futile.atlasManager.GetElementWithName(string.Concat("entities/shadow", index + 1));
     }
 
     public override void Update(float deltaTime)
@@ -49,8 +49,8 @@ public class Shadow : EntityPart
 
     public override void OnInitializeSprite(SpriteLeaser spriteLeaser, WorldCamera camera)
     {
-        if (sprites == null)
-            LoadTexture();
+        if (_sprites == null)
+            LoadSprites();
 
         base.OnInitializeSprite(spriteLeaser, camera);
     }

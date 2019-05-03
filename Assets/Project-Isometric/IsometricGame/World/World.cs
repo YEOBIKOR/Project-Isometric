@@ -59,10 +59,10 @@ public class World : ISerializable<World.Serialized>
         { return _cameraHUD; }
     }
 
-    private const float loadChunkRange = 30f;
-    private const float unloadChunkRange = 50f;
+    private const float LoadChunkRange = 30f;
+    private const float UnloadChunkRange = 50f;
 
-    private WorldProfiler worldProfiler;
+    private WorldProfiler _worldProfiler;
 
     public World(IsometricGame game, string worldName)
     {
@@ -86,9 +86,9 @@ public class World : ISerializable<World.Serialized>
         _cameraHUD = new CameraHUDMenu(_game, _worldCamera);
         game.AddSubLoopFlow(_cameraHUD);
 
-        // _cameraHUD.Speech(player, "W A S D : Move the character\nSpace : Jump the character\nQ, E : Move the camera\nEsc : Exit the game");
+        _cameraHUD.Speech(player, "W A S D : Move the character\nSpace : Jump the character\nQ, E : Move the camera\nEsc : Exit the game");
 
-        worldProfiler = new WorldProfiler(this);
+        _worldProfiler = new WorldProfiler(this);
 
         Shader.SetGlobalVector("_Epicenter", new Vector4(0f, 0f, -10f));
     }
@@ -98,22 +98,22 @@ public class World : ISerializable<World.Serialized>
         _worldTime += deltaTime;
 
         if (Input.GetKeyDown(KeyCode.F3))
-            worldProfiler.updateProfiler.SwitchProfiler();
+            _worldProfiler.updateProfiler.SwitchProfiler();
 
-        worldProfiler.updateProfiler.StartMeasureTime();
+        _worldProfiler.updateProfiler.StartMeasureTime();
 
         Vector2 playerCoordinate = new Vector2(player.worldPosition.x, player.worldPosition.z);
 
-        int xMin = Mathf.FloorToInt((playerCoordinate.x - loadChunkRange) / Chunk.Length);
-        int xMax = Mathf.FloorToInt((playerCoordinate.x + loadChunkRange) / Chunk.Length);
-        int yMin = Mathf.FloorToInt((playerCoordinate.y - loadChunkRange) / Chunk.Length);
-        int yMax = Mathf.FloorToInt((playerCoordinate.y + loadChunkRange) / Chunk.Length);
+        int xMin = Mathf.FloorToInt((playerCoordinate.x - LoadChunkRange) / Chunk.Length);
+        int xMax = Mathf.FloorToInt((playerCoordinate.x + LoadChunkRange) / Chunk.Length);
+        int yMin = Mathf.FloorToInt((playerCoordinate.y - LoadChunkRange) / Chunk.Length);
+        int yMax = Mathf.FloorToInt((playerCoordinate.y + LoadChunkRange) / Chunk.Length);
 
         for (int x = xMin; x <= xMax; x++)
         {
             for (int y = yMin; y <= yMax; y++)
             {
-                if (((new Vector2(x + 0.5f, y + 0.5f) * Chunk.Length) - playerCoordinate).sqrMagnitude < loadChunkRange * loadChunkRange)
+                if (((new Vector2(x + 0.5f, y + 0.5f) * Chunk.Length) - playerCoordinate).sqrMagnitude < LoadChunkRange * LoadChunkRange)
                     RequestLoadChunk(new Vector2Int(x, y));
             }
         }
@@ -127,7 +127,7 @@ public class World : ISerializable<World.Serialized>
                 chunk.Update(deltaTime);
 
                 Vector2 chunkDelta = new Vector2(chunk.coordination.x + 0.5f, chunk.coordination.y + 0.5f) * Chunk.Length - playerCoordinate;
-                if (chunkDelta.x * chunkDelta.x + chunkDelta.y * chunkDelta.y > unloadChunkRange * unloadChunkRange)
+                if (chunkDelta.x * chunkDelta.x + chunkDelta.y * chunkDelta.y > UnloadChunkRange * UnloadChunkRange)
                     chunk.UnloadChunk();
             }
         }
@@ -137,11 +137,11 @@ public class World : ISerializable<World.Serialized>
 
         DrawablesUpdate(deltaTime);
 
-        worldProfiler.updateProfiler.MeasureTime(UpdateProfilerType.ChunkUpdate);
+        _worldProfiler.updateProfiler.MeasureTime(UpdateProfilerType.ChunkUpdate);
 
         Shader.SetGlobalFloat("_WorldTime", _worldTime);
         worldCamera.GraphicUpdate(deltaTime);
-        worldProfiler.updateProfiler.MeasureTime(UpdateProfilerType.RenderUpdate);
+        _worldProfiler.updateProfiler.MeasureTime(UpdateProfilerType.RenderUpdate);
     }
 
     private void DrawablesUpdate(float deltaTime)
@@ -160,7 +160,7 @@ public class World : ISerializable<World.Serialized>
     public void OnTerminate()
     {
         worldCamera.CleanUp();
-        worldProfiler.updateProfiler.CleanUp();
+        _worldProfiler.updateProfiler.CleanUp();
     }
 
 
@@ -197,12 +197,12 @@ public class World : ISerializable<World.Serialized>
 
             worldCamera.SetCameraTarget(player, true);
 
-            // SpawnEntity(new EntityBoss(), new Vector3(8f, 16f, 8f));
+            SpawnEntity(new EntityBoss(), new Vector3(8f, 16f, 8f));
 
             for (int i = 0; i < 10; i++)
             {
-                Vector2 position = Vector2.one * 10f;
-                SpawnEntity(new EntityPpyongppyong(), new Vector3(position.x, 30f, position.y));
+                Vector2 position = new Vector3(10f, GetSurface(new Vector2(10f, 10f)), 10f);
+                SpawnEntity(new EntityPpyongppyong(), position);
             }
         }
 

@@ -3,16 +3,16 @@ using Custom;
 
 class DecomposeCreaturePart : Entity
 {
-    private float viewAngle;
-    private float decayTime;
+    private float _viewAngle;
+    private float _decayTime;
 
     public DecomposeCreaturePart(EntityCreature creature, EntityPart part) : base(0.5f)
     {
-        entityParts.Add(new EntityPart(this, part.element));
-        entityParts[0].sortZOffset = 1f;
+        _entityParts.Add(new EntityPart(this, part.element));
+        _entityParts[0].sortZOffset = 1f;
 
-        viewAngle = part.viewAngle;
-        decayTime = Random.Range(5f, 10f);
+        _viewAngle = part.viewAngle;
+        _decayTime = Random.Range(5f, 10f);
 
         AttachPhysics(0.25f, 0.5f);
 
@@ -21,14 +21,14 @@ class DecomposeCreaturePart : Entity
 
     public override void Update(float deltaTime)
     {
-        decayTime -= deltaTime;
-        if (decayTime < 0f)
+        _decayTime -= deltaTime;
+        if (_decayTime < 0f)
             DespawnEntity();
 
-        entityParts[0].worldPosition = worldPosition;
-        entityParts[0].viewAngle = viewAngle;
-        entityParts[0].color = new Color(0.8f, 0.8f, 0.8f);
-        entityParts[0].alpha = Mathf.Clamp01(decayTime);
+        _entityParts[0].worldPosition = worldPosition;
+        _entityParts[0].viewAngle = _viewAngle;
+        _entityParts[0].color = new Color(0.8f, 0.8f, 0.8f);
+        _entityParts[0].alpha = Mathf.Clamp01(_decayTime);
 
         base.Update(deltaTime);
     }

@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class ChunkRenderer : IRenderer
 {
-    private Chunk chunk;
+    private Chunk _chunk;
 
-    private List<Tile> drawTiles;
-    private Queue<Tile> tilesQueue;
+    private List<Tile> _drawTiles;
+    private Queue<Tile> _tilesQueue;
 
-    private bool showing;
+    private bool _showing;
 
     private bool _initialized;
     public bool initialized
@@ -19,12 +19,12 @@ public class ChunkRenderer : IRenderer
 
     public ChunkRenderer(Chunk chunk)
     {
-        this.chunk = chunk;
+        _chunk = chunk;
 
-        drawTiles = new List<Tile>();
-        tilesQueue = new Queue<Tile>();
+        _drawTiles = new List<Tile>();
+        _tilesQueue = new Queue<Tile>();
 
-        showing = false;
+        _showing = false;
         _initialized = false;
     }
 
@@ -37,23 +37,23 @@ public class ChunkRenderer : IRenderer
 
     public void RenderUpdate(SpriteLeaser spriteLeaser, WorldCamera camera)
     {
-        bool inRange = ((chunk.coordination + Vector2.one * 0.5f) * Chunk.Length - new Vector2(chunk.world.player.worldPosition.x, chunk.world.player.worldPosition.z)).sqrMagnitude < 1024f;
+        bool inRange = ((_chunk.coordination + Vector2.one * 0.5f) * Chunk.Length - new Vector2(_chunk.world.player.worldPosition.x, _chunk.world.player.worldPosition.z)).sqrMagnitude < 1024f;
 
-        if (showing && !inRange)
+        if (_showing && !inRange)
         {
             spriteLeaser.RemoveFromContainer();
-            showing = false;
+            _showing = false;
         }
-        else if (!showing && inRange)
-            showing = true;
+        else if (!_showing && inRange)
+            _showing = true;
 
-        if (showing)
+        if (_showing)
         {
             UpdateTileRender(spriteLeaser, camera);
 
-            for (int index = 0; index < drawTiles.Count; index++)
+            for (int index = 0; index < _drawTiles.Count; index++)
             {
-                Tile tile = drawTiles[index];
+                Tile tile = _drawTiles[index];
                 FSprite sprite = spriteLeaser.sprites[index];
 
                 // if (camera.turning)
@@ -84,9 +84,9 @@ public class ChunkRenderer : IRenderer
 
     public void UpdateTileRender(SpriteLeaser spriteLeaser, WorldCamera camera)
     {
-        while (tilesQueue.Count > 0)
+        while (_tilesQueue.Count > 0)
         {
-            Tile tile = tilesQueue.Dequeue();
+            Tile tile = _tilesQueue.Dequeue();
 
             if (tile != null)
             {
@@ -96,7 +96,7 @@ public class ChunkRenderer : IRenderer
                     if (GetTileShowing(tile))
                         showing = true;
 
-                int index = drawTiles.IndexOf(tile);
+                int index = _drawTiles.IndexOf(tile);
 
                 if (showing)
                 {
@@ -107,7 +107,7 @@ public class ChunkRenderer : IRenderer
                         sprite = new FSprite(tile.block.sprite);
                         sprite.shader = IsometricMain.GetShader("WorldObject");
 
-                        drawTiles.Add(tile);
+                        _drawTiles.Add(tile);
                         spriteLeaser.sprites.Add(sprite);
                     }
                     else
@@ -123,7 +123,7 @@ public class ChunkRenderer : IRenderer
                     if (index < 0)
                         continue;
 
-                    drawTiles.RemoveAt(index);
+                    _drawTiles.RemoveAt(index);
 
                     spriteLeaser.sprites[index].RemoveFromContainer();
                     spriteLeaser.sprites.RemoveAt(index);
@@ -134,7 +134,7 @@ public class ChunkRenderer : IRenderer
 
     public void AddUpdateTile(Tile tile)
     {
-        tilesQueue.Enqueue(tile);
+        _tilesQueue.Enqueue(tile);
     }
 
     private bool GetTileShowing(Tile tile)
@@ -147,19 +147,19 @@ public class ChunkRenderer : IRenderer
             int y = tile.coordination.y;
             int z = tile.coordination.z;
 
-            if (!Tile.GetFullTile(chunk.GetTileAtWorldPosition(new Vector3Int(x, y + 1, z))))
+            if (!Tile.GetFullTile(_chunk.GetTileAtWorldPosition(new Vector3Int(x, y + 1, z))))
                 return true;
 
-            else if (!Tile.GetFullTile(chunk.GetTileAtWorldPosition(new Vector3Int(x + 1, y, z))))
+            else if (!Tile.GetFullTile(_chunk.GetTileAtWorldPosition(new Vector3Int(x + 1, y, z))))
                 return true;
 
-            else if (!Tile.GetFullTile(chunk.GetTileAtWorldPosition(new Vector3Int(x - 1, y, z))))
+            else if (!Tile.GetFullTile(_chunk.GetTileAtWorldPosition(new Vector3Int(x - 1, y, z))))
                 return true;
 
-            else if (!Tile.GetFullTile(chunk.GetTileAtWorldPosition(new Vector3Int(x, y, z + 1))))
+            else if (!Tile.GetFullTile(_chunk.GetTileAtWorldPosition(new Vector3Int(x, y, z + 1))))
                 return true;
 
-            else if (!Tile.GetFullTile(chunk.GetTileAtWorldPosition(new Vector3Int(x, y, z - 1))))
+            else if (!Tile.GetFullTile(_chunk.GetTileAtWorldPosition(new Vector3Int(x, y, z - 1))))
                 return true;
         }
 

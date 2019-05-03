@@ -91,10 +91,10 @@ public abstract class Entity : IPositionable
         { return _physics; }
     }
 
-    private Shadow shadow;
-    protected List<EntityPart> entityParts;
+    private Shadow _shadow;
+    protected List<EntityPart> _entityParts;
 
-    private FLabel debugLabel;
+    private FLabel _debugLabel;
 
     public Entity(float shadowScale)
     {
@@ -106,9 +106,9 @@ public abstract class Entity : IPositionable
         _damagedCooldown = 0f;
 
         if (shadowScale > 0f)
-            shadow = new Shadow(this, shadowScale);
+            _shadow = new Shadow(this, shadowScale);
 
-        entityParts = new List<EntityPart>();
+        _entityParts = new List<EntityPart>();
     }
 
     public virtual void OnSpawn(Chunk chunk, Vector3 position)
@@ -120,19 +120,19 @@ public abstract class Entity : IPositionable
 
         worldPosition = position;
 
-        if (shadow != null)
-            world.AddCosmeticDrawble(shadow);
+        if (_shadow != null)
+            world.AddCosmeticDrawble(_shadow);
 
-        for (int index = 0; index < entityParts.Count; index++)
-            world.AddCosmeticDrawble(entityParts[index]);
+        for (int index = 0; index < _entityParts.Count; index++)
+            world.AddCosmeticDrawble(_entityParts[index]);
 
-        if (IsometricMain.doesDebugging)
+        if (IsometricMain._doesDebugging)
         {
-            debugLabel = new FLabel("font", "DEBUG");
-            debugLabel.scale = 0.5f;
-            debugLabel.color = Color.red;
-            debugLabel.alignment = FLabelAlignment.Left;
-            world.worldCamera.AddDebugRenderer(debugLabel);
+            _debugLabel = new FLabel("font", "DEBUG");
+            _debugLabel.scale = 0.5f;
+            _debugLabel.color = Color.red;
+            _debugLabel.alignment = FLabelAlignment.Left;
+            world.worldCamera.AddDebugRenderer(_debugLabel);
         }
     }
 
@@ -140,11 +140,11 @@ public abstract class Entity : IPositionable
     {
         _chunk = null;
 
-        if (shadow != null)
-            shadow.Erase();
+        if (_shadow != null)
+            _shadow.Erase();
 
-        for (int index = 0; index < entityParts.Count; index++)
-            entityParts[index].Erase();
+        for (int index = 0; index < _entityParts.Count; index++)
+            _entityParts[index].Erase();
     }
 
     public virtual void OnOtherChunk(Chunk chunk)
@@ -160,10 +160,10 @@ public abstract class Entity : IPositionable
         if (_physics != null)
             _physics.ApplyPhysics(chunk, deltaTime, ref _worldPosition);
 
-        if (IsometricMain.doesDebugging)
+        if (IsometricMain._doesDebugging)
         {
-            debugLabel.SetPosition(worldCamera.GetScreenPosition(worldPosition));
-            debugLabel.text = debugString;
+            _debugLabel.SetPosition(worldCamera.GetScreenPosition(worldPosition));
+            _debugLabel.text = debugString;
         }
     }
 

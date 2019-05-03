@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class InputManager : Single<InputManager>
@@ -34,9 +35,9 @@ public interface ICommand
 
 public class CommandCallback : ICommand
 {
-    private System.Action _callback;
+    private Action _callback;
 
-    public CommandCallback(System.Action callback)
+    public CommandCallback(Action callback)
     {
         _callback = callback;
     }

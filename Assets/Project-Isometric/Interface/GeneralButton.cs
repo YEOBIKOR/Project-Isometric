@@ -5,15 +5,15 @@ namespace Isometric.Interface
 {
     public class GeneralButton : ButtonBase
     {
-        private RoundedRect rect1;
-        private RoundedRect rect2;
+        private RoundedRect _rect1;
+        private RoundedRect _rect2;
 
-        private FLabel label;
+        private FLabel _label;
 
-        private Action clickCallback;
+        private Action _clickCallback;
 
-        private float hoverfactor;
-        private bool pressAudio;
+        private float _hoverfactor;
+        private bool _pressAudio;
 
         private static AudioClip _onHoverAudio;
         private static AudioClip _onPressAudio;
@@ -21,24 +21,24 @@ namespace Isometric.Interface
         public string text
         {
             get
-            { return label.text; }
+            { return _label.text; }
             set
-            { label.text = value; }
+            { _label.text = value; }
         }
 
         public GeneralButton(MenuFlow menu, string name, Action clickCallback, bool pressAudio = true) : base(menu)
         {
-            rect1 = new RoundedRect(menu);
-            rect2 = new RoundedRect(menu);
+            _rect1 = new RoundedRect(menu);
+            _rect2 = new RoundedRect(menu);
 
-            AddElement(rect1);
-            AddElement(rect2);
+            AddElement(_rect1);
+            AddElement(_rect2);
 
-            label = new FLabel("font", name);
-            container.AddChild(label);
+            _label = new FLabel("font", name);
+            container.AddChild(_label);
 
-            this.clickCallback = clickCallback;
-            this.pressAudio = pressAudio;
+            this._clickCallback = clickCallback;
+            this._pressAudio = pressAudio;
 
             if (_onHoverAudio == null)
             {
@@ -51,17 +51,17 @@ namespace Isometric.Interface
         {
             base.OnActivate();
 
-            hoverfactor = 0f;
+            _hoverfactor = 0f;
         }
 
         public override void Update(float deltaTime)
         {
-            hoverfactor = Mathf.Lerp(hoverfactor, hovering && !pressing ? 1f : 0f, deltaTime * 16f);
+            _hoverfactor = Mathf.Lerp(_hoverfactor, hovering && !pressing ? 1f : 0f, deltaTime * 16f);
 
             Vector2 rectSize = size - Vector2.one * 12f;
 
-            rect1.size = rectSize + Vector2.Lerp(Vector2.zero, Vector2.one * 6f, hoverfactor);
-            rect2.size = rectSize + Vector2.Lerp(Vector2.zero, Vector2.one * 2f, hoverfactor);
+            _rect1.size = rectSize + Vector2.Lerp(Vector2.zero, Vector2.one * 6f, _hoverfactor);
+            _rect2.size = rectSize + Vector2.Lerp(Vector2.zero, Vector2.one * 2f, _hoverfactor);
 
             base.Update(deltaTime);
         }
@@ -83,10 +83,10 @@ namespace Isometric.Interface
 
         public override void OnPressUp()
         {
-            if (clickCallback != null)
-                clickCallback();
+            if (_clickCallback != null)
+                _clickCallback();
 
-            if (pressAudio)
+            if (_pressAudio)
                 AudioEngine.PlaySound(_onPressAudio);
         }
 

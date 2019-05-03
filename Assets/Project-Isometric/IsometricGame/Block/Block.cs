@@ -4,47 +4,47 @@ using Isometric.Items;
 
 public abstract class Block
 {
-    private static Registry<Block> registry;
+    private static Registry<Block> _registry;
     private static Block _blockAir;
     
     public static void RegisterBlocks()
     {
-        registry = new Registry<Block>();
+        _registry = new Registry<Block>();
 
         _blockAir = new BlockAir();
-        registry.Add("air", _blockAir);
-        registry.Add("dirt", new BlockSolid("block_dirt", "b1"));
-        registry.Add("grass", new BlockSolid("block_dirt", "b2"));
-        registry.Add("stone", new BlockSolid("block_stone", "b3"));
-        registry.Add("mossy_stone", new BlockSolid("block_stone", "b4"));
-        registry.Add("sand", new BlockSolid("block_sand", "b5"));
-        registry.Add("sandstone", new BlockSolid("block_sandstone", "b6"));
-        registry.Add("wood", new BlockSolid("block_wood", "b7"));
-        registry.Add("bedrock", new BlockSolid(null, "b26"));
+        _registry.Add("air", _blockAir);
+        _registry.Add("dirt", new BlockSolid("block_dirt", "b1"));
+        _registry.Add("grass", new BlockSolid("block_dirt", "b2"));
+        _registry.Add("stone", new BlockSolid("block_stone", "b3"));
+        _registry.Add("mossy_stone", new BlockSolid("block_stone", "b4"));
+        _registry.Add("sand", new BlockSolid("block_sand", "b5"));
+        _registry.Add("sandstone", new BlockSolid("block_sandstone", "b6"));
+        _registry.Add("wood", new BlockSolid("block_wood", "b7"));
+        _registry.Add("bedrock", new BlockSolid(null, "b26"));
     }
 
     public static int GetIDByBlock(Block block)
     {
-        if (registry == null)
+        if (_registry == null)
             RegisterBlocks();
 
-        return registry.GetID(block);
+        return _registry.GetID(block);
     }
 
     public static Block GetBlockByID(int id)
     {
-        if (registry == null)
+        if (_registry == null)
             RegisterBlocks();
 
-        return registry[id];
+        return _registry[id];
     }
 
     public static Block GetBlockByKey(string key)
     {
-        if (registry == null)
+        if (_registry == null)
             RegisterBlocks();
 
-        return registry[key];
+        return _registry[key];
     }
 
     public Block()

@@ -93,16 +93,16 @@ public class CosmeticRenderer : IRenderer
 
     public CosmeticRenderer(FAtlasElement element)
     {
-        this._element = element;
-        this._worldPosition = Vector3.zero;
-        this._positionOffset = Vector2.zero;
-        this._rotation = 0f;
-        this._doesFlip = true;
-        this._viewAngle = 0f;
-        this._sortZOffset = 0f;
-        this._color = Color.white;
-        this._scale = Vector2.one;
-        this._shader = FShader.defaultShader;
+        _element = element;
+        _worldPosition = Vector3.zero;
+        _positionOffset = Vector2.zero;
+        _rotation = 0f;
+        _doesFlip = true;
+        _viewAngle = 0f;
+        _sortZOffset = 0f;
+        _color = Color.white;
+        _scale = Vector2.one;
+        _shader = FShader.defaultShader;
     }
 
     public virtual void OnShow(World world)

@@ -3,30 +3,32 @@ using UnityEngine;
 
 public class ThrowableRock : Entity
 {
-    private EntityCreature behaviour;
-    private Damage rockDamage;
+    private EntityCreature _behaviour;
+    private Damage _rockDamage;
 
-    private float decayTime = 5f;
+    private float _decayTime;
 
     public ThrowableRock(EntityCreature behaviour) : base(0.4f)
     {
-        this.behaviour = behaviour;
+        this._behaviour = behaviour;
 
-        entityParts.Add(new EntityPart(this, "throwablerock"));
+        _entityParts.Add(new EntityPart(this, "throwablerock"));
 
-        rockDamage = new Damage(this);
+        _rockDamage = new Damage(this);
 
         AttachPhysics(0.2f, 0.4f);
+
+        _decayTime = 5f;
     }
 
     public override void Update(float deltaTime)
     {
         if (_physics.landed)
-            decayTime -= deltaTime;
-        if (decayTime < 0f)
+            _decayTime -= deltaTime;
+        if (_decayTime < 0f)
             DespawnEntity();
 
-        entityParts[0].worldPosition = worldPosition + Vector3.up * 0.3f;
+        _entityParts[0].worldPosition = worldPosition + Vector3.up * 0.3f;
 
         base.Update(deltaTime);
     }

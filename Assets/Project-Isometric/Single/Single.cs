@@ -2,11 +2,11 @@
 
 public class Single <T> where T : class
 {
-    private static T m_instance = null;
-    public static T Instance { get { return m_instance; } }
+    private static T _instance = null;
+    public static T Instance { get { return _instance; } }
 
     protected Single()
     {
-        m_instance = this as T;
+        _instance = this as T;
     }
 }

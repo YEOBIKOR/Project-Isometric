@@ -19,17 +19,17 @@ namespace Isometric.Interface
             { return _itemContainer; }
         }
 
-        private ItemContainerVisualizer visualizer;
+        private ItemContainerVisualizer _visualizer;
 
         public ItemSlot(InventoryMenu menu, ItemContainer itemContainer) : base(menu, string.Empty, null, false)
         {
-            this._itemContainer = itemContainer;
+            _itemContainer = itemContainer;
 
             position = position;
             size = Vector2.one * 24f;
 
-            visualizer = new ItemContainerVisualizer(menu, itemContainer);
-            AddElement(visualizer);
+            _visualizer = new ItemContainerVisualizer(menu, itemContainer);
+            AddElement(_visualizer);
         }
 
         public override void OnHover()

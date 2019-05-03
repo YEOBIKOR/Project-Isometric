@@ -15,7 +15,7 @@ public class Preferences : ISerializable <SerializedPreferences>
 
     }
 
-    SerializedPreferences ISerializable<SerializedPreferences>.Serialize()
+    public SerializedPreferences Serialize()
     {
         throw new NotImplementedException();
     }

@@ -3,16 +3,16 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public class FileSerialization <T> where T : struct
 {
-    private string fileName;
+    private string _fileName;
 
     public FileSerialization(string fileName)
     {
-        this.fileName = fileName;
+        _fileName = fileName;
     }
 
     public void SaveFile(T serial)
     {
-        FileStream stream = new FileStream(fileName, FileMode.Create);
+        FileStream stream = new FileStream(_fileName, FileMode.Create);
 
         BinaryFormatter formatter = new BinaryFormatter();
 
@@ -23,7 +23,7 @@ public class FileSerialization <T> where T : struct
 
     public T LoadFile()
     {
-        FileStream stream = new FileStream(fileName, FileMode.Open);
+        FileStream stream = new FileStream(_fileName, FileMode.Open);
 
         BinaryFormatter formatter = new BinaryFormatter();
 

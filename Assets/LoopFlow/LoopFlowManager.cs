@@ -5,55 +5,55 @@ using Isometric.Interface;
 
 public class LoopFlowManager : LoopFlow
 {
-    protected LoopFlow requestedLoopFlow;
-    protected LoopFlow currentLoopFlow;
+    protected LoopFlow _requestedLoopFlow;
+    protected LoopFlow _currentLoopFlow;
 
-    protected float transitTime;
-    protected bool transiting;
+    protected float _transitTime;
+    protected bool _transiting;
 
-    public bool Transiting
+    public bool transiting
     {
         get
-        { return transiting; }
+        { return _transiting; }
     }
 
     public LoopFlowManager() : base()
     {
-        currentLoopFlow = null;
+        _currentLoopFlow = null;
     }
 
     public override void Update(float deltaTime)
     {
-        transitTime = transitTime - deltaTime;
+        _transitTime = _transitTime - deltaTime;
 
-        if (transitTime <= 0f)
-            SwitchLoopFlow(requestedLoopFlow);
+        if (_transitTime <= 0f)
+            SwitchLoopFlow(_requestedLoopFlow);
 
         base.Update(deltaTime);
     }
 
     public virtual void SwitchLoopFlow(LoopFlow newLoopFlow)
     {
-        if (newLoopFlow == null || currentLoopFlow == newLoopFlow)
+        if (newLoopFlow == null || _currentLoopFlow == newLoopFlow)
             return;
 
-        if (currentLoopFlow != null)
-            currentLoopFlow.Terminate();
+        if (_currentLoopFlow != null)
+            _currentLoopFlow.Terminate();
 
-        currentLoopFlow = newLoopFlow;
-        AddSubLoopFlow(currentLoopFlow);
+        _currentLoopFlow = newLoopFlow;
+        AddSubLoopFlow(_currentLoopFlow);
 
-        transiting = false;
+        _transiting = false;
     }
 
     public virtual void RequestSwitchLoopFlow(LoopFlow newLoopFlow, float fadeOutSeconds = 0.5f)
     {
-        if (transiting)
+        if (_transiting)
             return;
 
-        requestedLoopFlow = newLoopFlow;
+        _requestedLoopFlow = newLoopFlow;
 
-        transiting = true;
-        transitTime = fadeOutSeconds;
+        _transiting = true;
+        _transitTime = fadeOutSeconds;
     }
 }

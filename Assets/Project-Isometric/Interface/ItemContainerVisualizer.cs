@@ -13,15 +13,15 @@ namespace Isometric.Interface
             { return _itemContainer; }
         }
 
-        private FSprite itemSprite;
-        private FLabel itemAmount;
+        private FSprite _itemSprite;
+        private FLabel _itemAmount;
 
         public ItemContainerVisualizer(MenuFlow menu, ItemContainer itemContainer) : base(menu)
         {
-            this._itemContainer = itemContainer;
+            _itemContainer = itemContainer;
 
-            itemAmount = new FLabel("font", string.Empty);
-            itemAmount.SetPosition(new Vector2(4f, -4f));
+            _itemAmount = new FLabel("font", string.Empty);
+            _itemAmount.SetPosition(new Vector2(4f, -4f));
 
             itemContainer.SignalItemChange += OnItemChanged;
         }
@@ -38,29 +38,29 @@ namespace Isometric.Interface
 
             if (visible)
             {
-                if (itemSprite == null)
+                if (_itemSprite == null)
                 {
-                    itemSprite = new FSprite(itemContainer.itemStack.item.element);
+                    _itemSprite = new FSprite(itemContainer.itemStack.item.element);
 
-                    container.AddChild(itemSprite);
-                    container.AddChild(itemAmount);
+                    container.AddChild(_itemSprite);
+                    container.AddChild(_itemAmount);
                 }
                 else
-                    itemSprite.element = itemContainer.itemStack.item.element;
+                    _itemSprite.element = itemContainer.itemStack.item.element;
 
-                itemAmount.text = itemContainer.itemStack.stackSize.ToString();
+                _itemAmount.text = itemContainer.itemStack.stackSize.ToString();
             }
 
-            if (itemSprite != null)
+            if (_itemSprite != null)
             {
-                itemSprite.isVisible = visible;
+                _itemSprite.isVisible = visible;
 
                 bool isItemBlock = false;
                 if (!itemContainer.blank)
                     isItemBlock = itemContainer.itemStack.item is ItemBlock;
-                itemSprite.scale = isItemBlock ? 0.75f : 1f;
+                _itemSprite.scale = isItemBlock ? 0.75f : 1f;
 
-                itemAmount.isVisible = visible && itemContainer.itemStack.stackSize > 1;
+                _itemAmount.isVisible = visible && itemContainer.itemStack.stackSize > 1;
             }
         }
     }

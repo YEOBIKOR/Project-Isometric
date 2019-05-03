@@ -2,46 +2,46 @@
 
 public class Registry <T>
 {
-    private List<T> list;
-    private Dictionary<string, T> dictionary;
+    private List<T> _list;
+    private Dictionary<string, T> _dictionary;
 
     public Registry()
     {
-        list = new List<T>();
-        dictionary = new Dictionary<string, T>();
+        _list = new List<T>();
+        _dictionary = new Dictionary<string, T>();
     }
 
     public void Add(string key, T item)
     {
-        list.Add(item);
-        dictionary.Add(key, item);
+        _list.Add(item);
+        _dictionary.Add(key, item);
     }
 
     public T[] GetAll()
     {
-        return list.ToArray();
+        return _list.ToArray();
     }
 
     public T this [int id]
     {
         get
-        { return list[id]; }
+        { return _list[id]; }
     }
 
     public T this [string key]
     {
         get
-        { return dictionary[key]; }
+        { return _dictionary[key]; }
     }
 
     public int GetID(T item)
     {
-        return list.IndexOf(item);
+        return _list.IndexOf(item);
     }
 
     public int Count
     {
         get
-        { return list.Count; }
+        { return _list.Count; }
     }
 }

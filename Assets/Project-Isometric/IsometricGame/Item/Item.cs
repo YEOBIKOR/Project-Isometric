@@ -5,50 +5,50 @@ namespace Isometric.Items
 {
     public abstract class Item
     {
-        private static Registry<Item> registry;
+        private static Registry<Item> _registry;
 
         public static void RegisterItems()
         {
-            registry = new Registry<Item>();
+            _registry = new Registry<Item>();
 
-            registry.Add("pickaxe", new ItemPickaxe("Pickaxe", "pickaxe"));
-            registry.Add("throwable_rock", new ItemThrowableRock("Rock", "throwablerock"));
-            registry.Add("block_dirt", new ItemBlock("Dirt Block", "dirt"));
-            registry.Add("block_grass", new ItemBlock("Grass Block", "grass"));
-            registry.Add("block_stone", new ItemBlock("Stone Block", "stone"));
-            registry.Add("block_mossy_stone", new ItemBlock("Mossy Stone Block", "mossy_stone"));
-            registry.Add("block_sand", new ItemBlock("Sand Block", "sand"));
-            registry.Add("block_sandstone", new ItemBlock("Sandstone Block", "sandstone"));
-            registry.Add("block_wood", new ItemBlock("Wood Block", "wood"));
-            registry.Add("gunak47", new ItemGun("AK47", "gunak47", 0.08f, true));
-            registry.Add("guncannon", new ItemGun("Cannon", "guncannon", 1f, false));
-            registry.Add("gungranade", new ItemGranadeLauncher("Granade Launcher", "gungranade"));
-            registry.Add("gunpistol", new ItemGun("Pistol", "gunpistol", 0.5f, false));
-            registry.Add("gunshot", new ItemShotgun("Shotgun", "gunshot", 0.8f, false));
+            _registry.Add("pickaxe", new ItemPickaxe("Pickaxe", "pickaxe"));
+            _registry.Add("throwable_rock", new ItemThrowableRock("Rock", "throwablerock"));
+            _registry.Add("block_dirt", new ItemBlock("Dirt Block", "dirt"));
+            _registry.Add("block_grass", new ItemBlock("Grass Block", "grass"));
+            _registry.Add("block_stone", new ItemBlock("Stone Block", "stone"));
+            _registry.Add("block_mossy_stone", new ItemBlock("Mossy Stone Block", "mossy_stone"));
+            _registry.Add("block_sand", new ItemBlock("Sand Block", "sand"));
+            _registry.Add("block_sandstone", new ItemBlock("Sandstone Block", "sandstone"));
+            _registry.Add("block_wood", new ItemBlock("Wood Block", "wood"));
+            _registry.Add("gunak47", new ItemGun("AK47", "gunak47", 0.08f, true));
+            _registry.Add("guncannon", new ItemGun("Cannon", "guncannon", 1f, false));
+            _registry.Add("gungranade", new ItemGranadeLauncher("Granade Launcher", "gungranade"));
+            _registry.Add("gunpistol", new ItemGun("Pistol", "gunpistol", 0.5f, false));
+            _registry.Add("gunshot", new ItemShotgun("Shotgun", "gunshot", 0.8f, false));
         }
 
         public static Item GetItemByID(int id)
         {
-            if (registry == null)
+            if (_registry == null)
                 RegisterItems();
 
-            return registry[id];
+            return _registry[id];
         }
 
         public static Item GetItemByKey(string key)
         {
-            if (registry == null)
+            if (_registry == null)
                 RegisterItems();
 
-            return registry[key];
+            return _registry[key];
         }
 
         public static Item[] GetItemAll()
         {
-            if (registry == null)
+            if (_registry == null)
                 RegisterItems();
 
-            return registry.GetAll();
+            return _registry.GetAll();
         }
 
         private string _name;

@@ -24,8 +24,8 @@ namespace Isometric.Interface
             get { return _player.worldCamera; }
         }
 
-        private ItemSelect itemSelect;
-        private InventoryMenu inventoryMenu;
+        private ItemSelect _itemSelect;
+        private InventoryMenu _inventoryMenu;
 
         private WorldCursor[] _cursors;
         private WorldCursor _currentCursor;
@@ -36,17 +36,17 @@ namespace Isometric.Interface
         {
             _player = player;
 
-            itemSelect = new ItemSelect(this);
-            inventoryMenu = new InventoryMenu(this);
+            _itemSelect = new ItemSelect(this);
+            _inventoryMenu = new InventoryMenu(this);
 
             _playerCommand = new CommandDelegate();
 
             _playerCommand.Add("inventory", new CommandCallback(delegate
             {
-                if (inventoryMenu.activated)
-                    inventoryMenu.RequestTerminate();
+                if (_inventoryMenu.activated)
+                    _inventoryMenu.RequestTerminate();
                 else
-                    AddSubLoopFlow(inventoryMenu);
+                    AddSubLoopFlow(_inventoryMenu);
             }));
         }
 
@@ -93,10 +93,10 @@ namespace Isometric.Interface
 
         public override void Update(float deltaTime)
         {
-            if (!inventoryMenu.activated)
+            if (!_inventoryMenu.activated)
             {
-                if (Input.mouseScrollDelta.y != 0f && !itemSelect.activated)
-                    AddSubLoopFlow(itemSelect);
+                if (Input.mouseScrollDelta.y != 0f && !_itemSelect.activated)
+                    AddSubLoopFlow(_itemSelect);
 
                 if (_currentCursor != null)
                     _currentCursor.CursorUpdate(player.world, player, MenuFlow.mousePosition);
@@ -107,50 +107,50 @@ namespace Isometric.Interface
 
         public class ItemSelect : MenuFlow
         {
-            public const int length = 8;
+            public const int Length = 8;
 
-            private PlayerInterface playerInterface;
+            private PlayerInterface _playerInterface;
 
             public Player player
             {
                 get
-                { return playerInterface.player; }
+                { return _playerInterface.player; }
             }
             
-            private ItemContainerVisualizer[] visualizer;
-            private int selectedIndex;
+            private ItemContainerVisualizer[] _visualizer;
+            private int _selectedIndex;
 
-            private float factor;
-            private float sleepTime;
+            private float _factor;
+            private float _sleepTime;
 
-            private float scrollAmount;
-            private float selectSpriteAngle;
+            private float _scrollAmount;
+            private float _selectSpriteAngle;
 
-            private FLabel selectedItemLabel;
-            private FLabel selectedItemLabelShadow;
+            private FLabel _selectedItemLabel;
+            private FLabel _selectedItemLabelShadow;
 
             public ItemSelect(PlayerInterface playerInterface) : base()
             {
-                this.playerInterface = playerInterface;
+                this._playerInterface = playerInterface;
 
-                visualizer = new ItemContainerVisualizer[length];
-                for (int index = 0; index < length; index++)
+                _visualizer = new ItemContainerVisualizer[Length];
+                for (int index = 0; index < Length; index++)
                 {
-                    visualizer[index] = new ItemContainerVisualizer(this, player.inventory[index]);
-                    AddElement(visualizer[index]);
+                    _visualizer[index] = new ItemContainerVisualizer(this, player.inventory[index]);
+                    AddElement(_visualizer[index]);
                 }
 
-                factor = 0f;
-                sleepTime = 0f;
-                scrollAmount = 0f;
-                selectSpriteAngle = 0f;
+                _factor = 0f;
+                _sleepTime = 0f;
+                _scrollAmount = 0f;
+                _selectSpriteAngle = 0f;
 
-                selectedItemLabel = new FLabel("font", string.Empty);
-                selectedItemLabelShadow = new FLabel("font", string.Empty);
-                selectedItemLabelShadow.color = Color.black;
+                _selectedItemLabel = new FLabel("font", string.Empty);
+                _selectedItemLabelShadow = new FLabel("font", string.Empty);
+                _selectedItemLabelShadow.color = Color.black;
 
-                container.AddChild(selectedItemLabelShadow);
-                container.AddChild(selectedItemLabel);
+                container.AddChild(_selectedItemLabelShadow);
+                container.AddChild(_selectedItemLabel);
             }
 
             public override void Update(float deltaTime)
@@ -158,45 +158,45 @@ namespace Isometric.Interface
                 Vector2 anchorPosition = player.screenPosition + Vector2.up * 16f;
                 float scrollDelta = Input.mouseScrollDelta.y;
 
-                sleepTime = scrollDelta != 0 ? 1f : sleepTime - deltaTime;
-                factor = Mathf.Clamp01(factor + (sleepTime > 0f ? deltaTime : -deltaTime) * 5f);
+                _sleepTime = scrollDelta != 0 ? 1f : _sleepTime - deltaTime;
+                _factor = Mathf.Clamp01(_factor + (_sleepTime > 0f ? deltaTime : -deltaTime) * 5f);
 
-                if (!(factor > 0f))
+                if (!(_factor > 0f))
                     Terminate();
 
-                scrollAmount += scrollDelta;
+                _scrollAmount += scrollDelta;
 
-                int oldSelectedIndex = selectedIndex;
-                selectedIndex = (int)Mathf.Repeat(-scrollAmount, length);
+                int oldSelectedIndex = _selectedIndex;
+                _selectedIndex = (int)Mathf.Repeat(-_scrollAmount, Length);
 
-                selectSpriteAngle = Mathf.LerpAngle(selectSpriteAngle, (float)selectedIndex / length * 360f - 90f, deltaTime * 10f);
+                _selectSpriteAngle = Mathf.LerpAngle(_selectSpriteAngle, (float)_selectedIndex / Length * 360f - 90f, deltaTime * 10f);
 
-                for (int index = 0; index < length; index++)
+                for (int index = 0; index < Length; index++)
                 {
-                    bool selected = index == selectedIndex;
-                    float radian = ((float)index / length - selectSpriteAngle / 360f) * Mathf.PI * 2f;
+                    bool selected = index == _selectedIndex;
+                    float radian = ((float)index / Length - _selectSpriteAngle / 360f) * Mathf.PI * 2f;
 
-                    visualizer[index].position = anchorPosition + (new Vector2(Mathf.Cos(radian), Mathf.Sin(radian)) * factor * (selected ? 40f : 32f));
-                    visualizer[index].scale = Vector2.Lerp(visualizer[index].scale, Vector2.one * (selected ? 2f : 1f), deltaTime * 10f);
-                    visualizer[index].container.alpha = factor;
+                    _visualizer[index].position = anchorPosition + (new Vector2(Mathf.Cos(radian), Mathf.Sin(radian)) * _factor * (selected ? 40f : 32f));
+                    _visualizer[index].scale = Vector2.Lerp(_visualizer[index].scale, Vector2.one * (selected ? 2f : 1f), deltaTime * 10f);
+                    _visualizer[index].container.alpha = _factor;
                 }
 
-                ItemContainer pickedItemContainer = player.inventory[selectedIndex];
+                ItemContainer pickedItemContainer = player.inventory[_selectedIndex];
 
                 if (pickedItemContainer.blank)
-                    selectedItemLabel.text = string.Empty;
+                    _selectedItemLabel.text = string.Empty;
                 else
-                    selectedItemLabel.text = pickedItemContainer.itemStack.item.name;
+                    _selectedItemLabel.text = pickedItemContainer.itemStack.item.name;
 
-                selectedItemLabelShadow.text = selectedItemLabel.text;
+                _selectedItemLabelShadow.text = _selectedItemLabel.text;
 
-                selectedItemLabel.SetPosition(anchorPosition + new Vector2(0f, 24f));
-                selectedItemLabelShadow.SetPosition(anchorPosition + new Vector2(0f, 23f));
+                _selectedItemLabel.SetPosition(anchorPosition + new Vector2(0f, 24f));
+                _selectedItemLabelShadow.SetPosition(anchorPosition + new Vector2(0f, 23f));
 
-                selectedItemLabel.alpha = factor;
-                selectedItemLabelShadow.alpha = factor;
+                _selectedItemLabel.alpha = _factor;
+                _selectedItemLabelShadow.alpha = _factor;
 
-                if (oldSelectedIndex != selectedIndex)
+                if (oldSelectedIndex != _selectedIndex)
                     player.PickItem(pickedItemContainer);
 
                 base.Update(deltaTime);

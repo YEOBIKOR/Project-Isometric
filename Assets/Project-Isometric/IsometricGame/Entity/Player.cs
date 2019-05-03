@@ -220,23 +220,23 @@ public class Player : EntityCreature
             Item,
         }
 
-        private Player player;
+        private Player _player;
         private List<EntityPart> entityParts
         {
             get
-            { return player.entityParts; }
+            { return _player._entityParts; }
         }
 
-        private float runfactor;
+        private float _runfactor;
 
         private AnimationRigBipedal _bodyRig;
         private AnimationRigHandle _handleRig;
 
         public PlayerGraphics(Player player)
         {
-            this.player = player;
+            this._player = player;
 
-            runfactor = 0f;
+            _runfactor = 0f;
 
             EntityPart body = new EntityPart(player, "entityplayerbody");
             EntityPart head = new ZFlipEntityPart(player, "entityplayerhead", "entityplayerheadback");
@@ -274,31 +274,31 @@ public class Player : EntityCreature
 
         public void Update(float deltaTime)
         {
-            Vector3 playerPosition = player.worldPosition;
+            Vector3 playerPosition = _player.worldPosition;
 
             _bodyRig.worldPosition = playerPosition;
-            _bodyRig.viewAngle = player.viewAngle;
-            _bodyRig.moveSpeed = new Vector2(player.velocity.x, player.velocity.z).magnitude * deltaTime * 1.45f;
-            _bodyRig.landed = player._physics.landed;
+            _bodyRig.viewAngle = _player.viewAngle;
+            _bodyRig.moveSpeed = new Vector2(_player.velocity.x, _player.velocity.z).magnitude * deltaTime * 1.45f;
+            _bodyRig.landed = _player._physics.landed;
 
             _handleRig.worldPosition = playerPosition;
-            _handleRig.viewAngle = player.viewAngle;
-            _handleRig.cameraViewAngle = player.worldCamera.viewAngle;
+            _handleRig.viewAngle = _player.viewAngle;
+            _handleRig.cameraViewAngle = _player.worldCamera.viewAngle;
 
             GetEntityPart(PartType.Scarf).worldPosition = Vector3.Lerp(GetEntityPart(PartType.Body).worldPosition, GetEntityPart(PartType.Head).worldPosition, 0.3f);
-            GetEntityPart(PartType.Tail).worldPosition = playerPosition + CustomMath.HorizontalRotate(new Vector3(-0.3f, 0.75f + Mathf.Sin(runfactor * 2f) * -0.05f, Mathf.Sin(runfactor * 2f) * 0.05f), player.viewAngle);
+            GetEntityPart(PartType.Tail).worldPosition = playerPosition + CustomMath.HorizontalRotate(new Vector3(-0.3f, 0.75f + Mathf.Sin(_runfactor * 2f) * -0.05f, Mathf.Sin(_runfactor * 2f) * 0.05f), _player.viewAngle);
 
             for (int index = 0; index < entityParts.Count; index++)
-                player.entityParts[index].viewAngle = player.viewAngle;
+                _player._entityParts[index].viewAngle = _player.viewAngle;
 
             HoldType holdType = HoldType.None;
 
             EntityPart item = GetEntityPart(PartType.Item);
             item.element = null;
 
-            if (!player._pickedItemContainer.blank)
+            if (!_player._pickedItemContainer.blank)
             {
-                Item pickingItem = player.pickItemStack.item;
+                Item pickingItem = _player.pickItemStack.item;
 
                 item.element = pickingItem.element;
                 holdType = pickingItem.holdType;

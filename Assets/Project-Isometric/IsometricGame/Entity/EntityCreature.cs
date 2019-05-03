@@ -71,8 +71,8 @@ public abstract class EntityCreature : Entity, ITarget
 
     public void KillCreature()
     {
-        for (int index = 0; index < entityParts.Count; index++)
-            world.SpawnEntity(new DecomposeCreaturePart(this, entityParts[index]), entityParts[index].worldPosition);
+        for (int index = 0; index < _entityParts.Count; index++)
+            world.SpawnEntity(new DecomposeCreaturePart(this, _entityParts[index]), _entityParts[index].worldPosition);
 
         DespawnEntity();
     }
@@ -86,10 +86,10 @@ public abstract class EntityCreature : Entity, ITarget
     {
         get
         {
-            EntityPart[][] parts = new EntityPart[entityParts.Count][];
+            EntityPart[][] parts = new EntityPart[_entityParts.Count][];
 
-            for (int index = 0; index < entityParts.Count; index++)
-                parts[index] = new EntityPart[1] { entityParts[index] };
+            for (int index = 0; index < _entityParts.Count; index++)
+                parts[index] = new EntityPart[1] { _entityParts[index] };
 
             return parts;
         }

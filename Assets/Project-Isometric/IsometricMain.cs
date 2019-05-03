@@ -4,9 +4,9 @@ using UnityEngine.U2D;
 
 public class IsometricMain : MonoBehaviour
 {
-    private InputManager inputManager;
-    private AudioEngine audioEngine;
-    private IsometricLoopFlowManager flowManager;
+    private InputManager _inputManager;
+    private AudioEngine _audioEngine;
+    private IsometricLoopFlowManager _flowManager;
 
     private static Camera _camera;
     public static new Camera camera
@@ -16,9 +16,10 @@ public class IsometricMain : MonoBehaviour
 
     private static Dictionary<string, FShader> _shaders;
 
-    public static bool doesDebugging = false;
+    public static bool _doesDebugging = false;
 
-    public bool pixelPerfect;
+    [SerializeField]
+    private bool _pixelPerfect;
 
     private void Start()
     {
@@ -37,14 +38,14 @@ public class IsometricMain : MonoBehaviour
         LoadTextures();
 
         _camera = Futile.instance.camera;
-        if (pixelPerfect)
+        if (_pixelPerfect)
             InitializePixelPerfectCamera(_camera, screenSize);
 
-        inputManager = new InputManager();
-        audioEngine = new AudioEngine();
-        flowManager = new IsometricLoopFlowManager();
+        _inputManager = new InputManager();
+        _audioEngine = new AudioEngine();
+        _flowManager = new IsometricLoopFlowManager();
 
-        flowManager.SwitchLoopFlow(new Isometric.Interface.IntroRoll());
+        _flowManager.SwitchLoopFlow(new Isometric.Interface.IntroRoll());
     }
 
     private void Update()
@@ -56,16 +57,16 @@ public class IsometricMain : MonoBehaviour
                 1f;
 
         if (Input.GetKeyDown(KeyCode.Home))
-            flowManager.RequestSwitchLoopFlow(new IsometricGame("SaveData/World_0.dat"));
+            _flowManager.RequestSwitchLoopFlow(new IsometricGame("SaveData/World_0.dat"));
 
         float deltaTime = Time.deltaTime * timeScale;
 
-        flowManager.RawUpdate(deltaTime);
+        _flowManager.RawUpdate(deltaTime);
     }
 
     private void OnDestroy()
     {
-        flowManager.OnTerminate();
+        _flowManager.OnTerminate();
     }
 
     private void LoadAtlases()

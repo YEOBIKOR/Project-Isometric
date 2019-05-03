@@ -5,21 +5,21 @@ using Isometric.Interface;
 
 public class IsometricLoopFlowManager : LoopFlowManager
 {
-    private FSprite fadeSprite;
-    private FLabel fadeLabel;
+    private FSprite _fadeSprite;
+    private FLabel _fadeLabel;
 
-    private float transitFactor;
+    private float _transitFactor;
 
     public IsometricLoopFlowManager() : base()
     {
-        fadeSprite = new FSprite("pixel");
-        fadeSprite.scaleX = MenuFlow.screenWidth;
-        fadeSprite.scaleY = MenuFlow.screenHeight;
-        fadeSprite.color = Color.black;
+        _fadeSprite = new FSprite("pixel");
+        _fadeSprite.scaleX = MenuFlow.screenWidth;
+        _fadeSprite.scaleY = MenuFlow.screenHeight;
+        _fadeSprite.color = Color.black;
 
-        fadeLabel = new FLabel("font", "Loading...");
-        fadeLabel.alignment = FLabelAlignment.Right;
-        fadeLabel.SetPosition(MenuFlow.rightDown + new Vector2(-10f, 10f));
+        _fadeLabel = new FLabel("font", "Loading...");
+        _fadeLabel.alignment = FLabelAlignment.Right;
+        _fadeLabel.SetPosition(MenuFlow.rightDown + new Vector2(-10f, 10f));
     }
 
     public override void RawUpdate(float deltaTime)
@@ -32,9 +32,9 @@ public class IsometricLoopFlowManager : LoopFlowManager
 
     public override void Update(float deltaTime)
     {
-        transitFactor = Mathf.Clamp01(transitFactor + (transiting ? -deltaTime : deltaTime) / 0.5f);
+        _transitFactor = Mathf.Clamp01(_transitFactor + (_transiting ? -deltaTime : deltaTime) / 0.5f);
 
-        fadeSprite.alpha = CustomMath.Curve(1f - transitFactor, 1f);
+        _fadeSprite.alpha = CustomMath.Curve(1f - _transitFactor, 1f);
 
         base.Update(deltaTime);
     }
@@ -43,15 +43,15 @@ public class IsometricLoopFlowManager : LoopFlowManager
     {
         base.RequestSwitchLoopFlow(newLoopFlow, fadeOutSeconds);
 
-        Futile.stage.AddChild(fadeSprite);
-        Futile.stage.AddChild(fadeLabel);
+        Futile.stage.AddChild(_fadeSprite);
+        Futile.stage.AddChild(_fadeLabel);
     }
 
     public override void SwitchLoopFlow(LoopFlow newLoopFlow)
     {
         base.SwitchLoopFlow(newLoopFlow);
 
-        Futile.stage.AddChild(fadeSprite);
-        Futile.stage.RemoveChild(fadeLabel);
+        Futile.stage.AddChild(_fadeSprite);
+        Futile.stage.RemoveChild(_fadeLabel);
     }
 }

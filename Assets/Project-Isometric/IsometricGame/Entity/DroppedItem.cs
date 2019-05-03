@@ -21,10 +21,10 @@ public class DroppedItem : Entity
     {
         _itemStack = itemStack;
 
-        entityParts.Add(new EntityPart(this, itemStack.item.element));
-        entityParts[0].sortZOffset = 1f;
-        entityParts[0].scale = Vector2.one * 0.5f;
-        entityParts[0].shader = IsometricMain.GetShader("DroppedItem");
+        _entityParts.Add(new EntityPart(this, itemStack.item.element));
+        _entityParts[0].sortZOffset = 1f;
+        _entityParts[0].scale = Vector2.one * 0.5f;
+        _entityParts[0].shader = IsometricMain.GetShader("DroppedItem");
 
         _acquirable = false;
         _acquired = false;
@@ -55,7 +55,7 @@ public class DroppedItem : Entity
             }
         }
 
-        entityParts[0].worldPosition = worldPosition + Vector3.up * (Mathf.Sin(time * Mathf.PI) + 2f) * 0.3f;
+        _entityParts[0].worldPosition = worldPosition + Vector3.up * (Mathf.Sin(time * Mathf.PI) + 2f) * 0.3f;
 
         base.Update(deltaTime);
     }

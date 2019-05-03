@@ -6,13 +6,13 @@ namespace Isometric.Interface
 {
     public class PopupMenuFlow : MenuFlow
     {
-        private LoopFlow pausingTarget;
+        private LoopFlow _pausingTarget;
 
-        private bool escToExit;
-        private bool terminating;
+        private bool _escToExit;
+        private bool _terminating;
 
-        private float appearingTime;
-        private float disappearingTime;
+        private float _appearingTime;
+        private float _disappearingTime;
 
         private float _factor;
         public float factor
@@ -23,35 +23,35 @@ namespace Isometric.Interface
 
         public PopupMenuFlow(LoopFlow pausingTarget, bool escToExit, float appearingTime = 0f, float disappearingTime = 0f) : base()
         {
-            this.pausingTarget = pausingTarget;
-            this.escToExit = escToExit;
+            _pausingTarget = pausingTarget;
+            _escToExit = escToExit;
 
-            this.appearingTime = appearingTime;
-            this.disappearingTime = disappearingTime;
+            _appearingTime = appearingTime;
+            _disappearingTime = disappearingTime;
         }
 
         public override void OnActivate()
         {
             base.OnActivate();
             
-            terminating = false;
+            _terminating = false;
             _factor = 0f;
 
-            if (pausingTarget != null)
-                pausingTarget.paused = true;
+            if (_pausingTarget != null)
+                _pausingTarget.paused = true;
         }
 
         public override void OnTerminate()
         {
-            if (pausingTarget != null)
-                pausingTarget.paused = false;
+            if (_pausingTarget != null)
+                _pausingTarget.paused = false;
 
             base.OnTerminate();
         }
 
         public override void Update(float deltaTime)
         {
-            _factor = Mathf.Clamp01(_factor + (terminating ? deltaTime / -disappearingTime : deltaTime / appearingTime));
+            _factor = Mathf.Clamp01(_factor + (_terminating ? deltaTime / -_disappearingTime : deltaTime / _appearingTime));
             if (!(_factor > 0f))
                 Terminate();
 
@@ -60,12 +60,12 @@ namespace Isometric.Interface
 
         public void RequestTerminate()
         {
-            terminating = true;
+            _terminating = true;
         }
 
         public override bool OnExecuteEscape()
         {
-            if (escToExit)
+            if (_escToExit)
                 RequestTerminate();
 
             return true;
