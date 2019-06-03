@@ -62,11 +62,9 @@ public class EntityPpyongppyong : EntityCreature
         _entityParts[4].viewAngle = viewAngle + 30f;
     }
 
-    //public override void OnCollisionWithOther(PhysicalEntity other)
-    //{
-    //    base.OnCollisionWithOther(other);
-
-    //    if (other == world.player)
-    //        other.ApplyDamage(new Damage(this));
-    //}
+    public override string name
+    {
+        get
+        { return "Ppyongppyong"; }
+    }
 }

@@ -95,6 +95,12 @@ public abstract class EntityCreature : Entity, ITarget
         }
     }
 
+    public virtual string name
+    {
+        get
+        { return ToString(); }
+    }
+
     public override string debugString
     {
         get

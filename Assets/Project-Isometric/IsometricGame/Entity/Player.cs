@@ -203,6 +203,12 @@ public class Player : EntityCreature
         return !(_itemUseCoolTime > 0f) && (pickItemStack.item.repeatableUse || clicked);
     }
 
+    public override string name
+    {
+        get
+        { return "Player"; }
+    }
+
     public class PlayerGraphics
     {
         private enum PartType

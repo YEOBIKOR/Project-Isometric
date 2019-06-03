@@ -150,7 +150,7 @@ namespace Isometric.Interface
 
         public TargetInspector(MenuFlow menu) : base(menu)
         {
-            _inspectLabel = new ShadowedLabel(menu, "## : ## / ##");
+            _inspectLabel = new ShadowedLabel(menu, string.Empty);
             _inspectLabel.position = new Vector2(0f, 10f);
 
             _bar = new FSprite("uipixel");
@@ -165,7 +165,7 @@ namespace Isometric.Interface
 
             if (creature != null)
             {
-                _inspectLabel.text = string.Concat(creature.GetType());
+                _inspectLabel.text = string.Concat(creature.name);
 
                 _lastLength = creature.health / creature.maxHealth;
                 

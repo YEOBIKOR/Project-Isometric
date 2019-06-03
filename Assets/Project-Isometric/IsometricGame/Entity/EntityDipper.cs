@@ -46,6 +46,12 @@ public class EntityDipper : EntityCreature
         base.Update(deltaTime);
     }
 
+    public override string name
+    {
+        get
+        { return "Dipper"; }
+    }
+
     //public override void OnCollisionWithOther(PhysicalEntity other)
     //{
     //    base.OnCollisionWithOther(other);

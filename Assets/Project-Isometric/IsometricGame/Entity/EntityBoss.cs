@@ -143,6 +143,12 @@ public class EntityBoss : EntityCreature
     {
         _attackPattern.AddLast(new PatternNode(function, time));
     }
+    
+    public override string name
+    {
+        get
+        { return "Boss - Baphomet"; }
+    }
 
     public class EntityBossRune : EntityCreature
     {
@@ -209,6 +215,12 @@ public class EntityBoss : EntityCreature
                 (_state == RuneState.ReadyDrop ? Color.red : Color.white), deltaTime * 5f);
 
             base.Update(deltaTime);
+        }
+        
+        public override string name
+        {
+            get
+            { return "Rune - " + _index; }
         }
     }
 
