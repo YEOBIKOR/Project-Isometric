@@ -23,6 +23,11 @@ public class FileSerialization <T> where T : struct
 
     public T LoadFile()
     {
+        if (!File.Exists(_fileName))
+        {
+            throw new FileNotFoundException();
+        }
+
         FileStream stream = new FileStream(_fileName, FileMode.Open);
 
         BinaryFormatter formatter = new BinaryFormatter();
