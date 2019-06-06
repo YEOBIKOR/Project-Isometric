@@ -17,6 +17,8 @@ public class ChunkRenderer : IRenderer
         { return _initialized; }
     }
 
+    private FShader _shader;
+
     public ChunkRenderer(Chunk chunk)
     {
         _chunk = chunk;
@@ -26,6 +28,8 @@ public class ChunkRenderer : IRenderer
 
         _showing = false;
         _initialized = false;
+
+        _shader = IsometricMain.GetShader("WorldObject");
     }
 
     public void OnInitializeSprite(SpriteLeaser spriteLeaser, WorldCamera camera)
@@ -59,9 +63,11 @@ public class ChunkRenderer : IRenderer
                 // if (camera.turning)
                     SetSpriteByTile(sprite, tile, camera, true);
 
-                if (sprite.container != null && !spriteLeaser.InScreenRect(sprite))
+                bool inScreenRect = spriteLeaser.InScreenRect(sprite);
+
+                if (sprite.container != null && !inScreenRect)
                     sprite.RemoveFromContainer();
-                else if (sprite.container == null && spriteLeaser.InScreenRect(sprite))
+                else if (sprite.container == null && inScreenRect)
                     camera.worldContainer.AddChild(sprite);
             }
         }
@@ -105,7 +111,7 @@ public class ChunkRenderer : IRenderer
                     if (index < 0)
                     {
                         sprite = new FSprite(tile.block.sprite);
-                        sprite.shader = IsometricMain.GetShader("WorldObject");
+                        sprite.shader = _shader;
 
                         _drawTiles.Add(tile);
                         spriteLeaser.sprites.Add(sprite);

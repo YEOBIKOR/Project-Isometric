@@ -7,14 +7,14 @@ using Isometric.Items;
 
 public class World : ISerializable<World.Serialized>
 {
-    private IsometricGame _game;
+    private readonly IsometricGame _game;
     public IsometricGame game
     {
         get
         { return _game; }
     }
 
-    private WorldCamera _worldCamera;
+    private readonly WorldCamera _worldCamera;
     public WorldCamera worldCamera
     {
         get
@@ -52,7 +52,7 @@ public class World : ISerializable<World.Serialized>
 
     public Player player { get; private set; }
 
-    private CameraHUDMenu _cameraHUD;
+    private readonly CameraHUDMenu _cameraHUD;
     public CameraHUDMenu cameraHUD
     {
         get
@@ -85,8 +85,6 @@ public class World : ISerializable<World.Serialized>
 
         _cameraHUD = new CameraHUDMenu(_game, _worldCamera);
         game.AddSubLoopFlow(_cameraHUD);
-
-        _cameraHUD.Speech(player, "W A S D : Move the character\nSpace : Jump the character\nQ, E : Move the camera\nEsc : Exit the game");
 
         _worldProfiler = new WorldProfiler(this);
 
@@ -193,17 +191,21 @@ public class World : ISerializable<World.Serialized>
     {
         if (chunk.coordination == new Vector2Int(0, 0))
         {
-            SpawnEntity(player, new Vector3(1f, GetSurface(new Vector2(1f, 1f)), 1f));
+            Vector3 standUpPosition = new Vector3(1f, GetSurface(new Vector2(1f, 1f)), 1f);
+
+            SpawnEntity(player, standUpPosition);
+            SpawnEntity(new TutorialNPC(), standUpPosition);
 
             worldCamera.SetCameraTarget(player, true);
 
             SpawnEntity(new EntityBoss(), new Vector3(8f, 16f, 8f));
 
-            for (int i = 0; i < 10; i++)
-            {
-                Vector2 position = new Vector3(10f, GetSurface(new Vector2(10f, 10f)), 10f);
-                SpawnEntity(new EntityPpyongppyong(), position);
-            }
+            //for (int i = 0; i < 1; i++)
+            //{
+            //    Vector2 position = new Vector3(10f, GetSurface(new Vector2(10f, 10f)), 10f);
+            //    SpawnEntity(new EntityPpyongppyong(), position);
+            //    SpawnEntity(new EntityDipper(), position);
+            //}
         }
 
         //int spawnCount = (int)RXRandom.Range(0f, 1.1f);
@@ -433,10 +435,11 @@ public class World : ISerializable<World.Serialized>
         {
             Chunk.Serialized chunkData = data.chunks[index];
 
-            Vector2Int coordination = new Vector2Int();
-
-            coordination.x = chunkData.coordinationX;
-            coordination.y = chunkData.coordinationY;
+            Vector2Int coordination = new Vector2Int
+            {
+                x = chunkData.coordinationX,
+                y = chunkData.coordinationY
+            };
 
             Chunk chunk = new Chunk(this, coordination);
             AddChunk(chunk);

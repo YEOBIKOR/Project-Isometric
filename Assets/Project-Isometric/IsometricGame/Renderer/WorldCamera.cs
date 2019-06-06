@@ -25,7 +25,6 @@ public class WorldCamera
     private List<SpriteLeaser> _spriteLeasers;
     
     public FContainer worldContainer { get; private set; }
-    private FContainer _debugContainer;
 
     private IPositionable _cameraTarget;
     private Vector3 _targetPosition;
@@ -65,9 +64,6 @@ public class WorldCamera
         worldContainer.shouldSortByZ = true;
         Futile.stage.AddChild(worldContainer);
 
-        _debugContainer = new FContainer();
-        Futile.stage.AddChild(_debugContainer);
-
         _targetPosition = Vector3.zero;
 
         _viewDirection = CameraViewDirection.NE;
@@ -96,7 +92,6 @@ public class WorldCamera
             _targetPosition = Vector3.Lerp(_targetPosition, _cameraTarget.worldPosition, deltaTime * 10f);
         Vector2 cameraPosition = -GetScreenPosition(_targetPosition) + Random.insideUnitCircle * _shake;
         worldContainer.SetPosition(cameraPosition);
-        _debugContainer.SetPosition(cameraPosition);
 
         while (_renderersQueue.Count > 0)
         {
@@ -291,15 +286,9 @@ public class WorldCamera
         } while (_renderersQueue.Count > 0);
     }
 
-    public void AddDebugRenderer(FNode node)
-    {
-        _debugContainer.AddChild(node);
-    }
-
     public void CleanUp()
     {
         worldContainer.RemoveFromContainer();
-        _debugContainer.RemoveFromContainer();
 
         _worldCameraUI.CleanUp();
     }
@@ -327,11 +316,6 @@ public class WorldCamera
         private FSprite[] _axisSprites;
         private float _axisShowFactor;
 
-        private FLabel _debugLabel;
-        private FLabel _tutorialLabel;
-        private const string TutorialText =
-            "W A S D : Move the character\nSpace : Jump the character\nQ, E : Move the camera\nEsc : Exit the game";
-
         public WorldCameraUI(WorldCamera worldCamera)
         {
             _worldCamera = worldCamera;
@@ -353,20 +337,6 @@ public class WorldCamera
             }
 
             _axisShowFactor = 0f;
-
-            if (IsometricMain._doesDebugging)
-            {
-                _debugLabel = new FLabel("font", "DEBUG");
-                _debugLabel.color = Color.red;
-
-                Futile.stage.AddChild(_debugLabel);
-            }
-
-            _tutorialLabel = new FLabel("font", TutorialText);
-            _tutorialLabel.alignment = FLabelAlignment.Left;
-            _tutorialLabel.SetPosition(-Futile.screen.halfWidth + 4f, -Futile.screen.halfHeight + 32f);
-            _tutorialLabel.scale = 1f;
-            // Futile.stage.AddChild(tutorialLabel);
         }
 
         public void Update(float deltaTime)
@@ -383,15 +353,11 @@ public class WorldCamera
                     _axisSprites[index].rotation = angle;
                 }
             }
-
-            if (IsometricMain._doesDebugging)
-                _debugLabel.text = string.Concat("view angle : ", _worldCamera.viewAngle);
         }
 
         public void CleanUp()
         {
             _axisContainer.RemoveFromContainer();
-            _tutorialLabel.RemoveFromContainer();
         }
     }
 }

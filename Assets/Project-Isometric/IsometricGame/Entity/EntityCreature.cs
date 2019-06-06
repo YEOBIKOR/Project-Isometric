@@ -100,17 +100,4 @@ public abstract class EntityCreature : Entity, ITarget
         get
         { return ToString(); }
     }
-
-    public override string debugString
-    {
-        get
-        {
-            return string.Concat(
-                base.debugString,
-                "viewAngle : ", viewAngle, "\n",
-                "health : ", health, "\n",
-                "damageCool : ", damagedCooldown, "\n"
-                );
-        }
-    }
 }

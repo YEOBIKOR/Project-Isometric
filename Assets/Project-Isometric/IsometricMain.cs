@@ -16,8 +16,6 @@ public class IsometricMain : MonoBehaviour
 
     private static Dictionary<string, FShader> _shaders;
 
-    public static bool _doesDebugging = false;
-
     [SerializeField]
     private bool _pixelPerfect;
 
@@ -46,6 +44,11 @@ public class IsometricMain : MonoBehaviour
         _flowManager = new IsometricLoopFlowManager();
 
         _flowManager.SwitchLoopFlow(new Isometric.Interface.IntroRoll());
+
+        string path = "SaveData/";
+
+        if (!System.IO.Directory.Exists(path))
+            System.IO.Directory.CreateDirectory(path);
     }
 
     private void Update()

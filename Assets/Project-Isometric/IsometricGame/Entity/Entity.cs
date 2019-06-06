@@ -125,15 +125,6 @@ public abstract class Entity : IPositionable
 
         for (int index = 0; index < _entityParts.Count; index++)
             world.AddCosmeticDrawble(_entityParts[index]);
-
-        if (IsometricMain._doesDebugging)
-        {
-            _debugLabel = new FLabel("font", "DEBUG");
-            _debugLabel.scale = 0.5f;
-            _debugLabel.color = Color.red;
-            _debugLabel.alignment = FLabelAlignment.Left;
-            world.worldCamera.AddDebugRenderer(_debugLabel);
-        }
     }
 
     public virtual void OnDespawn()
@@ -159,12 +150,6 @@ public abstract class Entity : IPositionable
 
         if (_physics != null)
             _physics.ApplyPhysics(chunk, deltaTime, ref _worldPosition);
-
-        if (IsometricMain._doesDebugging)
-        {
-            _debugLabel.SetPosition(worldCamera.GetScreenPosition(worldPosition));
-            _debugLabel.text = debugString;
-        }
     }
 
     public void DespawnEntity()
@@ -213,17 +198,5 @@ public abstract class Entity : IPositionable
     public Tile GetTileAtWorldPosition(Vector3 position)
     {
         return GetTileAtWorldPosition(Vector3Int.FloorToInt(position));
-    }
-
-    public virtual string debugString
-    {
-        get
-        {
-            return string.Concat(
-                "chunk : ", chunk.coordination, "\n",
-                "position : ", worldPosition, "\n",
-                "tilePosition : ", tilePosition, "\n"
-                );
-        }
     }
 }
