@@ -62,6 +62,10 @@ public class World : ISerializable<World.Serialized>
     private const float LoadChunkRange = 30f;
     private const float UnloadChunkRange = 50f;
 
+    private const int NumMaxEpicenters = 4;
+
+    private Queue<Vector4> _epicenters;
+
     private WorldProfiler _worldProfiler;
 
     public World(IsometricGame game, string worldName)
@@ -88,7 +92,8 @@ public class World : ISerializable<World.Serialized>
 
         _worldProfiler = new WorldProfiler(this);
 
-        Shader.SetGlobalVector("_Epicenter", new Vector4(0f, 0f, -10f));
+        _epicenters = new Queue<Vector4>(NumMaxEpicenters);
+        UpdateEpicenters();
     }
 
     public void Update(float deltaTime)
@@ -140,6 +145,15 @@ public class World : ISerializable<World.Serialized>
         Shader.SetGlobalFloat("_WorldTime", _worldTime);
         worldCamera.GraphicUpdate(deltaTime);
         _worldProfiler.updateProfiler.MeasureTime(UpdateProfilerType.RenderUpdate);
+
+        if (_epicenters.Count > 0)
+        {
+            if (_worldTime - _epicenters.Peek().z > 3f)
+            {
+                _epicenters.Dequeue();
+                UpdateEpicenters();
+            }
+        }
     }
 
     private void DrawablesUpdate(float deltaTime)
@@ -400,13 +414,29 @@ public class World : ISerializable<World.Serialized>
 
     public void QuakeAtPosition(Vector3 epicenter)
     {
+        if (_epicenters.Count > NumMaxEpicenters)
+            return;
+
         Vector4 vector = new Vector4();
 
         vector.x = epicenter.x;
         vector.y = epicenter.z;
         vector.z = _worldTime;
 
-        Shader.SetGlobalVector("_Epicenter", vector);
+        _epicenters.Enqueue(vector);
+        UpdateEpicenters();
+    }
+
+    private void UpdateEpicenters()
+    {
+        Vector4[] array = new Vector4[NumMaxEpicenters];
+        Vector4[] epicenters = _epicenters.ToArray();
+
+        for (int index = 0; index < epicenters.Length; index++)
+            array[index] = epicenters[index];
+
+        Shader.SetGlobalVectorArray("_Epicenters", array);
+        Shader.SetGlobalInt("_NumEpicenters", epicenters.Length);
     }
 
     public Serialized Serialize()

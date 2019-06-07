@@ -40,7 +40,8 @@
 			uniform float _WorldTime;
 			uniform float3 _CameraPosition;
 			uniform float3 _SkyColor;
-			uniform float4 _Epicenter;
+			uniform float4 _Epicenters[4];
+			uniform int _NumEpicenters;
 
 			sampler2D _NoiseTex;
 
@@ -55,13 +56,18 @@
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				o.color = v.color;
 
-				float d = distance(float2(o.color.r, o.color.b), _Epicenter);
-				float t = _WorldTime - _Epicenter.b;
+				for (int n = 0; n < _NumEpicenters; n++)
+				{
+					float4 _Epicenter = _Epicenters[n];
 
-				float w = sin(clamp((t * 1.2 - d * 0.05) * 8.0, 0.0, 3.14));
-				float f = saturate(1 - d * 0.04) * 0.15f;
+					float d = distance(float2(o.color.r, o.color.b), _Epicenter);
+					float t = _WorldTime - _Epicenter.b;
 
-				o.vertex.y += w * f;
+					float w = sin(clamp((t * 1.2 - d * 0.05) * 8.0, 0.0, 3.14));
+					float f = saturate(1 - d * 0.04) * 0.15f;
+
+					o.vertex.y += w * f;
+				}
 
 				return o;
 			}
