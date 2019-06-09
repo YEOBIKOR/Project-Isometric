@@ -20,7 +20,7 @@
 },
 "blocks/b3.png":
 {
-	"frame": {"x":64,"y":270,"w":32,"h":32},
+	"frame": {"x":0,"y":302,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -29,7 +29,7 @@
 },
 "blocks/b4.png":
 {
-	"frame": {"x":96,"y":238,"w":32,"h":32},
+	"frame": {"x":64,"y":270,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -38,7 +38,7 @@
 },
 "blocks/b5.png":
 {
-	"frame": {"x":0,"y":238,"w":32,"h":32},
+	"frame": {"x":96,"y":238,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -47,7 +47,7 @@
 },
 "blocks/b6.png":
 {
-	"frame": {"x":64,"y":334,"w":32,"h":32},
+	"frame": {"x":0,"y":238,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -56,7 +56,7 @@
 },
 "blocks/b7.png":
 {
-	"frame": {"x":64,"y":174,"w":32,"h":32},
+	"frame": {"x":96,"y":334,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -65,7 +65,7 @@
 },
 "blocks/b8.png":
 {
-	"frame": {"x":0,"y":206,"w":32,"h":32},
+	"frame": {"x":64,"y":174,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -74,7 +74,7 @@
 },
 "blocks/b9.png":
 {
-	"frame": {"x":96,"y":206,"w":32,"h":32},
+	"frame": {"x":0,"y":206,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -83,7 +83,7 @@
 },
 "blocks/b10.png":
 {
-	"frame": {"x":32,"y":334,"w":32,"h":32},
+	"frame": {"x":64,"y":334,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -92,7 +92,7 @@
 },
 "blocks/b11.png":
 {
-	"frame": {"x":96,"y":334,"w":32,"h":32},
+	"frame": {"x":0,"y":366,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -101,7 +101,7 @@
 },
 "blocks/b12.png":
 {
-	"frame": {"x":0,"y":334,"w":32,"h":32},
+	"frame": {"x":32,"y":334,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -110,7 +110,7 @@
 },
 "blocks/b13.png":
 {
-	"frame": {"x":64,"y":302,"w":32,"h":32},
+	"frame": {"x":96,"y":302,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -119,7 +119,7 @@
 },
 "blocks/b14.png":
 {
-	"frame": {"x":32,"y":302,"w":32,"h":32},
+	"frame": {"x":64,"y":302,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -128,7 +128,7 @@
 },
 "blocks/b15.png":
 {
-	"frame": {"x":0,"y":366,"w":32,"h":32},
+	"frame": {"x":32,"y":366,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -137,7 +137,7 @@
 },
 "blocks/b16.png":
 {
-	"frame": {"x":96,"y":366,"w":32,"h":32},
+	"frame": {"x":0,"y":398,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -146,7 +146,7 @@
 },
 "blocks/b17.png":
 {
-	"frame": {"x":64,"y":398,"w":32,"h":32},
+	"frame": {"x":96,"y":398,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -155,7 +155,7 @@
 },
 "blocks/b18.png":
 {
-	"frame": {"x":0,"y":430,"w":32,"h":32},
+	"frame": {"x":32,"y":430,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -164,7 +164,7 @@
 },
 "blocks/b19.png":
 {
-	"frame": {"x":96,"y":398,"w":32,"h":32},
+	"frame": {"x":0,"y":430,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -209,7 +209,7 @@
 },
 "blocks/b24.png":
 {
-	"frame": {"x":96,"y":270,"w":32,"h":32},
+	"frame": {"x":32,"y":270,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -218,7 +218,7 @@
 },
 "blocks/b25.png":
 {
-	"frame": {"x":32,"y":270,"w":32,"h":32},
+	"frame": {"x":96,"y":270,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -263,7 +263,7 @@
 },
 "destroy0.png":
 {
-	"frame": {"x":32,"y":206,"w":32,"h":32},
+	"frame": {"x":96,"y":206,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -272,7 +272,7 @@
 },
 "destroy1.png":
 {
-	"frame": {"x":64,"y":206,"w":32,"h":32},
+	"frame": {"x":32,"y":206,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -281,7 +281,7 @@
 },
 "destroy2.png":
 {
-	"frame": {"x":0,"y":302,"w":32,"h":32},
+	"frame": {"x":64,"y":206,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -290,7 +290,7 @@
 },
 "destroy3.png":
 {
-	"frame": {"x":96,"y":302,"w":32,"h":32},
+	"frame": {"x":32,"y":302,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -299,7 +299,7 @@
 },
 "destroy4.png":
 {
-	"frame": {"x":32,"y":366,"w":32,"h":32},
+	"frame": {"x":0,"y":334,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -317,7 +317,7 @@
 },
 "destroy6.png":
 {
-	"frame": {"x":0,"y":398,"w":32,"h":32},
+	"frame": {"x":96,"y":366,"w":32,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
@@ -333,9 +333,18 @@
 	"sourceSize": {"w":32,"h":32},
 	"pivot": {"x":0.5,"y":0.5}
 },
+"entities/bordercollie.png":
+{
+	"frame": {"x":64,"y":398,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32},
+	"pivot": {"x":0.5,"y":0.5}
+},
 "entities/boss.png":
 {
-	"frame": {"x":0,"y":790,"w":120,"h":120},
+	"frame": {"x":0,"y":838,"w":120,"h":120},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":120,"h":120},
@@ -344,7 +353,7 @@
 },
 "entities/bossbeard.png":
 {
-	"frame": {"x":0,"y":670,"w":120,"h":120},
+	"frame": {"x":0,"y":718,"w":120,"h":120},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":120,"h":120},
@@ -353,7 +362,7 @@
 },
 "entities/bossrune.png":
 {
-	"frame": {"x":48,"y":574,"w":48,"h":48},
+	"frame": {"x":0,"y":622,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -362,7 +371,7 @@
 },
 "entities/bossrunemark1.png":
 {
-	"frame": {"x":48,"y":622,"w":48,"h":48},
+	"frame": {"x":0,"y":670,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -371,7 +380,7 @@
 },
 "entities/bossrunemark2.png":
 {
-	"frame": {"x":0,"y":622,"w":48,"h":48},
+	"frame": {"x":48,"y":622,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -380,7 +389,7 @@
 },
 "entities/bossrunemark3.png":
 {
-	"frame": {"x":48,"y":526,"w":48,"h":48},
+	"frame": {"x":0,"y":574,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -389,7 +398,7 @@
 },
 "entities/bossrunemark4.png":
 {
-	"frame": {"x":80,"y":430,"w":48,"h":48},
+	"frame": {"x":0,"y":478,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -398,7 +407,7 @@
 },
 "entities/bossrunemark5.png":
 {
-	"frame": {"x":0,"y":478,"w":48,"h":48},
+	"frame": {"x":48,"y":478,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -407,7 +416,7 @@
 },
 "entities/bossrunemark6.png":
 {
-	"frame": {"x":0,"y":526,"w":48,"h":48},
+	"frame": {"x":48,"y":526,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -416,7 +425,7 @@
 },
 "entities/bossrunemark7.png":
 {
-	"frame": {"x":48,"y":478,"w":48,"h":48},
+	"frame": {"x":64,"y":430,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -425,7 +434,7 @@
 },
 "entities/bossrunemark8.png":
 {
-	"frame": {"x":0,"y":574,"w":48,"h":48},
+	"frame": {"x":48,"y":574,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -452,7 +461,7 @@
 },
 "entities/dipperbody.png":
 {
-	"frame": {"x":32,"y":430,"w":48,"h":48},
+	"frame": {"x":0,"y":526,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -851,8 +860,8 @@
 	"version": "1.0",
 	"image": "isogame.png",
 	"format": "RGBA8888",
-	"size": {"w":128,"h":910},
+	"size": {"w":128,"h":958},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:e996289662a2bc0524e2eae604dea919:efa520b433c521cd474614e3b766b840:ce057d0cf328fdcb65fb530e256970b6$"
+	"smartupdate": "$TexturePacker:SmartUpdate:82675ca7a5aa08f219cb1015f244a397:92474b4ea31783f821e0a22b2ef8ee82:ce057d0cf328fdcb65fb530e256970b6$"
 }
 }

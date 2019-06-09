@@ -6,7 +6,15 @@ public class TutorialNPC : EntityCreature
 
     public TutorialNPC() : base(1f, 2f, 100f)
     {
+        _entityParts.Add(new EntityPart(this, "bordercollie"));
+    }
 
+    public override void Update(float deltaTime)
+    {
+        _entityParts[0].worldPosition = worldPosition + Vector3.up * 0.5f;
+        _entityParts[0].viewAngle = viewAngle;
+
+        base.Update(deltaTime);
     }
 
     public override void OnSpawn(Chunk chunk, Vector3 position)
