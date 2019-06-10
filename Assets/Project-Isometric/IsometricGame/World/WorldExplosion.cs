@@ -31,7 +31,7 @@ public class WorldExplosion : IPositionable
 
         if (chunk != null)
         {
-            chunk.GetCollidedEntites(_position - Vector3.down, 10f, 10f, EffectEntity);
+            chunk.GetCollidedEntities(_position - Vector3.down, 10f, 10f, EffectEntity);
         }
 
         _world.QuakeAtPosition(_position);

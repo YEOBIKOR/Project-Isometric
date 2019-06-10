@@ -33,7 +33,7 @@ public class Granade : Entity
 
         _part.worldPosition = worldPosition;
 
-        chunk.GetCollidedEntites(worldPosition, 0.5f, 0.5f, OnCollision);
+        chunk.GetCollidedEntities(worldPosition, 0.5f, 0.5f, OnCollision);
 
         base.Update(deltaTime);
     }

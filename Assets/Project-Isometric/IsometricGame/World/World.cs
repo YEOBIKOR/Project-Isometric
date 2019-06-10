@@ -105,6 +105,31 @@ public class World : ISerializable<World.Serialized>
 
         _worldProfiler.updateProfiler.StartMeasureTime();
 
+        foreach (var loadedChunk in _chunkGenerator.GetLoadedChunkQueue())
+            OnChunkGenerated(loadedChunk);
+
+        ChunkLoadUpdate(deltaTime);
+
+        DrawablesUpdate(deltaTime);
+
+        _worldProfiler.updateProfiler.MeasureTime(UpdateProfilerType.ChunkUpdate);
+
+        Shader.SetGlobalFloat("_WorldTime", _worldTime);
+        worldCamera.GraphicUpdate(deltaTime);
+        _worldProfiler.updateProfiler.MeasureTime(UpdateProfilerType.RenderUpdate);
+
+        if (_epicenters.Count > 0)
+        {
+            if (_worldTime - _epicenters.Peek().z > 3f)
+            {
+                _epicenters.Dequeue();
+                UpdateEpicenters();
+            }
+        }
+    }
+
+    private void ChunkLoadUpdate(float deltaTime)
+    {
         Vector2 playerCoordinate = new Vector2(player.worldPosition.x, player.worldPosition.z);
 
         int xMin = Mathf.FloorToInt((playerCoordinate.x - LoadChunkRange) / Chunk.Length);
@@ -132,26 +157,6 @@ public class World : ISerializable<World.Serialized>
                 Vector2 chunkDelta = new Vector2(chunk.coordination.x + 0.5f, chunk.coordination.y + 0.5f) * Chunk.Length - playerCoordinate;
                 if (chunkDelta.x * chunkDelta.x + chunkDelta.y * chunkDelta.y > UnloadChunkRange * UnloadChunkRange)
                     chunk.UnloadChunk();
-            }
-        }
-
-        foreach (var loadedChunk in _chunkGenerator.GetLoadedChunkQueue())
-            OnChunkGenerated(loadedChunk);
-
-        DrawablesUpdate(deltaTime);
-
-        _worldProfiler.updateProfiler.MeasureTime(UpdateProfilerType.ChunkUpdate);
-
-        Shader.SetGlobalFloat("_WorldTime", _worldTime);
-        worldCamera.GraphicUpdate(deltaTime);
-        _worldProfiler.updateProfiler.MeasureTime(UpdateProfilerType.RenderUpdate);
-
-        if (_epicenters.Count > 0)
-        {
-            if (_worldTime - _epicenters.Peek().z > 3f)
-            {
-                _epicenters.Dequeue();
-                UpdateEpicenters();
             }
         }
     }
@@ -203,6 +208,8 @@ public class World : ISerializable<World.Serialized>
 
     public void OnChunkGenerated(Chunk chunk)
     {
+        chunk.OnChunkActivate();
+
         if (chunk.coordination == new Vector2Int(0, 0))
         {
             Vector3 standUpPosition = new Vector3(1f, GetSurface(new Vector2(1f, 1f)), 1f);
@@ -221,22 +228,6 @@ public class World : ISerializable<World.Serialized>
             //    SpawnEntity(new EntityDipper(), position);
             //}
         }
-
-        //int spawnCount = (int)RXRandom.Range(0f, 1.1f);
-
-        //for (int i = 0; i < spawnCount; i++)
-        //{
-        //    Vector2 position = (chunk.coordination * Chunk.Length) + new Vector2(RXRandom.Range(0f, 16f), RXRandom.Range(0f, 16f));
-        //    SpawnEntity(new EntityPpyongppyong(), new Vector3(position.x, GetSurface(new Vector3(position.x, 0f, position.y)), position.y));
-        //}
-
-        //spawnCount = (int)RXRandom.Range(0f, 1.05f);
-
-        //for (int i = 0; i < spawnCount; i++)
-        //{
-        //    Vector2 position = (chunk.coordination * Chunk.Length) + new Vector2(RXRandom.Range(0f, 16f), RXRandom.Range(0f, 16f));
-        //    SpawnEntity(new EntityDipper(), new Vector3(position.x, GetSurface(new Vector3(position.x, 0f, position.y)), position.y));
-        //}
 
         Vector2Int[] nearbyCoordinations = new Vector2Int[]
         {
@@ -365,8 +356,10 @@ public class World : ISerializable<World.Serialized>
 
             if (chunk != null)
             {
+                entity.worldPosition = position;
+
                 chunk.AddEntity(entity);
-                entity.OnSpawn(chunk, position);
+                entity.OnSpawn();
 
                 if (entity is ITarget && entity != player)
                     _targets.Add(entity as ITarget);
@@ -409,12 +402,12 @@ public class World : ISerializable<World.Serialized>
             SpawnEntity(droppedItem, tilePosition + Vector3.one * 0.5f);
         }
 
-        tile.SetBlock(Block.GetBlockByKey("air"));
+        tile.SetBlock(Block.BlockAir);
     }
 
     public void QuakeAtPosition(Vector3 epicenter)
     {
-        if (_epicenters.Count > NumMaxEpicenters)
+        if (_epicenters.Count >= NumMaxEpicenters)
             return;
 
         Vector4 vector = new Vector4();

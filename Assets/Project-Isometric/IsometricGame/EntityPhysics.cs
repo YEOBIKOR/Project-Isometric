@@ -3,13 +3,6 @@ using UnityEngine;
 
 public class EntityPhysics
 {
-    private Entity _owner;
-    public Entity  owner
-    {
-        get
-        { return _owner; }
-    }
-
     private EntityAABBCollider _collider;
     public EntityAABBCollider collider
     {
@@ -60,7 +53,7 @@ public class EntityPhysics
 
     private const float Gravity = -39.24f;
 
-    public void ApplyPhysics(Chunk chunk, float deltaTime, ref Vector3 position)
+    public void ApplyPhysics(Chunk chunk, Entity owner, float deltaTime, ref Vector3 position)
     {
         float width = _collider.width;
         float height = _collider.height;
@@ -190,6 +183,20 @@ public class EntityPhysics
 
         if (collided && _onTileCallback != null)
             _onTileCallback();
+
+        Action<Entity> callback = delegate (Entity other)
+        {
+            if (other != owner)
+            {
+                Vector2 deltaNormal = new Vector2(
+                    owner.worldPosition.x - other.worldPosition.x,
+                    owner.worldPosition.z - other.worldPosition.z).normalized;
+
+                _velocity += new Vector3(deltaNormal.x, 0f, deltaNormal.y) * 50f * deltaTime;
+            }
+        };
+
+        chunk.GetCollidedEntities(position, collider.width, collider.height, callback);
     }
 
     public void AddForce(Vector3 force)

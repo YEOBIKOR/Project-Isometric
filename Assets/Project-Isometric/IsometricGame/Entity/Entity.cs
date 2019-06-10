@@ -94,8 +94,6 @@ public abstract class Entity : IPositionable
     private Shadow _shadow;
     protected List<EntityPart> _entityParts;
 
-    private FLabel _debugLabel;
-
     public Entity(float shadowScale)
     {
         _chunk = null;
@@ -111,14 +109,12 @@ public abstract class Entity : IPositionable
         _entityParts = new List<EntityPart>();
     }
 
-    public virtual void OnSpawn(Chunk chunk, Vector3 position)
+    public virtual void OnSpawn()
     {
         _spawned = true;
         _time = 0f;
 
         OnOtherChunk(chunk);
-
-        worldPosition = position;
 
         if (_shadow != null)
             world.AddCosmeticDrawble(_shadow);
@@ -149,7 +145,7 @@ public abstract class Entity : IPositionable
         _damagedCooldown = _damagedCooldown - deltaTime;
 
         if (_physics != null)
-            _physics.ApplyPhysics(chunk, deltaTime, ref _worldPosition);
+            _physics.ApplyPhysics(chunk, this, deltaTime, ref _worldPosition);
     }
 
     public void DespawnEntity()

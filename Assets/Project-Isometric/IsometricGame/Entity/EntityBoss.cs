@@ -29,14 +29,14 @@ public class EntityBoss : EntityCreature
         _entityParts[0].sortZOffset = 3f;
     }
 
-    public override void OnSpawn(Chunk chunk, Vector3 position)
+    public override void OnSpawn()
     {
-        base.OnSpawn(chunk, position);
+        base.OnSpawn();
 
         _player = world.player;
 
         foreach (var rune in _runes[(int)RuneState.Hold])
-            world.SpawnEntity(rune, position + Vector3.up * 10f);
+            world.SpawnEntity(rune, worldPosition + Vector3.up * 10f);
 
         SetAttackPattern(AllocateRunes, 3f);
         _entityParts[1].worldPosition = worldPosition;

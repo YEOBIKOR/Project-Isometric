@@ -17,9 +17,9 @@ public class TutorialNPC : EntityCreature
         base.Update(deltaTime);
     }
 
-    public override void OnSpawn(Chunk chunk, Vector3 position)
+    public override void OnSpawn()
     {
-        base.OnSpawn(chunk, position);
+        base.OnSpawn();
 
         HearAdvice();
     }

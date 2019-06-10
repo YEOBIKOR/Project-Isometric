@@ -149,10 +149,23 @@ public class Chunk : ISerializable <Chunk.Serialized>
 
     public void AddEntity(Entity entity)
     {
+        if (!GetPositionInChunk(entity.worldPosition))
+        {
+            Debug.LogWarning("The Entity trying to add is out of range: " + entity);
+            return;
+        }
+
         _entities.AddLast(entity);
+        entity.OnOtherChunk(this);
 
         if (entity.collider != null)
             _collidables.AddLast(entity.collider);
+    }
+
+    public void OnChunkActivate()
+    {
+        foreach (var entity in _entities)
+            entity.OnSpawn();
     }
 
     public void OnTileBlockSet(Tile tile)
@@ -231,10 +244,10 @@ public class Chunk : ISerializable <Chunk.Serialized>
 
     public bool GetPositionInChunk(Vector3 position)
     {
-        return Chunk.ToChunkCoordinate(position) == coordination;
+        return ToChunkCoordinate(position) == coordination;
     }
     
-    public void GetCollidedEntites(Vector3 position, float width, float height, Action<Entity> callback)
+    public void GetCollidedEntities(Vector3 position, float width, float height, Action<Entity> callback)
     {
         Action<Chunk> action = delegate (Chunk chunk)
         {

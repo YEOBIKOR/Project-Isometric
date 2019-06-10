@@ -76,9 +76,9 @@ public class Player : EntityCreature
         _playerCommand.Add("drop_item", new CommandCallback(delegate { DropItem(_pickedItemContainer); } ));
     }
 
-    public override void OnSpawn(Chunk chunk, Vector3 position)
+    public override void OnSpawn()
     {
-        base.OnSpawn(chunk, position);
+        base.OnSpawn();
 
         game.AddSubLoopFlow(_playerInterface);
     }

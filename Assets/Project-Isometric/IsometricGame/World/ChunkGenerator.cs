@@ -26,6 +26,7 @@ public class ChunkGenerator
         _progresses.Add(new ChunkBedrockGenerateProgress());
         _progresses.Add(new ChunkTerrainGenerateProgress());
         _progresses.Add(new ChunkGrowGrassProgress());
+        _progresses.Add(new ChunkCreatureSpawnProgress());
     }
 
     public void RequestGenerateChunk(Chunk chunk)
