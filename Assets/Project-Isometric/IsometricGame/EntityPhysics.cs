@@ -188,11 +188,12 @@ public class EntityPhysics
         {
             if (other != owner)
             {
-                Vector2 deltaNormal = new Vector2(
+                Vector3 pushVelocity = new Vector3(
                     owner.worldPosition.x - other.worldPosition.x,
+                    0f,
                     owner.worldPosition.z - other.worldPosition.z).normalized;
 
-                _velocity += new Vector3(deltaNormal.x, 0f, deltaNormal.y) * 50f * deltaTime;
+                AddForce(pushVelocity);
             }
         };
 

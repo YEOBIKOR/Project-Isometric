@@ -14,6 +14,22 @@ public class ShadowedLabel : InterfaceObject
         { _label.text = value; _labelShadow.text = value; }
     }
 
+    public Color color
+    {
+        get
+        { return _label.color; }
+        set
+        { _label.color = value; }
+    }
+
+    public float alpha
+    {
+        get
+        { return _label.alpha; }
+        set
+        { _label.alpha = value; _labelShadow.alpha = value; }
+    }
+
     public ShadowedLabel(MenuFlow menu, string text) : base (menu)
     {
         _label = new FLabel("font", text);
