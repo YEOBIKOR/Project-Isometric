@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Isometric.Interface;
 using Custom;
 
 public class EntityBoss : EntityCreature
 {
+    private BossInterface _bossInterface;
+
     private Player _player;
 
     private const int RuneNum = 8;
@@ -15,6 +18,8 @@ public class EntityBoss : EntityCreature
 
     public EntityBoss() : base(1f, 2f, 500f)
     {
+        _bossInterface = new BossInterface(this);
+
         _runes = new List<EntityBossRune>[RuneStateNum];
         for (int i = 0; i < RuneStateNum; i++)
             _runes[i] = new List<EntityBossRune>();
@@ -40,6 +45,15 @@ public class EntityBoss : EntityCreature
 
         SetAttackPattern(AllocateRunes, 3f);
         _entityParts[1].worldPosition = worldPosition;
+
+        game.AddSubLoopFlow(_bossInterface);
+    }
+
+    public override void OnDespawn()
+    {
+        _bossInterface.Terminate();
+
+        base.OnDespawn();
     }
 
     public override void Update(float deltaTime)
