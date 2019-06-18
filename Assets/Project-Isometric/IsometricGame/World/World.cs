@@ -166,7 +166,7 @@ public class World : ISerializable<World.Serialized>
         for (var iterator = _cosmeticDrawables.First; iterator != null; iterator = iterator.Next)
         {
             CosmeticRenderer cosmeticDrawable = iterator.Value;
-            
+
             if (cosmeticDrawable.world == this)
                 cosmeticDrawable.Update(deltaTime);
             else
@@ -201,7 +201,7 @@ public class World : ISerializable<World.Serialized>
     public void AddChunk(Chunk chunk)
     {
         Vector2Int coordination = chunk.coordination;
-        
+
         _chunks.AddLast(chunk);
         _chunkMap.Add((coordination.x << 16) + coordination.y, chunk);
     }
@@ -298,7 +298,7 @@ public class World : ISerializable<World.Serialized>
     public RayTrace RayTraceTile(Vector3 startPosition, Vector3 direction, float distance)
     {
         Vector3 tracePosition = startPosition;
-        
+
         while (true)
         {
             Vector3 intersectionDelta = Vector3.positiveInfinity;
@@ -361,12 +361,17 @@ public class World : ISerializable<World.Serialized>
                 chunk.AddEntity(entity);
                 entity.OnSpawn();
 
-                if (entity is ITarget && entity != player)
-                    _targets.Add(entity as ITarget);
+                OnSpawnEntity(entity);
             }
         }
         else
             Debug.LogWarning(string.Concat("Entity ", entity.GetType(), " has already spawn."));
+    }
+
+    public void OnSpawnEntity(Entity entity)
+    {
+        if (entity is ITarget && entity != player)
+            _targets.Add(entity as ITarget);
     }
 
     public void OnDespawnEntity(Entity entity)

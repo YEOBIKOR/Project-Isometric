@@ -165,7 +165,11 @@ public class Chunk : ISerializable <Chunk.Serialized>
     public void OnChunkActivate()
     {
         foreach (var entity in _entities)
+        {
             entity.OnSpawn();
+
+            world.OnSpawnEntity(entity);
+        }
     }
 
     public void OnTileBlockSet(Tile tile)
